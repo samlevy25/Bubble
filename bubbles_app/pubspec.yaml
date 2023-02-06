@@ -30,17 +30,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: "1.6.0"
-  firebase_storage: "10.0.3"
-  firebase_auth: "3.1.0"
-  firebase_analytics: "8.3.1"
-  cloud_firestore: "2.5.1"
-  provider: "6.0.0"
+  firebase_core: ^2.4.1
+  firebase_storage: ^11.0.10
+  firebase_auth: ^4.2.5
+  firebase_analytics: ^10.1.0
+  cloud_firestore: ^4.3.1
+  provider: ^6.0.5
   get_it: "7.2.0"
-  file_picker: "4.0.1"
+  file_picker: ^5.2.5
   flutter_spinkit: "5.1.0"
-  timeago: "3.1.0"
-  flutter_keyboard_visibility: "5.0.3"
+  timeago: ^3.3.0
+  flutter_keyboard_visibility: ^5.4.0
 
 
 
@@ -77,8 +77,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
