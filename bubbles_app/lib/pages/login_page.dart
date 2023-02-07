@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // w
 import '../widgets/custom_input_fields.dart';
+import '../widgets/rounded_button.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -40,6 +41,7 @@ class _LoginPage extends State<LoginPage> {
           children: [
             _pageTitle(),
             _loginForm(),
+            _loginBottun(),
           ],
         ),
       ),
@@ -84,6 +86,15 @@ class _LoginPage extends State<LoginPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _loginBottun() {
+    return RoundedButton(
+      name: "Login",
+      height: _deviceHeight * 0.065,
+      width: _deviceWidth * 0.65,
+      onPressed: () {},
     );
   }
 }
