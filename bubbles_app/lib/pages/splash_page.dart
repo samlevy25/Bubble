@@ -28,16 +28,21 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    _setup().then(
-      (_) => widget.onInitializationComplete(),
-    );
+
+    Future.delayed(const Duration(seconds: 3)).then((_) {
+      _setup().then(
+        (_) => widget.onInitializationComplete(),
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Bubbles',
-      theme: ThemeData(),
+      theme: ThemeData(
+        scaffoldBackgroundColor: Color.fromARGB(255, 255, 255, 255),
+      ),
       home: Scaffold(
         body: Center(
           child: Container(
@@ -46,7 +51,7 @@ class _SplashPageState extends State<SplashPage> {
             decoration: const BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.contain,
-                image: AssetImage('assets/images/b.jpeg'),
+                image: AssetImage('assets/images/loading.gif'),
               ),
             ),
           ),
