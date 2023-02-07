@@ -14,3 +14,13 @@ void main() {
     ),
   );
 }
+
+class MainApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Bubbles',
+      theme: ThemeData(),
+    );
+  }
+}
