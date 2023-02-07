@@ -5,6 +5,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 
 //Pages
 import './pages/splash_page.dart';
+import './pages/login_page.dart';
 
 //Servies
 import './services/navigation_server.dart';
@@ -28,13 +29,15 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: 'Bubbles',
       theme: ThemeData(
-        backgroundColor: Color.fromARGB(255, 0, 128, 255),
-        scaffoldBackgroundColor: Color.fromARGB(255, 255, 5, 34),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: Color.fromRGBO(242, 255, 0, 1),
-        ),
+        scaffoldBackgroundColor: Colors.red,
+        bottomNavigationBarTheme:
+            const BottomNavigationBarThemeData(backgroundColor: Colors.yellow),
       ),
-      // navigatorKey: NavigationService.navigatorKey,
+      navigatorKey: NavigationService.navigatorKey,
+      initialRoute: '/login',
+      routes: {
+        '/login': (BuildContext _context) => LoginPage(),
+      },
     );
   }
 }

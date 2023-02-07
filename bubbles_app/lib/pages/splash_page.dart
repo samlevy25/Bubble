@@ -41,7 +41,7 @@ class _SplashPageState extends State<SplashPage> {
     return MaterialApp(
       title: 'Bubbles',
       theme: ThemeData(
-        scaffoldBackgroundColor: Color.fromARGB(255, 255, 255, 255),
+        scaffoldBackgroundColor: Colors.white,
       ),
       home: Scaffold(
         body: Center(
