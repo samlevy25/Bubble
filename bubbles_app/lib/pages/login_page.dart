@@ -42,6 +42,7 @@ class _LoginPage extends State<LoginPage> {
             _pageTitle(),
             _loginForm(),
             _loginBottun(),
+            _registerAccountLink()
           ],
         ),
       ),
@@ -95,6 +96,22 @@ class _LoginPage extends State<LoginPage> {
       height: _deviceHeight * 0.065,
       width: _deviceWidth * 0.65,
       onPressed: () {},
+    );
+  }
+
+  Widget _registerAccountLink() {
+    return GestureDetector(
+      onTap: () {
+        print("Clicked!");
+      },
+      child: Container(
+        child: const Text(
+          "account",
+          style: TextStyle(
+            color: Colors.blue,
+          ),
+        ),
+      ),
     );
   }
 }
