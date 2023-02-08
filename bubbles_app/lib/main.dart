@@ -41,7 +41,7 @@ class MainApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Bubbles',
         theme: ThemeData(
-          scaffoldBackgroundColor: Colors.red,
+          scaffoldBackgroundColor: Color.fromARGB(255, 220, 223, 8),
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
               backgroundColor: Colors.yellow),
         ),

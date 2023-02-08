@@ -19,7 +19,8 @@ class AuthenticationProvider extends ChangeNotifier {
 
     _auth.authStateChanges().listen((_user) {
       if (_user != null) {
-        print("Logged");
+        _databaseService.updateUserLastSeenTime(_user.uid);
+        _databaseService.getUser(_user.uid);
       } else {
         print("not Logged");
       }
