@@ -1,13 +1,13 @@
 class AppUser {
   final String uid;
-  final String name;
+  final String username;
   final String email;
   final String imageURL;
   late DateTime lastActive;
 
   AppUser({
     required this.uid,
-    required this.name,
+    required this.username,
     required this.email,
     required this.imageURL,
     required this.lastActive,
@@ -16,7 +16,7 @@ class AppUser {
   factory AppUser.fromJSON(Map<String, dynamic> _json) {
     return AppUser(
       uid: _json["uid"],
-      name: _json["name"],
+      username: _json["username"],
       email: _json["email"],
       imageURL: _json["image"],
       lastActive: _json["last_active"].toDate(),
@@ -26,7 +26,7 @@ class AppUser {
   Map<String, dynamic> toMap() {
     return {
       "email": email,
-      "name": name,
+      "username": username,
       "last_active": lastActive,
       "image": imageURL,
     };

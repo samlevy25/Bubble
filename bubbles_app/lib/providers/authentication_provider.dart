@@ -17,4 +17,16 @@ class AuthenticationProvider extends ChangeNotifier {
     _navigationService = GetIt.instance.get<NavigationService>();
     _databaseService = GetIt.instance.get<DatabaseService>();
   }
+
+  Future<void> loginUsingEmailAndPassword(
+      String _email, String _password) async {
+    try {
+      await _auth.signInWithEmailAndPassword(
+          email: _email, password: _password);
+    } on FirebaseAuthException {
+      print("Error logging user into Firebase");
+    } catch (e) {
+      print(e);
+    }
+  }
 }
