@@ -1,9 +1,17 @@
 //Packages
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 
 // w
 import '../widgets/custom_input_fields.dart';
 import '../widgets/rounded_button.dart';
+
+//p
+import '../providers/authentication_provider.dart';
+
+//s
+import '../services/navigation_server.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -15,12 +23,21 @@ class LoginPage extends StatefulWidget {
 class _LoginPage extends State<LoginPage> {
   late double _deviceHeight;
   late double _deviceWidth;
-  final _loginFormKey = GlobalKey<FormState>();
+
+  late AuthenticationProvider _auth;
+  late NavigationService _navigation;
+
+  late final _loginFormKey = GlobalKey<FormState>();
+
+  String? _email;
+  String? _password;
 
   @override
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
+    _auth = Provider.of<AuthenticationProvider>(context);
+    _navigation = GetIt.instance.get<NavigationService>();
 
     return _buildUI();
   }
@@ -73,13 +90,21 @@ class _LoginPage extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomTextFromField(
-              onSaved: (_value) {},
+              onSaved: (_value) {
+                setState(() {
+                  _email = _value;
+                });
+              },
               regEx: r'^[a-zA-Z0-9]+$',
               hintText: "Email",
               obscureText: false,
             ),
             CustomTextFromField(
-              onSaved: (_value) {},
+              onSaved: (_value) {
+                setState(() {
+                  _password = _value;
+                });
+              },
               regEx: r'^[a-zA-Z0-9]+$',
               hintText: "Password",
               obscureText: true,
@@ -95,7 +120,12 @@ class _LoginPage extends State<LoginPage> {
       name: "Login",
       height: _deviceHeight * 0.065,
       width: _deviceWidth * 0.65,
-      onPressed: () {},
+      onPressed: () {
+        if (_loginFormKey.currentState!.validate()) {
+          _loginFormKey.currentState!.save();
+          _auth.loginUsingEmailAndPassword(_email!, _password!);
+        }
+      },
     );
   }
 
