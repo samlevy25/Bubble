@@ -37,11 +37,11 @@ class AuthenticationProvider extends ChangeNotifier {
                 "image": _userData["image"],
               },
             );
-            print(user.toMap());
+            _navigationService.removeAndNavigateToRoute('/home');
           },
         );
       } else {
-        print("not Logged");
+        _navigationService.removeAndNavigateToRoute('/login');
       }
     });
   }

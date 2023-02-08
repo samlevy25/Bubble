@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 //Pages
 import './pages/splash_page.dart';
 import './pages/login_page.dart';
+import './pages/home_page.dart';
 
 //Servies
 import './services/navigation_server.dart';
@@ -49,6 +50,7 @@ class MainApp extends StatelessWidget {
         initialRoute: '/login',
         routes: {
           '/login': (BuildContext _context) => LoginPage(),
+          '/home': (BuildContext _context) => HomePage(),
         },
       ),
     );
