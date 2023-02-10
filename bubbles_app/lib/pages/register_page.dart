@@ -28,16 +28,24 @@ class _RegisterPageState extends State<RegisterPage> {
   late double _deviceHeight;
   late double _deviceWidth;
 
+  late AuthenticationProvider _auth;
+  late DatabaseService _db;
+  late CloudStorageService _cloudStorageService;
+
   String? _username;
   String? _email;
   String? _password;
 
-  PlatformFile? _profile_image;
+  PlatformFile? _profileImage;
 
   final _registerFormKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    _auth = Provider.of<AuthenticationProvider>(context);
+    _db = GetIt.instance.get<DatabaseService>();
+    _cloudStorageService = GetIt.instance.get<CloudStorageService>();
+
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
 
@@ -81,17 +89,17 @@ class _RegisterPageState extends State<RegisterPage> {
               (_file) => {
                 setState(
                   () {
-                    _profile_image = _file;
+                    _profileImage = _file;
                   },
                 )
               },
             );
       },
       child: () {
-        if (_profile_image != null) {
+        if (_profileImage != null) {
           return RoundedImageFile(
             key: UniqueKey(),
-            image: _profile_image!,
+            image: _profileImage!,
             size: _deviceHeight * 0.15,
           );
         } else {
@@ -156,6 +164,9 @@ class _RegisterPageState extends State<RegisterPage> {
         name: "Register",
         height: _deviceHeight * 0.065,
         width: _deviceWidth * 0.65,
-        onPressed: () async {});
+        onPressed: () async {
+          if (_registerFormKey.currentState!.validate() &&
+              _profileImage != null) {}
+        });
   }
 }
