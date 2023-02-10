@@ -57,8 +57,17 @@ class _LoginPage extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _pageTitle(),
+            SizedBox(
+              height: _deviceHeight * 0.05,
+            ),
             _loginForm(),
+            SizedBox(
+              height: _deviceHeight * 0.05,
+            ),
             _loginBottun(),
+            SizedBox(
+              height: _deviceHeight * 0.05,
+            ),
             _registerAccountLink()
           ],
         ),

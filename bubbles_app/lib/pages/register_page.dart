@@ -64,6 +64,10 @@ class _RegisterPageState extends State<RegisterPage> {
               height: _deviceHeight * 0.05,
             ),
             _registerForm(),
+            SizedBox(
+              height: _deviceHeight * 0.05,
+            ),
+            _registerButton(),
           ],
         ),
       ),
@@ -145,5 +149,13 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
+  }
+
+  Widget _registerButton() {
+    return RoundedButton(
+        name: "Register",
+        height: _deviceHeight * 0.065,
+        width: _deviceWidth * 0.65,
+        onPressed: () async {});
   }
 }
