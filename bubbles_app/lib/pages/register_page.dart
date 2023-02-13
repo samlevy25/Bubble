@@ -103,6 +103,7 @@ class _RegisterPageState extends State<RegisterPage> {
             size: _deviceHeight * 0.15,
           );
         } else {
+          print("Maybe?");
           return DefaultRoundedImage(
             key: UniqueKey(),
             size: _deviceHeight * 0.15,
@@ -166,7 +167,19 @@ class _RegisterPageState extends State<RegisterPage> {
         width: _deviceWidth * 0.65,
         onPressed: () async {
           if (_registerFormKey.currentState!.validate() &&
-              _profileImage != null) {}
+              _profileImage != null) {
+            _registerFormKey.currentState!.save();
+            String? _uid = await _auth.registerUserUsingEmailAndPassword(
+                _email!, _password!);
+
+            String? _imageURL = await _cloudStorageService
+                .saveUserImageToStorage(_uid!, _profileImage!);
+            await _db.createUser(_uid, _email!, _username!, _imageURL!);
+            await _auth.logout();
+            await _auth.loginUsingEmailAndPassword(_email!, _password!);
+          } else {
+            print("not valid");
+          }
         });
   }
 }
