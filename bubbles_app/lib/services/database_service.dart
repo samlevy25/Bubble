@@ -30,7 +30,7 @@ class DatabaseService {
 
   Future<void> updateUserLastSeenTime(String _uid) async {
     try {
-      await _db.collection(USER_COLLECTION).doc(_uid).set(
+      await _db.collection(USER_COLLECTION).doc(_uid).update(
         {
           "last_active": DateTime.now().toUtc(),
         },
