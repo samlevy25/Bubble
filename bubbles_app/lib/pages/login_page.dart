@@ -134,6 +134,9 @@ class _LoginPage extends State<LoginPage> {
         if (_loginFormKey.currentState!.validate()) {
           _loginFormKey.currentState!.save();
           _auth.loginUsingEmailAndPassword(_email!, _password!);
+          print("Logged!");
+        } else {
+          print("not logged!");
         }
       },
     );

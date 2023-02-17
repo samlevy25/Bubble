@@ -19,7 +19,7 @@ class AuthenticationProvider extends ChangeNotifier {
     _auth = FirebaseAuth.instance;
     _navigationService = GetIt.instance.get<NavigationService>();
     _databaseService = GetIt.instance.get<DatabaseService>();
-    //logout();
+    logout();
 
     _auth.authStateChanges().listen((_user) {
       if (_user != null) {
@@ -28,7 +28,6 @@ class AuthenticationProvider extends ChangeNotifier {
           (_snapshot) {
             Map<String, dynamic> _userData =
                 _snapshot.data()! as Map<String, dynamic>;
-
             user = AppUser.fromJSON(
               {
                 "uid": _user.uid,
@@ -38,6 +37,7 @@ class AuthenticationProvider extends ChangeNotifier {
                 "image": _userData["image"],
               },
             );
+            print("After then");
             _navigationService.removeAndNavigateToRoute('/home');
           },
         );
