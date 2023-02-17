@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../services/media_service.dart';
 import '../services/database_service.dart';
 import '../services/cloud_storage_service.dart';
+import '../services/navigation_server.dart';
 
 //w
 import '../widgets/custom_input_fields.dart';
@@ -31,6 +32,7 @@ class _RegisterPageState extends State<RegisterPage> {
   late AuthenticationProvider _auth;
   late DatabaseService _db;
   late CloudStorageService _cloudStorage;
+  late NavigationService _navigation;
 
   String? _username;
   String? _email;
@@ -45,7 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _auth = Provider.of<AuthenticationProvider>(context);
     _db = GetIt.instance.get<DatabaseService>();
     _cloudStorage = GetIt.instance.get<CloudStorageService>();
-
+    _navigation = GetIt.instance.get<NavigationService>();
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
 
@@ -174,8 +176,7 @@ class _RegisterPageState extends State<RegisterPage> {
           String? _imageURL =
               await _cloudStorage.saveUserImageToStorage(_uid!, _profileImage!);
           await _db.createUser(_uid, _email!, _username!, _imageURL!);
-          await _auth.logout();
-          await _auth.loginUsingEmailAndPassword(_email!, _password!);
+          _navigation.goBack();
         }
       },
     );
