@@ -47,8 +47,8 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.person),
           ),
           BottomNavigationBarItem(
-            label: "C",
-            icon: Icon(Icons.abc),
+            label: "",
+            icon: Icon(Icons.settings),
           ),
         ],
       ),

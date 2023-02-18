@@ -1,3 +1,4 @@
+import 'package:bubbles_app/models/app_user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
@@ -53,17 +54,25 @@ class _ChatsPageState extends State<ChatsPage> {
               },
             ),
           ),
-          CustomListViewTile(
-            height: _deviceHeight * 0.10,
-            title: "title",
-            subtitle: "dummy msg",
-            imagePath: "https://i.pravatar.cc/300",
-            isActive: false,
-            isSelected: false,
-            onTap: () {},
-          )
+          _chatsList(),
         ],
       ),
+    );
+  }
+
+  Widget _chatsList() {
+    return Expanded(child: _chatTile());
+  }
+
+  Widget _chatTile() {
+    return CustomListViewTileWithActivity(
+      height: _deviceHeight * 0.10,
+      title: "title",
+      subtitle: "dummy msg",
+      imagePath: "https://i.pravatar.cc/300",
+      isActive: false,
+      isActivity: false,
+      onTap: () {},
     );
   }
 }
