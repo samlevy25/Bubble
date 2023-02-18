@@ -35,6 +35,16 @@ class DatabaseService {
         .snapshots();
   }
 
+  Future<QuerySnapshot> getLastMessageForChat(String chatID) {
+    return _db
+        .collection(chatsCollection)
+        .doc(chatID)
+        .collection(messagesCollection)
+        .orderBy("sent_time", descending: true)
+        .limit(1)
+        .get();
+  }
+
   Future<DocumentSnapshot> getUser(String uid) {
     return _db.collection(userCollection).doc(uid).get();
   }
