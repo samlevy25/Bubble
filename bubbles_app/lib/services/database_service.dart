@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 const String userCollection = "Users";
-const String chatsCollection = "Bubbles";
+const String chatsCollection = "Chats";
 const String messagesCollection = "Messages";
 
 class DatabaseService {

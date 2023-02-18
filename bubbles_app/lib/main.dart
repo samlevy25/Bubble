@@ -44,9 +44,9 @@ class MainApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Bubbles',
         theme: ThemeData(
-          scaffoldBackgroundColor: const Color.fromARGB(255, 15, 8, 223),
+          scaffoldBackgroundColor: Color.fromARGB(255, 86, 81, 249),
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-              backgroundColor: Color.fromARGB(255, 78, 72, 156)),
+              backgroundColor: Color.fromARGB(255, 105, 101, 159)),
         ),
         navigatorKey: NavigationService.navigatorKey,
         initialRoute: '/login',
