@@ -8,14 +8,14 @@ import '../providers/authentication_provider.dart';
 //w
 import '../widgets/top_bar.dart';
 
-class BubblesPage extends StatefulWidget {
-  const BubblesPage({super.key});
+class ChatsPage extends StatefulWidget {
+  const ChatsPage({super.key});
 
   @override
-  State<BubblesPage> createState() => _BubblesPageState();
+  State<ChatsPage> createState() => _ChatsPageState();
 }
 
-class _BubblesPageState extends State<BubblesPage> {
+class _ChatsPageState extends State<ChatsPage> {
   late double _deviceHeight;
   late double _deviceWidth;
   late AuthenticationProvider _auth;
