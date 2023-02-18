@@ -1,6 +1,6 @@
 //p
 import 'package:bubbles_app/models/app_user.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 
@@ -13,30 +13,29 @@ class AuthenticationProvider extends ChangeNotifier {
   late final NavigationService _navigationService;
   late final DatabaseService _databaseService;
 
-  late AppUser user;
+  late AppUser appUser;
 
   AuthenticationProvider() {
     _auth = FirebaseAuth.instance;
     _navigationService = GetIt.instance.get<NavigationService>();
     _databaseService = GetIt.instance.get<DatabaseService>();
 
-    _auth.authStateChanges().listen((_user) {
-      if (_user != null) {
-        _databaseService.updateUserLastSeenTime(_user.uid);
-        _databaseService.getUser(_user.uid).then(
-          (_snapshot) {
-            Map<String, dynamic> _userData =
-                _snapshot.data()! as Map<String, dynamic>;
-            user = AppUser.fromJSON(
+    _auth.authStateChanges().listen((user) {
+      if (user != null) {
+        _databaseService.updateUserLastSeenTime(user.uid);
+        _databaseService.getUser(user.uid).then(
+          (snapshot) {
+            Map<String, dynamic> userData =
+                snapshot.data()! as Map<String, dynamic>;
+            appUser = AppUser.fromJSON(
               {
-                "uid": _user.uid,
-                "username": _userData["username"],
-                "email": _userData["email"],
-                "last_active": _userData["last_active"],
-                "image": _userData["image"],
+                "uid": user.uid,
+                "username": userData["username"],
+                "email": userData["email"],
+                "last_active": userData["last_active"],
+                "image": userData["image"],
               },
             );
-            print("After then");
             _navigationService.removeAndNavigateToRoute('/home');
           },
         );
@@ -46,38 +45,47 @@ class AuthenticationProvider extends ChangeNotifier {
     });
   }
 
-  Future<void> loginUsingEmailAndPassword(
-      String _email, String _password) async {
+  Future<void> loginUsingEmailAndPassword(String email, String password) async {
     try {
-      await _auth.signInWithEmailAndPassword(
-          email: _email, password: _password);
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException {
-      print("Error logging user into Firebase");
+      if (kDebugMode) {
+        print("Error logging user into Firebase");
+      }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
   Future<String?> registerUserUsingEmailAndPassword(
-      String _email, String _password) async {
+      String email, String password) async {
     try {
-      UserCredential _credentials = await _auth.createUserWithEmailAndPassword(
-        email: _email,
-        password: _password,
+      UserCredential credentials = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
       );
-      return _credentials.user!.uid;
+      return credentials.user!.uid;
     } on FirebaseAuthException {
-      print("Error: create user");
+      if (kDebugMode) {
+        print("Error: create user");
+      }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
+    return null;
   }
 
   Future<void> logout() async {
     try {
       await _auth.signOut();
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 }

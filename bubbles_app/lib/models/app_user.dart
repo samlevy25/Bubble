@@ -13,13 +13,13 @@ class AppUser {
     required this.lastActive,
   });
 
-  factory AppUser.fromJSON(Map<String, dynamic> _json) {
+  factory AppUser.fromJSON(Map<String, dynamic> json) {
     return AppUser(
-      uid: _json["uid"],
-      username: _json["username"],
-      email: _json["email"],
-      imageURL: _json["image"],
-      lastActive: _json["last_active"].toDate(),
+      uid: json["uid"],
+      username: json["username"],
+      email: json["email"],
+      imageURL: json["image"],
+      lastActive: json["last_active"].toDate(),
     );
   }
 

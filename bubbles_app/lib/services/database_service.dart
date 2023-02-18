@@ -1,42 +1,48 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
-const String USER_COLLECTION = "Users";
-const String BUBBLES_COLLECTION = "Bubbles";
-const String MESSAGES_COLLECTION = "Messages";
+const String userCollection = "Users";
+const String chatsCollection = "Bubbles";
+const String messagesCollection = "Messages";
 
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  DatabaseService() {}
+  DatabaseService();
+
   Future<void> createUser(
-      String _uid, String _email, String _username, String _imageURL) async {
+      String uid, String email, String username, String imageURL) async {
     try {
-      await _db.collection(USER_COLLECTION).doc(_uid).set(
+      await _db.collection(userCollection).doc(uid).set(
         {
-          "email": _email,
-          "image": _imageURL,
+          "email": email,
+          "image": imageURL,
           "last_active": DateTime.now().toUtc(),
-          "username": _username,
+          "username": username,
         },
       );
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
-  Future<DocumentSnapshot> getUser(String _uid) {
-    return _db.collection(USER_COLLECTION).doc(_uid).get();
+  Future<DocumentSnapshot> getUser(String uid) {
+    return _db.collection(userCollection).doc(uid).get();
   }
 
-  Future<void> updateUserLastSeenTime(String _uid) async {
+  Future<void> updateUserLastSeenTime(String uid) async {
     try {
-      await _db.collection(USER_COLLECTION).doc(_uid).update(
+      await _db.collection(userCollection).doc(uid).update(
         {
           "last_active": DateTime.now().toUtc(),
         },
       );
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 }

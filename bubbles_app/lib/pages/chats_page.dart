@@ -1,7 +1,5 @@
-import 'package:bubbles_app/models/app_user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:get_it/get_it.dart';
 
 //p
 import '../providers/authentication_provider.dart';
@@ -23,7 +21,7 @@ class _ChatsPageState extends State<ChatsPage> {
   late double _deviceWidth;
 
   late AuthenticationProvider _auth;
-  late ChatsPageProvider _pageProvider;
+  late ChatsPageProvider pageProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +40,8 @@ class _ChatsPageState extends State<ChatsPage> {
 
   Widget _buildUI() {
     return Builder(
-      builder: (BuildContext _context) {
-        _pageProvider = _context.watch<ChatsPageProvider>();
+      builder: (BuildContext context) {
+        pageProvider = context.watch<ChatsPageProvider>();
         return Container(
           padding: EdgeInsets.symmetric(
             horizontal: _deviceWidth * 0.03,

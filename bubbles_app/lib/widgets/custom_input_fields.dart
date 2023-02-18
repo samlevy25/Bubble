@@ -6,8 +6,9 @@ class CustomTextFromField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
 
-  CustomTextFromField(
-      {required this.onSaved,
+  const CustomTextFromField(
+      {super.key,
+      required this.onSaved,
       required this.regEx,
       required this.hintText,
       required this.obscureText});
@@ -15,12 +16,12 @@ class CustomTextFromField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      onSaved: (_value) => onSaved(_value!),
+      onSaved: (value) => onSaved(value!),
       cursorColor: Colors.white,
       style: const TextStyle(color: Colors.white),
       obscureText: obscureText,
-      validator: (_value) {
-        return RegExp(regEx).hasMatch(_value!) ? null : "Error";
+      validator: (value) {
+        return RegExp(regEx).hasMatch(value!) ? null : "Error";
       },
       decoration: InputDecoration(
         fillColor: Colors.green,
@@ -30,7 +31,7 @@ class CustomTextFromField extends StatelessWidget {
           borderSide: BorderSide.none,
         ),
         hintText: hintText,
-        hintStyle: TextStyle(color: Colors.white),
+        hintStyle: const TextStyle(color: Colors.white),
       ),
     );
   }

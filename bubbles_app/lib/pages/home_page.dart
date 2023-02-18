@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 //p
-
 import '../pages/chats_page.dart';
 import '../pages/users_page.dart';
 
@@ -32,9 +31,9 @@ class _HomePageState extends State<HomePage> {
       body: _pages[currentPage],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentPage,
-        onTap: (_index) {
+        onTap: (index) {
           setState(() {
-            currentPage = _index;
+            currentPage = index;
           });
         },
         items: const [

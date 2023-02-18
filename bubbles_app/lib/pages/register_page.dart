@@ -32,7 +32,7 @@ class _RegisterPageState extends State<RegisterPage> {
   late AuthenticationProvider _auth;
   late DatabaseService _db;
   late CloudStorageService _cloudStorage;
-  late NavigationService _navigation;
+  late NavigationService navigation;
 
   String? _username;
   String? _email;
@@ -47,7 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _auth = Provider.of<AuthenticationProvider>(context);
     _db = GetIt.instance.get<DatabaseService>();
     _cloudStorage = GetIt.instance.get<CloudStorageService>();
-    _navigation = GetIt.instance.get<NavigationService>();
+    navigation = GetIt.instance.get<NavigationService>();
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
 
@@ -88,10 +88,10 @@ class _RegisterPageState extends State<RegisterPage> {
     return GestureDetector(
       onTap: () {
         GetIt.instance.get<MediaService>().pickedImageFromLibary().then(
-              (_file) => {
+              (file) => {
                 setState(
                   () {
-                    _profileImage = _file;
+                    _profileImage = file;
                   },
                 )
               },
@@ -116,7 +116,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _registerForm() {
-    return Container(
+    return SizedBox(
       height: _deviceHeight * 0.35,
       child: Form(
         key: _registerFormKey,
@@ -126,9 +126,9 @@ class _RegisterPageState extends State<RegisterPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomTextFromField(
-              onSaved: (_value) {
+              onSaved: (value) {
                 setState(() {
-                  _username = _value;
+                  _username = value;
                 });
               },
               regEx: r'.{8,}',
@@ -136,9 +136,9 @@ class _RegisterPageState extends State<RegisterPage> {
               obscureText: false,
             ),
             CustomTextFromField(
-              onSaved: (_value) {
+              onSaved: (value) {
                 setState(() {
-                  _email = _value;
+                  _email = value;
                 });
               },
               regEx:
@@ -147,9 +147,9 @@ class _RegisterPageState extends State<RegisterPage> {
               obscureText: false,
             ),
             CustomTextFromField(
-              onSaved: (_value) {
+              onSaved: (value) {
                 setState(() {
-                  _password = _value;
+                  _password = value;
                 });
               },
               regEx: r'.{8,}',
@@ -171,11 +171,11 @@ class _RegisterPageState extends State<RegisterPage> {
         if (_registerFormKey.currentState!.validate() &&
             _profileImage != null) {
           _registerFormKey.currentState!.save();
-          String? _uid = await _auth.registerUserUsingEmailAndPassword(
+          String? uid = await _auth.registerUserUsingEmailAndPassword(
               _email!, _password!);
-          String? _imageURL =
-              await _cloudStorage.saveUserImageToStorage(_uid!, _profileImage!);
-          await _db.createUser(_uid, _email!, _username!, _imageURL!);
+          String? imageURL =
+              await _cloudStorage.saveUserImageToStorage(uid!, _profileImage!);
+          await _db.createUser(uid, _email!, _username!, imageURL!);
           _auth.logout();
           _auth.loginUsingEmailAndPassword(_email!, _password!);
         }

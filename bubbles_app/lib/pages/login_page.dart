@@ -14,6 +14,8 @@ import '../providers/authentication_provider.dart';
 import '../services/navigation_server.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _LoginPage();
@@ -76,7 +78,7 @@ class _LoginPage extends State<LoginPage> {
   }
 
   Widget _pageTitle() {
-    return Container(
+    return SizedBox(
       height: _deviceHeight * 0.10,
       child: const Text(
         'Bubbles',
@@ -99,9 +101,9 @@ class _LoginPage extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomTextFromField(
-              onSaved: (_value) {
+              onSaved: (value) {
                 setState(() {
-                  _email = _value;
+                  _email = value;
                 });
               },
               regEx:
@@ -110,9 +112,9 @@ class _LoginPage extends State<LoginPage> {
               obscureText: false,
             ),
             CustomTextFromField(
-              onSaved: (_value) {
+              onSaved: (value) {
                 setState(() {
-                  _password = _value;
+                  _password = value;
                 });
               },
               regEx: r".{6,}",
@@ -134,10 +136,7 @@ class _LoginPage extends State<LoginPage> {
         if (_loginFormKey.currentState!.validate()) {
           _loginFormKey.currentState!.save();
           _auth.loginUsingEmailAndPassword(_email!, _password!);
-          print("Logged!");
-        } else {
-          print("not logged!");
-        }
+        } else {}
       },
     );
   }
@@ -145,12 +144,10 @@ class _LoginPage extends State<LoginPage> {
   Widget _registerAccountLink() {
     return GestureDetector(
       onTap: () => _navigation.navigateToRoute('/register'),
-      child: Container(
-        child: const Text(
-          "account",
-          style: TextStyle(
-            color: Colors.blue,
-          ),
+      child: const Text(
+        "account",
+        style: TextStyle(
+          color: Colors.blue,
         ),
       ),
     );

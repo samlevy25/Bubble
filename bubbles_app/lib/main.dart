@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 // Packages
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:provider/provider.dart';
 
 //Pages
@@ -22,7 +21,7 @@ void main() {
       key: UniqueKey(),
       onInitializationComplete: () {
         runApp(
-          MainApp(),
+          const MainApp(),
         );
       },
     ),
@@ -30,12 +29,14 @@ void main() {
 }
 
 class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthenticationProvider>(
-          create: (BuildContext _context) {
+          create: (BuildContext context) {
             return AuthenticationProvider();
           },
         ),
@@ -43,16 +44,16 @@ class MainApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Bubbles',
         theme: ThemeData(
-          scaffoldBackgroundColor: Color.fromARGB(255, 15, 8, 223),
+          scaffoldBackgroundColor: const Color.fromARGB(255, 15, 8, 223),
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
               backgroundColor: Color.fromARGB(255, 78, 72, 156)),
         ),
         navigatorKey: NavigationService.navigatorKey,
         initialRoute: '/login',
         routes: {
-          '/login': (BuildContext _context) => LoginPage(),
-          '/register': (BuildContext _context) => RegisterPage(),
-          '/home': (BuildContext _context) => HomePage(),
+          '/login': (BuildContext context) => const LoginPage(),
+          '/register': (BuildContext context) => const RegisterPage(),
+          '/home': (BuildContext context) => const HomePage(),
         },
       ),
     );

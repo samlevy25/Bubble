@@ -1,46 +1,52 @@
-import "dart:io";
-
 //Packages
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
+import "dart:io";
 
-const String USER_COLLECTION = "users";
+import 'package:flutter/foundation.dart';
+
+const String userCollection = "users";
 
 class CloudStorageService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   CloudStorageService();
 
-  Future<String?> saveUserImageToStorage(
-      String _uid, PlatformFile _file) async {
+  Future<String?> saveUserImageToStorage(String uid, PlatformFile file) async {
     try {
-      Reference _ref =
-          _storage.ref().child('images/users/$_uid/profile.${_file.extension}');
-      UploadTask _task = _ref.putFile(
-        File(_file.path!),
+      Reference ref =
+          _storage.ref().child('images/users/$uid/profile.${file.extension}');
+      UploadTask task = ref.putFile(
+        File(file.path!),
       );
-      return await _task.then(
-        (_result) => _result.ref.getDownloadURL(),
+      return await task.then(
+        (result) => result.ref.getDownloadURL(),
       );
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
+    return null;
   }
 
   Future<String?> saveChatImageToStorage(
-      String _chatID, String _userID, PlatformFile _file) async {
+      String chatID, String userID, PlatformFile file) async {
     try {
-      Reference _ref = _storage.ref().child(
-          'images/chats/$_chatID/${_userID}_${Timestamp.now().millisecondsSinceEpoch}.${_file.extension}');
-      UploadTask _task = _ref.putFile(
-        File(_file.path!),
+      Reference ref = _storage.ref().child(
+          'images/chats/$chatID/${userID}_${Timestamp.now().millisecondsSinceEpoch}.${file.extension}');
+      UploadTask task = ref.putFile(
+        File(file.path!),
       );
-      return await _task.then(
-        (_result) => _result.ref.getDownloadURL(),
+      return await task.then(
+        (result) => result.ref.getDownloadURL(),
       );
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
+    return null;
   }
 }
