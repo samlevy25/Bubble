@@ -28,6 +28,13 @@ class DatabaseService {
     }
   }
 
+  Stream<QuerySnapshot> getChatsForUser(String uid) {
+    return _db
+        .collection(chatsCollection)
+        .where('members', arrayContains: uid)
+        .snapshots();
+  }
+
   Future<DocumentSnapshot> getUser(String uid) {
     return _db.collection(userCollection).doc(uid).get();
   }
