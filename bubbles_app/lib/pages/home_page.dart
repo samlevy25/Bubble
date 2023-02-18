@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+//p
+
+import '../pages/bubbles_page.dart';
+import '../pages/users_page.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -10,12 +15,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int currentPage = 0;
   final List<Widget> _pages = [
-    Container(
-      color: Colors.red,
-    ),
-    Container(
-      color: Colors.green,
-    ),
+    const BubblesPage(),
+    const UsersPage(),
     Container(
       color: Colors.blue,
     )
@@ -37,8 +38,9 @@ class _HomePageState extends State<HomePage> {
           });
         },
         items: const [
-          BottomNavigationBarItem(label: "A", icon: Icon(Icons.abc)),
-          BottomNavigationBarItem(label: "B", icon: Icon(Icons.abc)),
+          BottomNavigationBarItem(
+              label: "", icon: Icon(Icons.bubble_chart_rounded)),
+          BottomNavigationBarItem(label: "", icon: Icon(Icons.person)),
           BottomNavigationBarItem(label: "C", icon: Icon(Icons.abc)),
         ],
       ),
