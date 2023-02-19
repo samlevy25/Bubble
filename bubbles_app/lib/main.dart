@@ -42,6 +42,7 @@ class MainApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Bubbles',
         theme: ThemeData(
           scaffoldBackgroundColor: Color.fromARGB(255, 86, 81, 249),
