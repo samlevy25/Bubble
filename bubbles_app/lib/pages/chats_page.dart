@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //p
+import '../models/app_user.dart';
+import '../models/chat.dart';
+import '../models/chat_message.dart';
 import '../providers/authentication_provider.dart';
 import '../providers/chats_page_provider.dart';
 
 //w
+import '../services/navigation_server.dart';
 import '../widgets/top_bar.dart';
 import '../widgets/custom_list_view_tiles.dart';
 
@@ -21,6 +25,7 @@ class _ChatsPageState extends State<ChatsPage> {
   late double _deviceWidth;
 
   late AuthenticationProvider _auth;
+  late NavigationService _navigation;
   late ChatsPageProvider pageProvider;
 
   @override
@@ -75,17 +80,54 @@ class _ChatsPageState extends State<ChatsPage> {
   }
 
   Widget _chatsList() {
-    return Expanded(child: _chatTile());
+    List<Chat>? chats = pageProvider.chats;
+    return Expanded(
+      child: (() {
+        if (chats != null) {
+          if (chats.isNotEmpty) {
+            return ListView.builder(
+              itemCount: chats.length,
+              itemBuilder: (BuildContext context, int index) {
+                return _chatTile(
+                  chats[index],
+                );
+              },
+            );
+          } else {
+            return const Center(
+              child: Text(
+                "No Chats Found.",
+                style: TextStyle(color: Colors.white),
+              ),
+            );
+          }
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Colors.white,
+            ),
+          );
+        }
+      })(),
+    );
   }
 
-  Widget _chatTile() {
+  Widget _chatTile(Chat chat) {
+    List<AppUser> recepients = chat.recepients();
+    bool isActive = recepients.any((d) => d.wasRecentlyActive());
+    String subtitleText = "";
+    if (chat.messages.isNotEmpty) {
+      subtitleText = chat.messages.first.type != MessageType.text
+          ? "Media Attachment"
+          : chat.messages.first.content;
+    }
     return CustomListViewTileWithActivity(
       height: _deviceHeight * 0.10,
-      title: "title",
-      subtitle: "dummy msg",
-      imagePath: "https://i.pravatar.cc/300",
-      isActive: false,
-      isActivity: false,
+      title: chat.title(),
+      subtitle: subtitleText,
+      imagePath: chat.imageURL(),
+      isActive: isActive,
+      isActivity: chat.activity,
       onTap: () {},
     );
   }

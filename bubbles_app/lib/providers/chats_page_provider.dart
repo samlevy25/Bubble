@@ -27,6 +27,7 @@ class ChatsPageProvider extends ChangeNotifier {
 
   ChatsPageProvider(this._auth) {
     _db = GetIt.instance.get<DatabaseService>();
+    getChats();
   }
 
   @override
