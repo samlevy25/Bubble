@@ -10,7 +10,7 @@ import '../providers/authentication_provider.dart';
 import '../providers/chats_page_provider.dart';
 
 //w
-import '../services/navigation_server.dart';
+import '../services/navigation_service.dart';
 import '../widgets/top_bar.dart';
 import '../widgets/custom_list_view_tiles.dart';
 import 'chat_page.dart';

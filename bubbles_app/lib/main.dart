@@ -10,7 +10,7 @@ import './pages/home_page.dart';
 import './pages/register_page.dart';
 
 //Servies
-import './services/navigation_server.dart';
+import 'services/navigation_service.dart';
 
 //Provider
 import './providers/authentication_provider.dart';

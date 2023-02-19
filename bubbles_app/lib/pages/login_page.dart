@@ -11,7 +11,7 @@ import '../widgets/rounded_button.dart';
 import '../providers/authentication_provider.dart';
 
 //s
-import '../services/navigation_server.dart';
+import '../services/navigation_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
