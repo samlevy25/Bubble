@@ -41,6 +41,10 @@ class ChatPageProvider extends ChangeNotifier {
     return message;
   }
 
+  void set message(String _value) {
+    _message = _value;
+  }
+
   ChatPageProvider(this._chatId, this._auth, this._messagesListViewController) {
     _db = GetIt.instance.get<DatabaseService>();
     _storage = GetIt.instance.get<CloudStorageService>();

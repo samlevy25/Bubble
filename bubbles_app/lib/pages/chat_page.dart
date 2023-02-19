@@ -100,6 +100,7 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                   ),
                   _messagesListView(),
+                  _sendMessageForm(),
                 ],
               ),
             ),
@@ -143,11 +144,51 @@ class _ChatPageState extends State<ChatPage> {
         );
       }
     } else {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(
           color: Colors.white,
         ),
       );
     }
+  }
+
+  Widget _sendMessageForm() {
+    return Container(
+      height: _deviceHeight * 0.06,
+      decoration: BoxDecoration(
+        color: const Color.fromRGBO(30, 29, 37, 1.0),
+        borderRadius: BorderRadius.circular(100),
+      ),
+      margin: EdgeInsets.symmetric(
+        horizontal: _deviceWidth * 0.04,
+        vertical: _deviceHeight * 0.03,
+      ),
+      child: Form(
+        key: _messageFormState,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _messageTextField(),
+            //_sendMessageButton(),
+            //_imageMessageButton(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _messageTextField() {
+    return SizedBox(
+      width: _deviceWidth * 0.65,
+      child: CustomTextFromField(
+          onSaved: (_value) {
+            _pageProvider.message = _value;
+          },
+          regEx: r"^(?!\s*$).+",
+          hintText: "Type a message",
+          obscureText: false),
+    );
   }
 }
