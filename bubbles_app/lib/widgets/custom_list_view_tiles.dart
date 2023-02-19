@@ -137,11 +137,10 @@ class CustomChatListViewTile extends StatelessWidget {
     required this.message,
     required this.sender,
   });
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(bottom: 10),
       width: width,
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -159,8 +158,18 @@ class CustomChatListViewTile extends StatelessWidget {
             width: width * 0.05,
           ),
           message.type == MessageType.text
-              ? Text(message.content)
-              : Text(message.content)
+              ? TextMessageBubble(
+                  isOwnMessage: isOwnMessage,
+                  message: message,
+                  height: deviceHeight * 0.06,
+                  width: width,
+                )
+              : ImageMessageBubble(
+                  isOwnMessage: isOwnMessage,
+                  message: message,
+                  height: deviceHeight * 0.30,
+                  width: width * 0.55,
+                ),
         ],
       ),
     );
