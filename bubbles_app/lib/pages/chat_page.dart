@@ -226,7 +226,7 @@ class _ChatPageState extends State<ChatPage> {
           1.0,
         ),
         onPressed: () {
-          // _pageProvider.sendImageMessage();
+          _pageProvider.sendImageMessage();
         },
         child: const Icon(Icons.camera_enhance),
       ),
