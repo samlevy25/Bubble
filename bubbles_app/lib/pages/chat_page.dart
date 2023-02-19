@@ -171,8 +171,8 @@ class _ChatPageState extends State<ChatPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _messageTextField(),
-            //_sendMessageButton(),
-            //_imageMessageButton(),
+            _sendMessageButton(),
+            _imageMessageButton(),
           ],
         ),
       ),
@@ -189,6 +189,47 @@ class _ChatPageState extends State<ChatPage> {
           regEx: r"^(?!\s*$).+",
           hintText: "Type a message",
           obscureText: false),
+    );
+  }
+
+  Widget _sendMessageButton() {
+    double _size = _deviceHeight * 0.04;
+    return Container(
+      height: _size,
+      width: _size,
+      child: IconButton(
+        icon: const Icon(
+          Icons.send,
+          color: Colors.white,
+        ),
+        onPressed: () {
+          //if (_messageFormState.currentState!.validate()) {
+          //  _messageFormState.currentState!.save();
+          // _pageProvider.sendTextMessage();
+          // _messageFormState.currentState!.reset();
+          //}
+        },
+      ),
+    );
+  }
+
+  Widget _imageMessageButton() {
+    double _size = _deviceHeight * 0.04;
+    return Container(
+      height: _size,
+      width: _size,
+      child: FloatingActionButton(
+        backgroundColor: const Color.fromRGBO(
+          0,
+          82,
+          218,
+          1.0,
+        ),
+        onPressed: () {
+          // _pageProvider.sendImageMessage();
+        },
+        child: const Icon(Icons.camera_enhance),
+      ),
     );
   }
 }

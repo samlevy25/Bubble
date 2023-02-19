@@ -31,7 +31,7 @@ class CustomTextFromField extends StatelessWidget {
           borderSide: BorderSide.none,
         ),
         hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.white),
+        hintStyle: const TextStyle(color: Colors.white54),
       ),
     );
   }
