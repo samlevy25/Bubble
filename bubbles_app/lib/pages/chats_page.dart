@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 //p
@@ -12,6 +13,7 @@ import '../providers/chats_page_provider.dart';
 import '../services/navigation_server.dart';
 import '../widgets/top_bar.dart';
 import '../widgets/custom_list_view_tiles.dart';
+import 'chat_page.dart';
 
 class ChatsPage extends StatefulWidget {
   const ChatsPage({super.key});
@@ -33,6 +35,7 @@ class _ChatsPageState extends State<ChatsPage> {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
     _auth = Provider.of<AuthenticationProvider>(context);
+    _navigation = GetIt.instance.get<NavigationService>();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ChatsPageProvider>(
@@ -128,7 +131,11 @@ class _ChatsPageState extends State<ChatsPage> {
       imagePath: chat.imageURL(),
       isActive: isActive,
       isActivity: chat.activity,
-      onTap: () {},
+      onTap: () {
+        _navigation.navigateToPage(
+          ChatPage(chat: chat),
+        );
+      },
     );
   }
 }
