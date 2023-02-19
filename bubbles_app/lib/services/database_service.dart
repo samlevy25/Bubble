@@ -56,10 +56,9 @@ class DatabaseService {
         .snapshots();
   }
 
-  Future<void> updateChatData(
-      String _chatID, Map<String, dynamic> _data) async {
+  Future<void> updateChatData(String chatID, Map<String, dynamic> _data) async {
     try {
-      await _db.collection(chatsCollection).doc(_chatID).update(_data);
+      await _db.collection(chatsCollection).doc(chatID).update(_data);
     } catch (e) {
       if (kDebugMode) {
         print(e);

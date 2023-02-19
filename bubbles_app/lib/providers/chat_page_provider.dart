@@ -94,13 +94,13 @@ class ChatPageProvider extends ChangeNotifier {
 
   void sendTextMessage() {
     if (_message != null) {
-      ChatMessage _messageToSend = ChatMessage(
+      ChatMessage messageToSend = ChatMessage(
         content: _message!,
         type: MessageType.text,
         senderID: _auth.appUser.uid,
         sentTime: DateTime.now(),
       );
-      _db.addMessageToChat(_chatId, _messageToSend);
+      _db.addMessageToChat(_chatId, messageToSend);
     }
   }
 

@@ -102,7 +102,7 @@ class _ChatPageState extends State<ChatPage> {
                       },
                     ),
                   ),
-                  // _messagesListView(),
+                  _messagesListView(),
                   //_sendMessageForm(),
                 ],
               ),
@@ -111,5 +111,45 @@ class _ChatPageState extends State<ChatPage> {
         );
       },
     );
+  }
+
+  Widget _messagesListView() {
+    if (_pageProvider.messages != null) {
+      if (_pageProvider.messages!.isNotEmpty) {
+        return SizedBox(
+          height: _deviceHeight * 0.74,
+          child: ListView.builder(
+            controller: _messagesListViewController,
+            itemCount: _pageProvider.messages!.length,
+            itemBuilder: (BuildContext context, int index) {
+              ChatMessage message = _pageProvider.messages![index];
+              bool isOwnMessage = message.senderID == _auth.appUser.uid;
+              return Container(
+                child: Text(
+                  _pageProvider.messages![index].content,
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      } else {
+        return const Align(
+          alignment: Alignment.center,
+          child: Text(
+            "Be the first to say Hi!",
+            style: TextStyle(color: Colors.white),
+          ),
+        );
+      }
+    } else {
+      return const Center(
+        child: CircularProgressIndicator(
+          color: Colors.white,
+        ),
+      );
+    }
   }
 }
