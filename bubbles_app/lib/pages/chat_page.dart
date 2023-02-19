@@ -40,6 +40,43 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget buildUI() {
-    return Scaffold();
+    _deviceHeight = MediaQuery.of(context).size.height;
+    _deviceWidth = MediaQuery.of(context).size.width;
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: _deviceWidth * 0.03,
+            vertical: _deviceHeight * 0.02,
+          ),
+          height: _deviceHeight,
+          width: _deviceWidth * 0.97,
+          child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TopBar(
+                  widget.chat.title(),
+                  fontSize: 20,
+                  primaryAction: IconButton(
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Color.fromRGBO(0, 82, 218, 1.0),
+                    ),
+                    onPressed: () {},
+                  ),
+                  secondaryAction: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Color.fromRGBO(0, 82, 218, 1.0),
+                    ),
+                    onPressed: () {},
+                  ),
+                )
+              ]),
+        ),
+      ),
+    );
   }
 }
