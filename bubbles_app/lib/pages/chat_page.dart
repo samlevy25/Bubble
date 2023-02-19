@@ -115,28 +115,34 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _messagesListView() {
     if (_pageProvider.messages != null) {
-      if (_pageProvider.messages!.isNotEmpty) {
-        return SizedBox(
+      if (_pageProvider.messages!.length != 0) {
+        return Container(
           height: _deviceHeight * 0.74,
           child: ListView.builder(
             controller: _messagesListViewController,
             itemCount: _pageProvider.messages!.length,
-            itemBuilder: (BuildContext context, int index) {
-              ChatMessage message = _pageProvider.messages![index];
-              bool isOwnMessage = message.senderID == _auth.appUser.uid;
+            itemBuilder: (BuildContext _context, int _index) {
+              ChatMessage _message = _pageProvider.messages![_index];
+              bool _isOwnMessage = _message.senderID == _auth.appUser.uid;
               return Container(
-                child: Text(
-                  _pageProvider.messages![index].content,
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
+                child: CustomChatListViewTile(
+                  deviceHeight: _deviceHeight,
+                  width: _deviceWidth * 0.80,
+                  message: _message,
+                  isOwnMessage: _isOwnMessage,
+                  sender: this
+                      .widget
+                      .chat
+                      .members
+                      .where((_m) => _m.uid == _message.senderID)
+                      .first,
                 ),
               );
             },
           ),
         );
       } else {
-        return const Align(
+        return Align(
           alignment: Alignment.center,
           child: Text(
             "Be the first to say Hi!",
@@ -145,7 +151,7 @@ class _ChatPageState extends State<ChatPage> {
         );
       }
     } else {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(
           color: Colors.white,
         ),
