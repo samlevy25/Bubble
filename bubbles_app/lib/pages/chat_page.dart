@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //Widgets
-import '../providers/chat_page_provider.dart';
 import '../widgets/top_bar.dart';
 import '../widgets/custom_list_view_tiles.dart';
 import '../widgets/custom_input_fields.dart';
@@ -14,16 +13,17 @@ import '../models/chat_message.dart';
 
 //Providers
 import '../providers/authentication_provider.dart';
+import '../providers/chat_page_provider.dart';
 
 class ChatPage extends StatefulWidget {
   final Chat chat;
-  const ChatPage({
-    super.key,
-    required this.chat,
-  });
+
+  ChatPage({required this.chat});
 
   @override
-  State<ChatPage> createState() => _ChatPageState();
+  State<StatefulWidget> createState() {
+    return _ChatPageState();
+  }
 }
 
 class _ChatPageState extends State<ChatPage> {
@@ -52,20 +52,17 @@ class _ChatPageState extends State<ChatPage> {
       providers: [
         ChangeNotifierProvider<ChatPageProvider>(
           create: (_) => ChatPageProvider(
-            widget.chat.uid,
-            _auth,
-            _messagesListViewController,
-          ),
+              this.widget.chat.uid, _auth, _messagesListViewController),
         ),
       ],
-      child: buildUI(),
+      child: _buildUI(),
     );
   }
 
-  Widget buildUI() {
+  Widget _buildUI() {
     return Builder(
-      builder: (BuildContext context) {
-        _pageProvider = context.watch<ChatPageProvider>();
+      builder: (BuildContext _context) {
+        _pageProvider = _context.watch<ChatPageProvider>();
         return Scaffold(
           body: SingleChildScrollView(
             child: Container(
@@ -81,7 +78,7 @@ class _ChatPageState extends State<ChatPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   TopBar(
-                    widget.chat.title(),
+                    this.widget.chat.title(),
                     fontSize: 10,
                     primaryAction: IconButton(
                       icon: const Icon(
@@ -89,7 +86,7 @@ class _ChatPageState extends State<ChatPage> {
                         color: Color.fromRGBO(0, 82, 218, 1.0),
                       ),
                       onPressed: () {
-                        // _pageProvider.deleteChat();
+                        _pageProvider.deleteChat();
                       },
                     ),
                     secondaryAction: IconButton(
@@ -103,7 +100,6 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                   ),
                   _messagesListView(),
-                  //_sendMessageForm(),
                 ],
               ),
             ),
@@ -119,7 +115,6 @@ class _ChatPageState extends State<ChatPage> {
         return Container(
           height: _deviceHeight * 0.74,
           child: ListView.builder(
-            controller: _messagesListViewController,
             itemCount: _pageProvider.messages!.length,
             itemBuilder: (BuildContext _context, int _index) {
               ChatMessage _message = _pageProvider.messages![_index];
@@ -130,10 +125,7 @@ class _ChatPageState extends State<ChatPage> {
                   width: _deviceWidth * 0.80,
                   message: _message,
                   isOwnMessage: _isOwnMessage,
-                  sender: this
-                      .widget
-                      .chat
-                      .members
+                  sender: widget.chat.members
                       .where((_m) => _m.uid == _message.senderID)
                       .first,
                 ),
@@ -142,7 +134,7 @@ class _ChatPageState extends State<ChatPage> {
           ),
         );
       } else {
-        return Align(
+        return const Align(
           alignment: Alignment.center,
           child: Text(
             "Be the first to say Hi!",

@@ -1,23 +1,23 @@
-//Packages
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'dart:async';
 
+//Packages
+import 'package:bubbles_app/models/app_user.dart';
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 //Services
-import '../models/chat_message.dart';
 import '../services/database_service.dart';
 
 //Providers
-import 'authentication_provider.dart';
+import '../providers/authentication_provider.dart';
 
 //Models
 import '../models/chat.dart';
-import '../models/app_user.dart';
+import '../models/chat_message.dart';
 
 class ChatsPageProvider extends ChangeNotifier {
-  final AuthenticationProvider _auth;
+  AuthenticationProvider _auth;
 
   late DatabaseService _db;
 
@@ -39,39 +39,41 @@ class ChatsPageProvider extends ChangeNotifier {
   void getChats() async {
     try {
       _chatsStream =
-          _db.getChatsForUser(_auth.appUser.uid).listen((snapshot) async {
+          _db.getChatsForUser(_auth.appUser.uid).listen((_snapshot) async {
         chats = await Future.wait(
-          snapshot.docs.map(
-            (d) async {
-              Map<String, dynamic> chatData = d.data() as Map<String, dynamic>;
+          _snapshot.docs.map(
+            (_d) async {
+              Map<String, dynamic> _chatData =
+                  _d.data() as Map<String, dynamic>;
               //Get Users In Chat
-              List<AppUser> members = [];
-              for (var uid in chatData["members"]) {
-                DocumentSnapshot userSnapshot = await _db.getUser(uid);
-                Map<String, dynamic> userData =
-                    userSnapshot.data() as Map<String, dynamic>;
-                userData["uid"] = userSnapshot.id;
-                members.add(
-                  AppUser.fromJSON(userData),
+              List<AppUser> _members = [];
+              for (var _uid in _chatData["members"]) {
+                DocumentSnapshot _userSnapshot = await _db.getUser(_uid);
+                Map<String, dynamic> _userData =
+                    _userSnapshot.data() as Map<String, dynamic>;
+                _userData["uid"] = _userSnapshot.id;
+                _members.add(
+                  AppUser.fromJSON(_userData),
                 );
               }
               //Get Last Message For Chat
-              List<ChatMessage> messages = [];
-              QuerySnapshot chatMessage = await _db.getLastMessageForChat(d.id);
-              if (chatMessage.docs.isNotEmpty) {
-                Map<String, dynamic> messageData =
-                    chatMessage.docs.first.data()! as Map<String, dynamic>;
-                ChatMessage message = ChatMessage.fromJSON(messageData);
-                messages.add(message);
+              List<ChatMessage> _messages = [];
+              QuerySnapshot _chatMessage =
+                  await _db.getLastMessageForChat(_d.id);
+              if (_chatMessage.docs.isNotEmpty) {
+                Map<String, dynamic> _messageData =
+                    _chatMessage.docs.first.data()! as Map<String, dynamic>;
+                ChatMessage _message = ChatMessage.fromJSON(_messageData);
+                _messages.add(_message);
               }
               //Return Chat Instance
               return Chat(
-                uid: d.id,
+                uid: _d.id,
                 currentUserUid: _auth.appUser.uid,
-                members: members,
-                messages: messages,
-                activity: chatData["is_activity"],
-                group: chatData["is_group"],
+                members: _members,
+                messages: _messages,
+                activity: _chatData["is_activity"],
+                group: _chatData["is_group"],
               );
             },
           ).toList(),
@@ -79,12 +81,8 @@ class ChatsPageProvider extends ChangeNotifier {
         notifyListeners();
       });
     } catch (e) {
-      if (kDebugMode) {
-        print("Error getting chats.");
-      }
-      if (kDebugMode) {
-        print(e);
-      }
+      print("Error getting chats.");
+      print(e);
     }
   }
 }
