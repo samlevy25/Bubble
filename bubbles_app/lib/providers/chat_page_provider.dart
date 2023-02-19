@@ -2,6 +2,7 @@ import 'dart:async';
 
 //Packages
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -30,7 +31,7 @@ class ChatPageProvider extends ChangeNotifier {
   String _chatId;
   List<ChatMessage>? messages;
 
-  //late StreamSubscription _messagesStream;
+  late StreamSubscription _messagesStream;
   //late StreamSubscription _keyboardVisibilityStream;
   //late KeyboardVisibilityController _keyboardVisibilityController;
 
@@ -46,17 +47,48 @@ class ChatPageProvider extends ChangeNotifier {
     _media = GetIt.instance.get<MediaService>();
     _navigation = GetIt.instance.get<NavigationService>();
     //_keyboardVisibilityController = KeyboardVisibilityController();
-    //listenToMessages();
+    listenToMessages();
     //listenToKeyboardChanges();
   }
 
   @override
   void dispose() {
-    //_messagesStream.cancel();
+    _messagesStream.cancel();
     super.dispose();
   }
 
   void goBack() {
     _navigation.goBack();
+  }
+
+  void listenToMessages() {
+    try {
+      _messagesStream = _db.streamMessagesForChat(_chatId).listen(
+        (_snapshot) {
+          List<ChatMessage> _messages = _snapshot.docs.map(
+            (_m) {
+              Map<String, dynamic> _messageData =
+                  _m.data() as Map<String, dynamic>;
+              return ChatMessage.fromJSON(_messageData);
+            },
+          ).toList();
+          messages = _messages;
+          notifyListeners();
+          WidgetsBinding.instance!.addPostFrameCallback(
+            (_) {
+              if (_messagesListViewController.hasClients) {
+                _messagesListViewController.jumpTo(
+                    _messagesListViewController.position.maxScrollExtent);
+              }
+            },
+          );
+        },
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error getting messages.");
+        print(e);
+      }
+    }
   }
 }
