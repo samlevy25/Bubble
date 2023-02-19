@@ -27,7 +27,7 @@ class CustomTextFromField extends StatelessWidget {
         fillColor: const Color.fromRGBO(30, 29, 37, 1.0),
         filled: true,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(100.0),
           borderSide: BorderSide.none,
         ),
         hintText: hintText,

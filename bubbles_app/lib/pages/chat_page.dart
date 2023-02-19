@@ -203,11 +203,11 @@ class _ChatPageState extends State<ChatPage> {
           color: Colors.white,
         ),
         onPressed: () {
-          //if (_messageFormState.currentState!.validate()) {
-          //  _messageFormState.currentState!.save();
-          // _pageProvider.sendTextMessage();
-          // _messageFormState.currentState!.reset();
-          //}
+          if (_messageFormState.currentState!.validate()) {
+            _messageFormState.currentState!.save();
+            _pageProvider.sendTextMessage();
+            _messageFormState.currentState!.reset();
+          }
         },
       ),
     );
