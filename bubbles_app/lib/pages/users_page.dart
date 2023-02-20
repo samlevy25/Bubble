@@ -67,16 +67,13 @@ class _UsersPageState extends State<UsersPage> {
                   },
                 ),
               ),
-              //CustomTextField(
-              //onEditingComplete: (_value) {
-              //  _pageProvider.getUsers(name: _value);
-              //    FocusScope.of(context).unfocus();
-              //  },
-              //  hintText: "Search...",
-              //  obscureText: false,
-              //  controller: _searchFieldTextEditingController,
-              //  icon: Icons.search,
-              //),
+              CustomTextField(
+                onEditingComplete: (_value) {},
+                hintText: "Search...",
+                obscureText: false,
+                controller: _searchFieldTextEditingController,
+                icon: Icons.search,
+              ),
               //_usersList(),
               //_createChatButton(),
             ],
