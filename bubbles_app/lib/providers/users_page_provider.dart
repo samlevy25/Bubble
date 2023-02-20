@@ -58,6 +58,13 @@ class UsersPageProvider extends ChangeNotifier {
     }
   }
 
+  void updateSelectedUsers(AppUser _user) {
+    _selectedUsers.contains(_user)
+        ? _selectedUsers.remove(_user)
+        : _selectedUsers.add(_user);
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     super.dispose();
