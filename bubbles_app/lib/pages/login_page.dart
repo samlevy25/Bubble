@@ -83,6 +83,7 @@ class _LoginPage extends State<LoginPage> {
       child: const Text(
         'Bubbles',
         style: TextStyle(
+          fontSize: 40,
           color: Colors.white,
           fontWeight: FontWeight.w900,
         ),

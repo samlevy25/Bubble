@@ -45,9 +45,9 @@ class MainApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Bubbles',
         theme: ThemeData(
-          scaffoldBackgroundColor: Color.fromARGB(255, 86, 81, 249),
+          scaffoldBackgroundColor: Color.fromRGBO(36, 35, 49, 1.0),
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-              backgroundColor: Color.fromARGB(255, 105, 101, 159)),
+              backgroundColor: Color.fromRGBO(30, 29, 37, 1.0)),
         ),
         navigatorKey: NavigationService.navigatorKey,
         initialRoute: '/login',
