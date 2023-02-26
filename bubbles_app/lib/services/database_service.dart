@@ -5,7 +5,7 @@ import '../models/message.dart';
 
 const String userCollection = "Users";
 const String chatsCollection = "Chats";
-const String bubblesCollection = "Chats";
+const String bubblesCollection = "Bubbles";
 const String messagesCollection = "Messages";
 
 class DatabaseService {
@@ -137,24 +137,6 @@ class DatabaseService {
 //e
 
 extension x on DatabaseService {
-  Future<void> createUser(
-      String uid, String email, String username, String imageURL) async {
-    try {
-      await _db.collection(userCollection).doc(uid).set(
-        {
-          "email": email,
-          "image": imageURL,
-          "last_active": DateTime.now().toUtc(),
-          "username": username,
-        },
-      );
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-  }
-
   Stream<QuerySnapshot> getBubblesForUser(String uid) {
     return _db
         .collection(bubblesCollection)
@@ -201,34 +183,6 @@ extension x on DatabaseService {
           .add(
             _message.toJson(),
           );
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-  }
-
-  Future<DocumentSnapshot> getUser(String uid) {
-    return _db.collection(userCollection).doc(uid).get();
-  }
-
-  Future<QuerySnapshot> getUsers({String? username}) {
-    Query _query = _db.collection(userCollection);
-    if (username != null) {
-      _query = _query
-          .where("username", isGreaterThanOrEqualTo: username)
-          .where("username", isLessThanOrEqualTo: username + "z");
-    }
-    return _query.get();
-  }
-
-  Future<void> updateUserLastSeenTime(String uid) async {
-    try {
-      await _db.collection(userCollection).doc(uid).update(
-        {
-          "last_active": DateTime.now().toUtc(),
-        },
-      );
     } catch (e) {
       if (kDebugMode) {
         print(e);
