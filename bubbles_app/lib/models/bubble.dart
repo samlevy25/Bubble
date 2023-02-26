@@ -1,7 +1,8 @@
+
 import '../models/app_user.dart';
 import 'message.dart';
 
-class Chat {
+class Bubble {
   final String uid;
   final String currentUserUid;
   final bool activity;
@@ -11,7 +12,7 @@ class Chat {
 
   late final List<AppUser> _recepients;
 
-  Chat({
+  Bubble({
     required this.uid,
     required this.currentUserUid,
     required this.members,

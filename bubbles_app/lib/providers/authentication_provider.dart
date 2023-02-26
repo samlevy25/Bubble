@@ -1,7 +1,14 @@
 //p
+import 'dart:io';
+
 import 'package:bubbles_app/models/app_user.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:geolocator/geolocator.dart';
+import 'package:geolocator_android/geolocator_android.dart';
+import 'package:geolocator_apple/geolocator_apple.dart';
+
 import 'package:get_it/get_it.dart';
 
 //services

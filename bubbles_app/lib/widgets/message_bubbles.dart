@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 //Models
-import '../models/chat_message.dart';
+import '../models/message.dart';
 
 class TextMessageBubble extends StatelessWidget {
   final bool isOwnMessage;
-  final ChatMessage message;
+  final Message message;
   final double height;
   final double width;
 
@@ -68,7 +68,7 @@ class TextMessageBubble extends StatelessWidget {
 
 class ImageMessageBubble extends StatelessWidget {
   final bool isOwnMessage;
-  final ChatMessage message;
+  final Message message;
   final double height;
   final double width;
 

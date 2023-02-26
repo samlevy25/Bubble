@@ -6,19 +6,19 @@ enum MessageType {
   unkown,
 }
 
-class ChatMessage {
+class Message {
   final String senderID;
   final MessageType type;
   final String content;
   final DateTime sentTime;
 
-  ChatMessage(
+  Message(
       {required this.content,
       required this.type,
       required this.senderID,
       required this.sentTime});
 
-  factory ChatMessage.fromJSON(Map<String, dynamic> json) {
+  factory Message.fromJSON(Map<String, dynamic> json) {
     MessageType messageType;
     switch (json["type"]) {
       case "text":
@@ -30,7 +30,7 @@ class ChatMessage {
       default:
         messageType = MessageType.unkown;
     }
-    return ChatMessage(
+    return Message(
       content: json["content"],
       type: messageType,
       senderID: json["sender_id"],

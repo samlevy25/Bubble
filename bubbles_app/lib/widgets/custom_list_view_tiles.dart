@@ -7,7 +7,7 @@ import '../widgets/rounded_image.dart';
 import '../widgets/message_bubbles.dart';
 
 //Models
-import '../models/chat_message.dart';
+import '../models/message.dart';
 import '../models/app_user.dart';
 
 class CustomListViewTile extends StatelessWidget {
@@ -127,7 +127,7 @@ class CustomChatListViewTile extends StatelessWidget {
   final double width;
   final double deviceHeight;
   final bool isOwnMessage;
-  final ChatMessage message;
+  final Message message;
   final AppUser sender;
 
   const CustomChatListViewTile({

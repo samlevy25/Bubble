@@ -3,30 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //Widgets
-import '../models/chat.dart';
 import '../widgets/top_bar.dart';
 import '../widgets/custom_list_view_tiles.dart';
 import '../widgets/custom_input_fields.dart';
 
 //Models
+import '../models/chat.dart';
 import '../models/message.dart';
 
 //Providers
 import '../providers/authentication_provider.dart';
 import '../providers/chat_page_provider.dart';
 
-class ChatPage extends StatefulWidget {
-  final Chat chat;
+class BubblePage extends StatefulWidget {
+  final Chat bubble;
 
-  ChatPage({required this.chat});
+  const BubblePage({super.key, required this.bubble});
 
   @override
   State<StatefulWidget> createState() {
-    return _ChatPageState();
+    return _BubblePageState();
   }
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _BubblePageState extends State<BubblePage> {
   late double _deviceHeight;
   late double _deviceWidth;
 
@@ -52,7 +52,7 @@ class _ChatPageState extends State<ChatPage> {
       providers: [
         ChangeNotifierProvider<ChatPageProvider>(
           create: (_) => ChatPageProvider(
-              this.widget.chat.uid, _auth, _messagesListViewController),
+              this.widget.bubble.uid, _auth, _messagesListViewController),
         ),
       ],
       child: _buildUI(),
@@ -78,7 +78,7 @@ class _ChatPageState extends State<ChatPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   TopBar(
-                    this.widget.chat.title(),
+                    this.widget.bubble.title(),
                     fontSize: 10,
                     primaryAction: IconButton(
                       icon: const Icon(
@@ -127,7 +127,7 @@ class _ChatPageState extends State<ChatPage> {
                   width: _deviceWidth * 0.80,
                   message: _message,
                   isOwnMessage: _isOwnMessage,
-                  sender: widget.chat.members
+                  sender: widget.bubble.members
                       .where((_m) => _m.uid == _message.senderID)
                       .first,
                 ),

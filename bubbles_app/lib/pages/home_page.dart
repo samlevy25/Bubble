@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 //p
 import '../pages/chats_page.dart';
 import '../pages/users_page.dart';
+import 'bubble_page.dart';
+import 'bubbles_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,13 +14,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int currentPage = 0;
+  int currentPage = 1;
   final List<Widget> _pages = [
     ChatsPage(),
-    const UsersPage(),
-    Container(
-      color: Colors.blue,
-    )
+    BubblesPage(),
+    UsersPage(),
   ];
 
   @override
@@ -37,18 +37,9 @@ class _HomePageState extends State<HomePage> {
           });
         },
         items: const [
-          BottomNavigationBarItem(
-            label: "",
-            icon: Icon(Icons.bubble_chart_rounded),
-          ),
-          BottomNavigationBarItem(
-            label: "",
-            icon: Icon(Icons.person),
-          ),
-          BottomNavigationBarItem(
-            label: "",
-            icon: Icon(Icons.settings),
-          ),
+          BottomNavigationBarItem(label: "", icon: Icon(Icons.chat)),
+          BottomNavigationBarItem(label: "", icon: Icon(Icons.circle)),
+          BottomNavigationBarItem(label: "", icon: Icon(Icons.person)),
         ],
       ),
     );

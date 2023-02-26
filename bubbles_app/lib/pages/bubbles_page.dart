@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 //Providers
 import '../models/bubble.dart';
 import '../providers/authentication_provider.dart';
+import '../providers/bubbles_page_provider.dart';
 import '../providers/chats_page_provider.dart';
 
 //Services
@@ -19,24 +20,23 @@ import '../widgets/top_bar.dart';
 import '../widgets/custom_list_view_tiles.dart';
 
 //Models
-import '../models/chat.dart';
 import '../models/app_user.dart';
 import '../models/message.dart';
 
-class ChatsPage extends StatefulWidget {
+class BubblesPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _ChatsPageState();
+    return _BubblesPageState();
   }
 }
 
-class _ChatsPageState extends State<ChatsPage> {
+class _BubblesPageState extends State<BubblesPage> {
   late double _deviceHeight;
   late double _deviceWidth;
 
   late AuthenticationProvider _auth;
   late NavigationService _navigation;
-  late ChatsPageProvider _pageProvider;
+  late BubblesPageProvider _pageProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +46,8 @@ class _ChatsPageState extends State<ChatsPage> {
     _navigation = GetIt.instance.get<NavigationService>();
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<ChatsPageProvider>(
-          create: (_) => ChatsPageProvider(_auth),
+        ChangeNotifierProvider<BubblesPageProvider>(
+          create: (_) => BubblesPageProvider(_auth),
         ),
       ],
       child: _buildUI(),
@@ -57,7 +57,7 @@ class _ChatsPageState extends State<ChatsPage> {
   Widget _buildUI() {
     return Builder(
       builder: (BuildContext _context) {
-        _pageProvider = _context.watch<ChatsPageProvider>();
+        _pageProvider = _context.watch<BubblesPageProvider>();
         return Container(
           padding: EdgeInsets.symmetric(
             horizontal: _deviceWidth * 0.03,
@@ -71,7 +71,7 @@ class _ChatsPageState extends State<ChatsPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               TopBar(
-                'Chats',
+                'Bubbles',
                 primaryAction: IconButton(
                   icon: Icon(
                     Icons.logout,
@@ -82,7 +82,7 @@ class _ChatsPageState extends State<ChatsPage> {
                   },
                 ),
               ),
-              _chatsList(),
+              _bubblesList(),
             ],
           ),
         );
@@ -90,30 +90,30 @@ class _ChatsPageState extends State<ChatsPage> {
     );
   }
 
-  Widget _chatsList() {
-    List<Chat>? _chats = _pageProvider.chats;
+  Widget _bubblesList() {
+    List<Bubble>? _bubbles = _pageProvider.bubbles;
     return Expanded(
       child: (() {
-        if (_chats != null) {
-          if (_chats.length != 0) {
+        if (_bubbles != null) {
+          if (_bubbles.length != 0) {
             return ListView.builder(
-              itemCount: _chats.length,
+              itemCount: _bubbles.length,
               itemBuilder: (BuildContext _context, int _index) {
-                return _chatTile(
-                  _chats[_index],
+                return _bubbleTile(
+                  _bubbles[_index],
                 );
               },
             );
           } else {
-            return Center(
+            return const Center(
               child: Text(
-                "No Chats Found.",
+                "No Bubbles Found.",
                 style: TextStyle(color: Colors.white),
               ),
             );
           }
         } else {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(
               color: Colors.white,
             ),
@@ -123,26 +123,24 @@ class _ChatsPageState extends State<ChatsPage> {
     );
   }
 
-  Widget _chatTile(Chat _chat) {
-    List<AppUser> _recepients = _chat.recepients();
+  Widget _bubbleTile(Bubble _bubble) {
+    List<AppUser> _recepients = _bubble.recepients();
     bool _isActive = _recepients.any((_d) => _d.wasRecentlyActive());
     String _subtitleText = "";
-    if (_chat.messages.isNotEmpty) {
-      _subtitleText = _chat.messages.first.type != MessageType.text
+    if (_bubble.messages.isNotEmpty) {
+      _subtitleText = _bubble.messages.first.type != MessageType.text
           ? "Media Attachment"
-          : _chat.messages.first.content;
+          : _bubble.messages.first.content;
     }
     return CustomListViewTileWithActivity(
       height: _deviceHeight * 0.10,
-      title: _chat.title(),
+      title: _bubble.title(),
       subtitle: _subtitleText,
-      imagePath: _chat.imageURL(),
+      imagePath: _bubble.imageURL(),
       isActive: _isActive,
-      isActivity: _chat.activity,
+      isActivity: _bubble.activity,
       onTap: () {
-        _navigation.navigateToPage(
-          ChatPage(chat: _chat),
-        );
+        _navigation.navigateToPage(BubblesPage());
       },
     );
   }

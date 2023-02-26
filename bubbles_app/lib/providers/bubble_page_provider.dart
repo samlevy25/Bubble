@@ -19,7 +19,7 @@ import '../providers/authentication_provider.dart';
 //Models
 import '../models/message.dart';
 
-class ChatPageProvider extends ChangeNotifier {
+class bubblePageProvider extends ChangeNotifier {
   late DatabaseService _db;
   late CloudStorageService _storage;
   late MediaService _media;
@@ -28,7 +28,7 @@ class ChatPageProvider extends ChangeNotifier {
   AuthenticationProvider _auth;
   ScrollController _messagesListViewController;
 
-  String _chatId;
+  String _bubbleId;
   List<Message>? messages;
 
   late StreamSubscription _messagesStream;
@@ -45,7 +45,8 @@ class ChatPageProvider extends ChangeNotifier {
     _message = _value;
   }
 
-  ChatPageProvider(this._chatId, this._auth, this._messagesListViewController) {
+  bubblePageProvider(
+      this._bubbleId, this._auth, this._messagesListViewController) {
     _db = GetIt.instance.get<DatabaseService>();
     _storage = GetIt.instance.get<CloudStorageService>();
     _media = GetIt.instance.get<MediaService>();
@@ -67,7 +68,7 @@ class ChatPageProvider extends ChangeNotifier {
 
   void listenToMessages() {
     try {
-      _messagesStream = _db.streamMessagesForChat(_chatId).listen(
+      _messagesStream = _db.streamMessagesForBubble(_bubbleId).listen(
         (_snapshot) {
           List<Message> _messages = _snapshot.docs.map(
             (_m) {
@@ -99,7 +100,7 @@ class ChatPageProvider extends ChangeNotifier {
   void listenToKeyboardChanges() {
     _keyboardVisibilityStream = _keyboardVisibilityController.onChange.listen(
       (_event) {
-        _db.updateChatData(_chatId, {"is_activity": _event});
+        _db.updateBubbleData(_bubbleId, {"is_activity": _event});
       },
     );
   }
@@ -112,7 +113,7 @@ class ChatPageProvider extends ChangeNotifier {
         senderID: _auth.appUser.uid,
         sentTime: DateTime.now(),
       );
-      _db.addMessageToChat(_chatId, messageToSend);
+      _db.addMessageToBubble(_bubbleId, messageToSend);
     }
   }
 
@@ -120,15 +121,15 @@ class ChatPageProvider extends ChangeNotifier {
     try {
       PlatformFile? file = await _media.pickedImageFromLibary();
       if (file != null) {
-        String? downloadURL = await _storage.saveChatImageToStorage(
-            _chatId, _auth.appUser.uid, file);
+        String? downloadURL = await _storage.saveBubbleImageToStorage(
+            _bubbleId, _auth.appUser.uid, file);
         Message messageToSend = Message(
           content: downloadURL!,
           type: MessageType.image,
           senderID: _auth.appUser.uid,
           sentTime: DateTime.now(),
         );
-        _db.addMessageToChat(_chatId, messageToSend);
+        _db.addMessageToBubble(_bubbleId, messageToSend);
       }
     } catch (e) {
       if (kDebugMode) {
@@ -138,8 +139,8 @@ class ChatPageProvider extends ChangeNotifier {
     }
   }
 
-  void deleteChat() {
+  void deletebubble() {
     goBack();
-    _db.deleteChat(_chatId);
+    _db.deleteBubble(_bubbleId);
   }
 }

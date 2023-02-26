@@ -13,41 +13,41 @@ import '../services/database_service.dart';
 import '../providers/authentication_provider.dart';
 
 //Models
-import '../models/chat.dart';
+import '../models/bubble.dart';
 import '../models/message.dart';
 
-class ChatsPageProvider extends ChangeNotifier {
+class BubblesPageProvider extends ChangeNotifier {
   AuthenticationProvider _auth;
 
   late DatabaseService _db;
 
-  List<Chat>? chats;
+  List<Bubble>? bubbles;
 
-  late StreamSubscription _chatsStream;
+  late StreamSubscription _bubblesStream;
 
-  ChatsPageProvider(this._auth) {
+  BubblesPageProvider(this._auth) {
     _db = GetIt.instance.get<DatabaseService>();
-    getChats();
+    getBubble();
   }
 
   @override
   void dispose() {
-    _chatsStream.cancel();
+    _bubblesStream.cancel();
     super.dispose();
   }
 
-  void getChats() async {
+  void getBubble() async {
     try {
-      _chatsStream =
-          _db.getChatsForUser(_auth.appUser.uid).listen((_snapshot) async {
-        chats = await Future.wait(
+      _bubblesStream =
+          _db.getBubblesForUser(_auth.appUser.uid).listen((_snapshot) async {
+        bubbles = await Future.wait(
           _snapshot.docs.map(
             (_d) async {
-              Map<String, dynamic> _chatData =
+              Map<String, dynamic> _bubbleData =
                   _d.data() as Map<String, dynamic>;
               //Get Users In Chat
               List<AppUser> _members = [];
-              for (var _uid in _chatData["members"]) {
+              for (var _uid in _bubbleData["members"]) {
                 DocumentSnapshot _userSnapshot = await _db.getUser(_uid);
                 Map<String, dynamic> _userData =
                     _userSnapshot.data() as Map<String, dynamic>;
@@ -58,22 +58,22 @@ class ChatsPageProvider extends ChangeNotifier {
               }
               //Get Last Message For Chat
               List<Message> _messages = [];
-              QuerySnapshot _chatMessage =
-                  await _db.getLastMessageForChat(_d.id);
-              if (_chatMessage.docs.isNotEmpty) {
+              QuerySnapshot _bubbleMessage =
+                  await _db.getLastMessageForBubble(_d.id);
+              if (_bubbleMessage.docs.isNotEmpty) {
                 Map<String, dynamic> _messageData =
-                    _chatMessage.docs.first.data()! as Map<String, dynamic>;
+                    _bubbleMessage.docs.first.data()! as Map<String, dynamic>;
                 Message _message = Message.fromJSON(_messageData);
                 _messages.add(_message);
               }
               //Return Chat Instance
-              return Chat(
+              return Bubble(
                 uid: _d.id,
                 currentUserUid: _auth.appUser.uid,
                 members: _members,
                 messages: _messages,
-                activity: _chatData["is_activity"],
-                group: _chatData["is_group"],
+                activity: _bubbleData["is_activity"],
+                group: _bubbleData["is_group"],
               );
             },
           ).toList(),
@@ -81,7 +81,7 @@ class ChatsPageProvider extends ChangeNotifier {
         notifyListeners();
       });
     } catch (e) {
-      print("Error getting chats.");
+      print("Error getting bubbles.");
       print(e);
     }
   }
