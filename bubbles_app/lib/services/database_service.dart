@@ -209,9 +209,21 @@ extension x on DatabaseService {
     required GeoPoint location,
     required String? wifi,
     required String? nfc,
-    required String method,
+    required JoinMethod method,
   }) async {
     try {
+      String strMethod;
+      switch (method) {
+        case JoinMethod.wifi:
+          strMethod = "wifi";
+          break;
+        case JoinMethod.nfc:
+          strMethod = "nfc";
+          break;
+        default:
+          strMethod = "gps";
+      }
+
       await _db.collection(bubblesCollection).doc(bubbleUid).set(
         {
           "location": location,
@@ -220,7 +232,7 @@ extension x on DatabaseService {
           "members": [createrUid],
           "wifi": wifi,
           "nfc": nfc,
-          "method": method.toString(),
+          "method": strMethod,
         },
       );
     } catch (e) {

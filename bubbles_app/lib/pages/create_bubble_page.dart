@@ -168,6 +168,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             bubbleUid,
             _bubbleImage!,
           );
+
           await _db.createBubble(
             bubbleUid: bubbleUid,
             createrUid: createrUid,
@@ -176,7 +177,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             location: GeoPoint(0, 0),
             wifi: null,
             nfc: null,
-            method: "gps",
+            method: _selected!,
           );
           navigation.goBack();
           navigation.navigateToPage(
