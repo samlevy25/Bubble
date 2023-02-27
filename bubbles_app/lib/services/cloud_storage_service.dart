@@ -56,10 +56,29 @@ class CloudStorageService {
 //esx
 extension x on CloudStorageService {
   Future<String?> saveBubbleImageToStorage(
+      String uid, PlatformFile file) async {
+    try {
+      Reference ref =
+          _storage.ref().child('images/bubbles/$uid/profile.${file.extension}');
+      UploadTask task = ref.putFile(
+        File(file.path!),
+      );
+      return await task.then(
+        (result) => result.ref.getDownloadURL(),
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return null;
+  }
+
+  Future<String?> saveSentBubbleImageToStorage(
       String bubbleID, String userID, PlatformFile file) async {
     try {
       Reference ref = _storage.ref().child(
-          'images/chats/$bubbleID/${userID}_${Timestamp.now().millisecondsSinceEpoch}.${file.extension}');
+          'images/bubbles/$bubbleID/${userID}_${Timestamp.now().millisecondsSinceEpoch}.${file.extension}');
       UploadTask task = ref.putFile(
         File(file.path!),
       );

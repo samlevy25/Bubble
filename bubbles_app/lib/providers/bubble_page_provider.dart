@@ -121,7 +121,7 @@ class bubblePageProvider extends ChangeNotifier {
     try {
       PlatformFile? file = await _media.pickedImageFromLibary();
       if (file != null) {
-        String? downloadURL = await _storage.saveBubbleImageToStorage(
+        String? downloadURL = await _storage.saveSentBubbleImageToStorage(
             _bubbleId, _auth.appUser.uid, file);
         Message messageToSend = Message(
           content: downloadURL!,

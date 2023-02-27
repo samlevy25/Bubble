@@ -1,6 +1,7 @@
 //external
 import 'dart:math';
 
+import 'package:bubbles_app/pages/create_bubble_page.dart';
 import 'package:flutter_map/flutter_map.dart'; // Suitable for most situations
 import 'package:flutter_map/plugin_api.dart'; // Only import if required functionality is not exposed by default
 
@@ -92,6 +93,7 @@ class _BubblesPageState extends State<BubblesPage> {
               ),
               _bubblesList(),
               _map(),
+              _createBubble(),
             ],
           ),
         );
@@ -144,6 +146,7 @@ class _BubblesPageState extends State<BubblesPage> {
 
     return Center(
       child: Card(
+        color: const Color.fromARGB(204, 204, 252, 255),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -189,19 +192,35 @@ class _BubblesPageState extends State<BubblesPage> {
   Widget _map() {
     return Expanded(
       child: Container(
-        decoration: const BoxDecoration(color: Color.fromARGB(255, 0, 7, 99)),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: const Color.fromARGB(255, 47, 68, 106),
+            width: 8,
+          ), //Border.all
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black,
+              offset: Offset(
+                5.0,
+                5.0,
+              ), //OffsetblurRadius: 10.0,
+              spreadRadius: 2.0,
+            ), //BoxShadow
+            BoxShadow(
+              color: Colors.white,
+              offset: Offset(0.0, 0.0),
+              blurRadius: 0.0,
+              spreadRadius: 0.0,
+            ), //BoxShadow
+          ],
+        ),
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: FlutterMap(
           options: MapOptions(
             zoom: 9.2,
           ),
-          nonRotatedChildren: [
-            AttributionWidget.defaultWidget(
-              source: 'OpenStreetMap contributors',
-              onSourceTapped: null,
-            ),
-          ],
           children: [
             TileLayer(
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -210,6 +229,15 @@ class _BubblesPageState extends State<BubblesPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _createBubble() {
+    return FloatingActionButton(
+      onPressed: () {
+        _navigation.navigateToPage(CreateBubblePage());
+      },
+      child: const Icon(Icons.add),
     );
   }
 }

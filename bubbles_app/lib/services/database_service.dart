@@ -200,13 +200,25 @@ extension x on DatabaseService {
     }
   }
 
-  Future<DocumentReference?> createBubble(Map<String, dynamic> _data) async {
+  Future<void> createBubble(
+      String bubbleUid, String createrUid, String name, String imageURL) async {
     try {
-      DocumentReference _bubble =
-          await _db.collection(bubblesCollection).add(_data);
-      return _bubble;
+      await _db.collection(bubblesCollection).doc(bubbleUid).set(
+        {
+          "geoPoint": GeoPoint(0, 0),
+          "image": imageURL,
+          "name": name,
+          "members": [createrUid],
+        },
+      );
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
+  }
+
+  String generateBubbleUid() {
+    return _db.collection(bubblesCollection).doc().id;
   }
 }
