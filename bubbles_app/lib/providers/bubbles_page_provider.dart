@@ -46,7 +46,8 @@ class BubblesPageProvider extends ChangeNotifier {
             (_d) async {
               Map<String, dynamic> _bubbleData =
                   _d.data() as Map<String, dynamic>;
-              //Get Users In Chat
+
+              //Get Users In Bubble
               List<AppUser> _members = [];
               for (var _uid in _bubbleData["members"]) {
                 DocumentSnapshot _userSnapshot = await _db.getUser(_uid);
@@ -57,7 +58,7 @@ class BubblesPageProvider extends ChangeNotifier {
                   AppUser.fromJSON(_userData),
                 );
               }
-              //Get Last Message For Chat
+              //Get Last Message For Bubble
               List<Message> _messages = [];
               QuerySnapshot _bubbleMessage =
                   await _db.getLastMessageForBubble(_d.id);
@@ -67,14 +68,19 @@ class BubblesPageProvider extends ChangeNotifier {
                 Message _message = Message.fromJSON(_messageData);
                 _messages.add(_message);
               }
-              //Return Chat Instance
+              String _name = _bubbleData['name'];
+              String _image = _bubbleData['image'];
+              GeoPoint _geoPoint = _bubbleData['geoPoint'];
+
+              //Return Bubble Instance
               return Bubble(
                 uid: _d.id,
+                name: _name,
                 currentUserUid: _auth.appUser.uid,
                 members: _members,
+                image: _image,
+                geoPoint: _geoPoint,
                 messages: _messages,
-                activity: _bubbleData["is_activity"],
-                group: _bubbleData["is_group"],
               );
             },
           ).toList(),

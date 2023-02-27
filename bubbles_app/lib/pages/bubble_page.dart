@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //Widgets
+import '../models/bubble.dart';
 import '../widgets/top_bar.dart';
 import '../widgets/custom_list_view_tiles.dart';
 import '../widgets/custom_input_fields.dart';
@@ -16,7 +17,7 @@ import '../providers/authentication_provider.dart';
 import '../providers/chat_page_provider.dart';
 
 class BubblePage extends StatefulWidget {
-  final Chat bubble;
+  final Bubble bubble;
 
   const BubblePage({super.key, required this.bubble});
 

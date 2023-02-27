@@ -105,7 +105,7 @@ class _ChatsPageState extends State<ChatsPage> {
               },
             );
           } else {
-            return Center(
+            return const Center(
               child: Text(
                 "No Chats Found.",
                 style: TextStyle(color: Colors.white),
@@ -113,7 +113,7 @@ class _ChatsPageState extends State<ChatsPage> {
             );
           }
         } else {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(
               color: Colors.white,
             ),

@@ -1,5 +1,13 @@
+//external
+import 'dart:math';
+
+import 'package:flutter_map/flutter_map.dart'; // Suitable for most situations
+import 'package:flutter_map/plugin_api.dart'; // Only import if required functionality is not exposed by default
+
 //Packages
+import 'package:bubbles_app/widgets/rounded_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
 
@@ -13,7 +21,7 @@ import '../providers/chats_page_provider.dart';
 import '../services/navigation_service.dart';
 
 //Pages
-import '../pages/chat_page.dart';
+import 'bubble_page.dart';
 
 //Widgets
 import '../widgets/top_bar.dart';
@@ -73,7 +81,7 @@ class _BubblesPageState extends State<BubblesPage> {
               TopBar(
                 'Bubbles',
                 primaryAction: IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.logout,
                     color: Color.fromRGBO(0, 82, 218, 1.0),
                   ),
@@ -83,6 +91,7 @@ class _BubblesPageState extends State<BubblesPage> {
                 ),
               ),
               _bubblesList(),
+              _map(),
             ],
           ),
         );
@@ -132,16 +141,75 @@ class _BubblesPageState extends State<BubblesPage> {
           ? "Media Attachment"
           : _bubble.messages.first.content;
     }
-    return CustomListViewTileWithActivity(
-      height: _deviceHeight * 0.10,
-      title: _bubble.title(),
-      subtitle: _subtitleText,
-      imagePath: _bubble.imageURL(),
-      isActive: _isActive,
-      isActivity: _bubble.activity,
-      onTap: () {
-        _navigation.navigateToPage(BubblesPage());
-      },
+
+    return Center(
+      child: Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: RoundedImageNetwork(
+                imagePath: _bubble.imageURL(),
+                size: _deviceHeight * 0.06,
+                key: UniqueKey(),
+              ),
+              title: Text(_bubble.title()),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Memmbers: ${_bubble.members.length}"),
+                  Text("Location: ${_bubble.location()}"),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  child: const Text('Join'),
+                  onPressed: () {
+                    _bubble;
+                    _navigation.navigateToPage(BubblePage(bubble: _bubble));
+                  },
+                ),
+                const SizedBox(width: 8),
+                TextButton(
+                  child: const Text('Cancle'),
+                  onPressed: () {},
+                ),
+                const SizedBox(width: 8),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _map() {
+    return Expanded(
+      child: Container(
+        decoration: const BoxDecoration(color: Color.fromARGB(255, 0, 7, 99)),
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: FlutterMap(
+          options: MapOptions(
+            zoom: 9.2,
+          ),
+          nonRotatedChildren: [
+            AttributionWidget.defaultWidget(
+              source: 'OpenStreetMap contributors',
+              onSourceTapped: null,
+            ),
+          ],
+          children: [
+            TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'com.example.app',
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
