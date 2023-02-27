@@ -1,9 +1,13 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/app_user.dart';
 import 'message.dart';
+
+enum JoinMethod {
+  gps,
+  wifi,
+  nfc,
+}
 
 class Bubble {
   final String currentUserUid;
@@ -11,8 +15,11 @@ class Bubble {
   final String name;
   final List<AppUser> members;
   final String image;
-  final GeoPoint geoPoint;
-  List<Message> messages;
+  final GeoPoint location;
+  final String? wifi;
+  final String? nfc;
+  final List<Message> messages;
+  final JoinMethod joinMethod;
 
   late final List<AppUser> _recepients;
 
@@ -22,8 +29,11 @@ class Bubble {
     required this.name,
     required this.members,
     required this.image,
-    required this.geoPoint,
+    required this.location,
     required this.messages,
+    required this.wifi,
+    required this.nfc,
+    required this.joinMethod,
   }) {
     _recepients = members.where((i) => i.uid != currentUserUid).toList();
   }
@@ -32,19 +42,30 @@ class Bubble {
     return _recepients;
   }
 
-  String title() {
+  String getName() {
     return name;
   }
 
-  String imageURL() {
+  String getImageURL() {
     return image;
   }
 
-  int numberOfMemmbers() {
+  int getLenght() {
     return members.length;
   }
 
-  List<double> location() {
-    return [geoPoint.latitude, geoPoint.longitude];
+  List<double> getLocation() {
+    return [location.latitude, location.longitude];
+  }
+
+  String getMethod() {
+    switch (joinMethod) {
+      case JoinMethod.wifi:
+        return "wifi";
+      case JoinMethod.nfc:
+        return "nfc";
+      default:
+        return "gps";
+    }
   }
 }

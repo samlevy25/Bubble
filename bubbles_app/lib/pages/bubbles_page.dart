@@ -1,6 +1,3 @@
-//external
-import 'dart:math';
-
 import 'package:bubbles_app/pages/create_bubble_page.dart';
 import 'package:flutter_map/flutter_map.dart'; // Suitable for most situations
 import 'package:flutter_map/plugin_api.dart'; // Only import if required functionality is not exposed by default
@@ -8,7 +5,6 @@ import 'package:flutter_map/plugin_api.dart'; // Only import if required functio
 //Packages
 import 'package:bubbles_app/widgets/rounded_image.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
 
@@ -16,7 +12,6 @@ import 'package:get_it/get_it.dart';
 import '../models/bubble.dart';
 import '../providers/authentication_provider.dart';
 import '../providers/bubbles_page_provider.dart';
-import '../providers/chats_page_provider.dart';
 
 //Services
 import '../services/navigation_service.dart';
@@ -26,7 +21,6 @@ import 'bubble_page.dart';
 
 //Widgets
 import '../widgets/top_bar.dart';
-import '../widgets/custom_list_view_tiles.dart';
 
 //Models
 import '../models/app_user.dart';
@@ -152,16 +146,17 @@ class _BubblesPageState extends State<BubblesPage> {
           children: <Widget>[
             ListTile(
               leading: RoundedImageNetwork(
-                imagePath: _bubble.imageURL(),
+                imagePath: _bubble.getImageURL(),
                 size: _deviceHeight * 0.06,
                 key: UniqueKey(),
               ),
-              title: Text(_bubble.title()),
+              title: Text(_bubble.getName()),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("Memmbers: ${_bubble.members.length}"),
-                  Text("Location: ${_bubble.location()}"),
+                  Text("Location: ${_bubble.getLocation()}"),
+                  Text("Method: ${_bubble.getMethod()}"),
                 ],
               ),
             ),

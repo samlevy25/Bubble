@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 //p
 import '../pages/chats_page.dart';
 import '../pages/users_page.dart';
-import 'bubble_page.dart';
 import 'bubbles_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,7 +17,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     ChatsPage(),
     BubblesPage(),
-    UsersPage(),
+    const UsersPage(),
   ];
 
   @override

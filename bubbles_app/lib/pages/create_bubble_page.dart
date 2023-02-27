@@ -3,6 +3,7 @@ import 'package:bubbles_app/models/bubble.dart';
 import 'package:bubbles_app/pages/bubble_page.dart';
 import 'package:bubbles_app/widgets/rounded_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get_it/get_it.dart';
@@ -21,11 +22,8 @@ import '../widgets/rounded_button.dart';
 //pr
 import '../providers/authentication_provider.dart';
 
-enum JoinMethod {
-  gps,
-  wifi,
-  nfc,
-}
+//ex
+import 'package:network_info_plus/network_info_plus.dart';
 
 class CreateBubblePage extends StatefulWidget {
   const CreateBubblePage({super.key});
@@ -44,9 +42,14 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   late NavigationService navigation;
 
   String? _name;
-  JoinMethod? _selectedJoinMethod;
-  String? JoinValue;
-  int? _selected = 0;
+  JoinMethod? _selected = JoinMethod.gps;
+  String? _value;
+
+  late final Map<JoinMethod, Widget> _methods = {
+    JoinMethod.gps: gps(),
+    JoinMethod.wifi: wifi(),
+    JoinMethod.nfc: nfc(),
+  };
 
   PlatformFile? _bubbleImage;
 
@@ -166,10 +169,14 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             _bubbleImage!,
           );
           await _db.createBubble(
-            bubbleUid,
-            createrUid,
-            _name!,
-            imageURL!,
+            bubbleUid: bubbleUid,
+            createrUid: createrUid,
+            name: _name!,
+            imageURL: imageURL!,
+            location: GeoPoint(0, 0),
+            wifi: null,
+            nfc: null,
+            method: "gps",
           );
           navigation.goBack();
           navigation.navigateToPage(
@@ -180,8 +187,11 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                 name: _name!,
                 members: [_auth.appUser],
                 image: imageURL,
-                geoPoint: GeoPoint(0, 0),
+                location: GeoPoint(0, 0),
                 messages: [],
+                wifi: null,
+                nfc: null,
+                joinMethod: _selected!,
               ),
             ),
           );
@@ -191,16 +201,21 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   }
 
   Widget joinInMethods() {
-    return Row(
+    return Column(
       children: [
-        _methodButton(index: 0, icon: Icons.gps_fixed),
-        _methodButton(index: 1, icon: Icons.wifi),
-        _methodButton(index: 2, icon: Icons.nfc),
+        Row(
+          children: [
+            _methodButton(method: JoinMethod.gps, icon: Icons.gps_fixed),
+            _methodButton(method: JoinMethod.wifi, icon: Icons.wifi),
+            _methodButton(method: JoinMethod.nfc, icon: Icons.nfc),
+          ],
+        ),
+        _methods[_selected]!,
       ],
     );
   }
 
-  Widget _methodButton({required int index, required IconData icon}) {
+  Widget _methodButton({required JoinMethod method, required IconData icon}) {
     return Padding(
       padding: EdgeInsets.all(_deviceWidth * 0.11),
       child: InkResponse(
@@ -209,16 +224,37 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
           children: [
             Icon(
               icon,
-              color: _selected == index ? Colors.white : null,
+              color: _selected == method ? Colors.white : null,
             ),
           ],
         ),
         onTap: () => setState(
           () {
-            _selected = index;
+            _selected = method;
           },
         ),
       ),
     );
+  }
+
+  Widget gps() {
+    setState(() {
+      _value = "Location";
+    });
+    return Text("Only user in your GPS area can join, GPS: $_value");
+  }
+
+  Widget wifi() {
+    setState(() {
+      _value = "id";
+    });
+    return Text("Any user using you current network can join, WIFI:$_value");
+  }
+
+  Widget nfc() {
+    setState(() {
+      _value = "code";
+    });
+    return const Text("NFC");
   }
 }

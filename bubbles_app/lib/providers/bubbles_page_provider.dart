@@ -68,19 +68,37 @@ class BubblesPageProvider extends ChangeNotifier {
                 Message _message = Message.fromJSON(_messageData);
                 _messages.add(_message);
               }
-              String _name = _bubbleData['name'];
-              String _image = _bubbleData['image'];
-              GeoPoint _geoPoint = _bubbleData['geoPoint'];
+              String name = _bubbleData['name'];
+              String image = _bubbleData['image'];
+              GeoPoint location = _bubbleData['location'];
+              String? wifi = _bubbleData['wifi'];
+              String? nfc = _bubbleData['nfc'];
+              JoinMethod method;
+
+              switch (_bubbleData['method']) {
+                case "wifi":
+                  method = JoinMethod.wifi;
+                  break;
+                case "nfc":
+                  method = JoinMethod.nfc;
+                  break;
+                default:
+                  method = JoinMethod.gps;
+                  break;
+              }
 
               //Return Bubble Instance
               return Bubble(
                 uid: _d.id,
-                name: _name,
+                name: name,
                 currentUserUid: _auth.appUser.uid,
                 members: _members,
-                image: _image,
-                geoPoint: _geoPoint,
+                image: image,
+                location: location,
                 messages: _messages,
+                wifi: wifi,
+                nfc: nfc,
+                joinMethod: method,
               );
             },
           ).toList(),

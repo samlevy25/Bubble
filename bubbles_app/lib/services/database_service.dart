@@ -1,3 +1,4 @@
+import 'package:bubbles_app/models/bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
@@ -200,15 +201,26 @@ extension x on DatabaseService {
     }
   }
 
-  Future<void> createBubble(
-      String bubbleUid, String createrUid, String name, String imageURL) async {
+  Future<void> createBubble({
+    required String bubbleUid,
+    required String createrUid,
+    required String name,
+    required String imageURL,
+    required GeoPoint location,
+    required String? wifi,
+    required String? nfc,
+    required String method,
+  }) async {
     try {
       await _db.collection(bubblesCollection).doc(bubbleUid).set(
         {
-          "geoPoint": GeoPoint(0, 0),
+          "location": location,
           "image": imageURL,
           "name": name,
           "members": [createrUid],
+          "wifi": wifi,
+          "nfc": nfc,
+          "method": method.toString(),
         },
       );
     } catch (e) {

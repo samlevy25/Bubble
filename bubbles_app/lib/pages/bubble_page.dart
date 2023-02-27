@@ -79,7 +79,7 @@ class _BubblePageState extends State<BubblePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   TopBar(
-                    this.widget.bubble.title(),
+                    this.widget.bubble.getName(),
                     fontSize: 10,
                     primaryAction: IconButton(
                       icon: const Icon(
