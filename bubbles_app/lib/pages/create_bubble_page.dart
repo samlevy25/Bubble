@@ -42,8 +42,10 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   late NavigationService navigation;
 
   String? _name;
-  JoinMethod? _selected = JoinMethod.gps;
-  String? _value;
+  JoinMethod? _selected = null;
+  final GeoPoint _location = const GeoPoint(0, 0);
+  String? _wifi;
+  String? _nfc;
 
   late final Map<JoinMethod, Widget> _methods = {
     JoinMethod.gps: gps(),
@@ -168,15 +170,14 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             bubbleUid,
             _bubbleImage!,
           );
-
           await _db.createBubble(
             bubbleUid: bubbleUid,
             createrUid: createrUid,
             name: _name!,
             imageURL: imageURL!,
-            location: GeoPoint(0, 0),
-            wifi: null,
-            nfc: null,
+            location: _location!,
+            wifi: _wifi,
+            nfc: _nfc,
             method: _selected!,
           );
           navigation.goBack();
@@ -188,10 +189,10 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                 name: _name!,
                 members: [_auth.appUser],
                 image: imageURL,
-                location: GeoPoint(0, 0),
+                location: _location!,
                 messages: [],
-                wifi: null,
-                nfc: null,
+                wifi: _wifi,
+                nfc: _nfc,
                 joinMethod: _selected!,
               ),
             ),
@@ -240,22 +241,26 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
 
   Widget gps() {
     setState(() {
-      _value = "Location";
+      _wifi = null;
+      _nfc = null;
+      print(_nfc);
     });
-    return Text("Only user in your GPS area can join, GPS: $_value");
+    return Text("Only user in your GPS area can join, GPS: $_location");
   }
 
   Widget wifi() {
     setState(() {
-      _value = "id";
+      _wifi = "id";
+      _nfc = null;
     });
-    return Text("Any user using you current network can join, WIFI:$_value");
+    return Text("Any user using you current network can join, WIFI:$_wifi");
   }
 
   Widget nfc() {
     setState(() {
-      _value = "code";
+      _nfc = "code";
+      _wifi = null;
     });
-    return const Text("NFC");
+    return Text("NFC: $_nfc");
   }
 }
