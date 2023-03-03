@@ -1,0 +1,1 @@
+// get point geopoint singleton (longitude x, latitude y )
