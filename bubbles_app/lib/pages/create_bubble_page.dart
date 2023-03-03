@@ -240,27 +240,14 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   }
 
   Widget gps() {
-    setState(() {
-      _wifi = null;
-      _nfc = null;
-      print(_nfc);
-    });
     return Text("Only user in your GPS area can join, GPS: $_location");
   }
 
   Widget wifi() {
-    setState(() {
-      _wifi = "id";
-      _nfc = null;
-    });
     return Text("Any user using you current network can join, WIFI:$_wifi");
   }
 
   Widget nfc() {
-    setState(() {
-      _nfc = "code";
-      _wifi = null;
-    });
     return Text("NFC: $_nfc");
   }
 }
