@@ -41,21 +41,13 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   late CloudStorageService _cloudStorage;
   late NavigationService navigation;
 
-  String? _name;
-  JoinMethod? _selected = null;
-  final GeoPoint _location = const GeoPoint(0, 0);
-  String? _wifi;
-  String? _nfc;
-
-  late final Map<JoinMethod, Widget> _methods = {
-    JoinMethod.gps: gps(),
-    JoinMethod.wifi: wifi(),
-    JoinMethod.nfc: nfc(),
-  };
-
-  PlatformFile? _bubbleImage;
-
   final _registerFormKey = GlobalKey<FormState>();
+
+  String? _name;
+  PlatformFile? _bubbleImage;
+  int _methodType = 0;
+  String? _methodValue;
+  final GeoPoint _location = const GeoPoint(0, 0);
 
   @override
   Widget build(BuildContext context) {
@@ -85,11 +77,11 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _bubbleImageField(),
-            SizedBox(height: _deviceHeight * 0.05),
+            SizedBox(height: _deviceHeight * 0.01),
             _registerForm(),
-            SizedBox(height: _deviceHeight * 0.05),
+            SizedBox(height: _deviceHeight * 0.01),
             joinInMethods(),
-            SizedBox(height: _deviceHeight * 0.05),
+            SizedBox(height: _deviceHeight * 0.01),
             _createButton(),
           ],
         ),
@@ -175,10 +167,9 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             createrUid: createrUid,
             name: _name!,
             imageURL: imageURL!,
+            methoudType: _methodType,
+            methodValue: _methodValue,
             location: _location!,
-            wifi: _wifi,
-            nfc: _nfc,
-            method: _selected!,
           );
           navigation.goBack();
           navigation.navigateToPage(
@@ -188,12 +179,11 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                 uid: bubbleUid,
                 name: _name!,
                 members: [_auth.appUser],
-                image: imageURL,
-                location: _location!,
+                image: imageURL!,
                 messages: [],
-                wifi: _wifi,
-                nfc: _nfc,
-                joinMethod: _selected!,
+                methodType: _methodType,
+                methodValue: _methodValue,
+                location: _location,
               ),
             ),
           );
@@ -202,52 +192,77 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
     );
   }
 
-  Widget joinInMethods() {
+  joinInMethods() {
     return Column(
       children: [
         Row(
-          children: [
-            _methodButton(method: JoinMethod.gps, icon: Icons.gps_fixed),
-            _methodButton(method: JoinMethod.wifi, icon: Icons.wifi),
-            _methodButton(method: JoinMethod.nfc, icon: Icons.nfc),
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _methodRadioButton(0, text: "GPS", icon: Icons.gps_fixed),
+            _methodRadioButton(1, text: "WIFI", icon: Icons.wifi),
+            _methodRadioButton(2, text: "NFC", icon: Icons.nfc),
           ],
         ),
-        _methods[_selected]!,
+        selectedMethod(),
       ],
     );
   }
 
-  Widget _methodButton({required JoinMethod method, required IconData icon}) {
+  Widget selectedMethod() {
+    return SizedBox(
+      width: _deviceWidth,
+      height: _deviceHeight * 0.1,
+      child: const DecoratedBox(
+        child: Text("HI"),
+        decoration: BoxDecoration(color: Colors.blue),
+      ),
+    );
+  }
+
+  Widget _methodRadioButton(int index, {String? text, IconData? icon}) {
     return Padding(
-      padding: EdgeInsets.all(_deviceWidth * 0.11),
+      padding: EdgeInsets.all(_deviceWidth * 0.1),
       child: InkResponse(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               icon,
-              color: _selected == method ? Colors.white : null,
+              color: _methodType == index ? Colors.red : null,
+            ),
+            Text(
+              text!,
+              style: TextStyle(
+                color: _methodType == index ? Colors.red : null,
+              ),
             ),
           ],
         ),
         onTap: () => setState(
           () {
-            _selected = method;
+            _methodType = index;
+            _methodValue = getMethodValue();
           },
         ),
       ),
     );
   }
 
+  String? getMethodValue() {
+    switch (_methodType) {
+      case 0:
+        return "location";
+      case 1:
+        return "networkName";
+      case 2:
+        return "nfcCode";
+    }
+    return null;
+  }
+
   Widget gps() {
-    return Text("Only user in your GPS area can join, GPS: $_location");
-  }
-
-  Widget wifi() {
-    return Text("Any user using you current network can join, WIFI:$_wifi");
-  }
-
-  Widget nfc() {
-    return Text("NFC: $_nfc");
+    return Container(
+      child: Text("GPS"),
+    );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 //Packages
 import 'package:bubbles_app/models/app_user.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,65 +41,51 @@ class BubblesPageProvider extends ChangeNotifier {
   void getBubble() async {
     try {
       _bubblesStream =
-          _db.getBubblesForUser(_auth.appUser.uid).listen((_snapshot) async {
+          _db.getBubblesForUser(_auth.appUser.uid).listen((snapshot) async {
         bubbles = await Future.wait(
-          _snapshot.docs.map(
-            (_d) async {
-              Map<String, dynamic> _bubbleData =
-                  _d.data() as Map<String, dynamic>;
+          snapshot.docs.map(
+            (d) async {
+              Map<String, dynamic> bubbleData =
+                  d.data() as Map<String, dynamic?>;
 
               //Get Users In Bubble
-              List<AppUser> _members = [];
-              for (var _uid in _bubbleData["members"]) {
-                DocumentSnapshot _userSnapshot = await _db.getUser(_uid);
-                Map<String, dynamic> _userData =
-                    _userSnapshot.data() as Map<String, dynamic>;
-                _userData["uid"] = _userSnapshot.id;
-                _members.add(
-                  AppUser.fromJSON(_userData),
+              List<AppUser> members = [];
+              for (var _uid in bubbleData["members"]) {
+                DocumentSnapshot userSnapshot = await _db.getUser(_uid);
+                Map<String, dynamic> userData =
+                    userSnapshot.data() as Map<String, dynamic>;
+                userData["uid"] = userSnapshot.id;
+                members.add(
+                  AppUser.fromJSON(userData),
                 );
               }
               //Get Last Message For Bubble
-              List<Message> _messages = [];
-              QuerySnapshot _bubbleMessage =
-                  await _db.getLastMessageForBubble(_d.id);
-              if (_bubbleMessage.docs.isNotEmpty) {
-                Map<String, dynamic> _messageData =
-                    _bubbleMessage.docs.first.data()! as Map<String, dynamic>;
-                Message _message = Message.fromJSON(_messageData);
-                _messages.add(_message);
+              List<Message> messages = [];
+              QuerySnapshot bubbleMessage =
+                  await _db.getLastMessageForBubble(d.id);
+              if (bubbleMessage.docs.isNotEmpty) {
+                Map<String, dynamic> messageData =
+                    bubbleMessage.docs.first.data()! as Map<String, dynamic>;
+                Message message = Message.fromJSON(messageData);
+                messages.add(message);
               }
-              String name = _bubbleData['name'];
-              String image = _bubbleData['image'];
-              GeoPoint location = _bubbleData['location'];
-              String? wifi = _bubbleData['wifi'];
-              String? nfc = _bubbleData['nfc'];
-              JoinMethod method;
-
-              switch (_bubbleData['method']) {
-                case "wifi":
-                  method = JoinMethod.wifi;
-                  break;
-                case "nfc":
-                  method = JoinMethod.nfc;
-                  break;
-                default:
-                  method = JoinMethod.gps;
-                  break;
-              }
+              String name = bubbleData['name'];
+              String image = bubbleData['image'];
+              int methodType = bubbleData['methodType'];
+              String? methodValue = bubbleData['methodValue'];
+              GeoPoint location = bubbleData['location'];
 
               //Return Bubble Instance
               return Bubble(
-                uid: _d.id,
+                uid: d.id,
                 name: name,
                 currentUserUid: _auth.appUser.uid,
-                members: _members,
+                members: members,
                 image: image,
+                messages: messages,
+                methodType: methodType,
+                methodValue: methodValue,
                 location: location,
-                messages: _messages,
-                wifi: wifi,
-                nfc: nfc,
-                joinMethod: method,
               );
             },
           ).toList(),
@@ -106,8 +93,10 @@ class BubblesPageProvider extends ChangeNotifier {
         notifyListeners();
       });
     } catch (e) {
-      print("Error getting bubbles.");
-      print(e);
+      if (kDebugMode) {
+        print("Error getting bubbles.");
+        print(e);
+      }
     }
   }
 }

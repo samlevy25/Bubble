@@ -206,33 +206,19 @@ extension x on DatabaseService {
     required String createrUid,
     required String name,
     required String imageURL,
+    required int methoudType,
+    required String? methodValue,
     required GeoPoint location,
-    required String? wifi,
-    required String? nfc,
-    required JoinMethod method,
   }) async {
     try {
-      String strMethod;
-      switch (method) {
-        case JoinMethod.wifi:
-          strMethod = "wifi";
-          break;
-        case JoinMethod.nfc:
-          strMethod = "nfc";
-          break;
-        default:
-          strMethod = "gps";
-      }
-
       await _db.collection(bubblesCollection).doc(bubbleUid).set(
         {
           "location": location,
           "image": imageURL,
           "name": name,
           "members": [createrUid],
-          "wifi": wifi,
-          "nfc": nfc,
-          "method": strMethod,
+          "methodType": methoudType,
+          "methodValue": methodValue,
         },
       );
     } catch (e) {

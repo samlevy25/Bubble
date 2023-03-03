@@ -15,11 +15,11 @@ class Bubble {
   final String name;
   final List<AppUser> members;
   final String image;
-  final GeoPoint location;
-  final String? wifi;
-  final String? nfc;
   final List<Message> messages;
-  final JoinMethod joinMethod;
+
+  final int methodType;
+  final String? methodValue;
+  final GeoPoint location;
 
   late final List<AppUser> _recepients;
 
@@ -29,11 +29,10 @@ class Bubble {
     required this.name,
     required this.members,
     required this.image,
-    required this.location,
     required this.messages,
-    required this.wifi,
-    required this.nfc,
-    required this.joinMethod,
+    required this.methodType,
+    required this.methodValue,
+    required this.location,
   }) {
     _recepients = members.where((i) => i.uid != currentUserUid).toList();
   }
@@ -58,14 +57,11 @@ class Bubble {
     return [location.latitude, location.longitude];
   }
 
-  String getMethod() {
-    switch (joinMethod) {
-      case JoinMethod.wifi:
-        return "wifi";
-      case JoinMethod.nfc:
-        return "nfc";
-      default:
-        return "gps";
-    }
+  int getMethod() {
+    return methodType;
+  }
+
+  String? getMethodValue() {
+    return methodValue;
   }
 }
