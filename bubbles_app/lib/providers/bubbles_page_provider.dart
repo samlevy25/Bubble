@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:bubbles_app/models/app_user.dart';
 import 'package:bubbles_app/networks/gps.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -20,7 +19,7 @@ import '../models/bubble.dart';
 import '../models/message.dart';
 
 class BubblesPageProvider extends ChangeNotifier {
-  AuthenticationProvider _auth;
+  final AuthenticationProvider _auth;
 
   late DatabaseService _db;
 
@@ -49,12 +48,12 @@ class BubblesPageProvider extends ChangeNotifier {
           snapshot.docs.map(
             (d) async {
               Map<String, dynamic> bubbleData =
-                  d.data() as Map<String, dynamic?>;
+                  d.data() as Map<String, dynamic>;
 
               //Get Users In Bubble
               List<AppUser> members = [];
-              for (var _uid in bubbleData["members"]) {
-                DocumentSnapshot userSnapshot = await _db.getUser(_uid);
+              for (var mUid in bubbleData["members"]) {
+                DocumentSnapshot userSnapshot = await _db.getUser(mUid);
                 Map<String, dynamic> userData =
                     userSnapshot.data() as Map<String, dynamic>;
                 userData["uid"] = userSnapshot.id;

@@ -18,7 +18,7 @@ import '../providers/chat_page_provider.dart';
 class ChatPage extends StatefulWidget {
   final Chat chat;
 
-  ChatPage({required this.chat});
+  const ChatPage({super.key, required this.chat});
 
   @override
   State<StatefulWidget> createState() {
@@ -52,7 +52,7 @@ class _ChatPageState extends State<ChatPage> {
       providers: [
         ChangeNotifierProvider<ChatPageProvider>(
           create: (_) => ChatPageProvider(
-              this.widget.chat.uid, _auth, _messagesListViewController),
+              widget.chat.uid, _auth, _messagesListViewController),
         ),
       ],
       child: _buildUI(),
@@ -61,8 +61,8 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _buildUI() {
     return Builder(
-      builder: (BuildContext _context) {
-        _pageProvider = _context.watch<ChatPageProvider>();
+      builder: (BuildContext context) {
+        _pageProvider = context.watch<ChatPageProvider>();
         return Scaffold(
           body: SingleChildScrollView(
             child: Container(
@@ -78,7 +78,7 @@ class _ChatPageState extends State<ChatPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   TopBar(
-                    this.widget.chat.title(),
+                    widget.chat.title(),
                     fontSize: 10,
                     primaryAction: IconButton(
                       icon: const Icon(
@@ -112,25 +112,23 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _messagesListView() {
     if (_pageProvider.messages != null) {
-      if (_pageProvider.messages!.length != 0) {
-        return Container(
+      if (_pageProvider.messages!.isNotEmpty) {
+        return SizedBox(
           height: _deviceHeight * 0.74,
           child: ListView.builder(
             controller: _messagesListViewController,
             itemCount: _pageProvider.messages!.length,
-            itemBuilder: (BuildContext _context, int _index) {
-              Message _message = _pageProvider.messages![_index];
-              bool _isOwnMessage = _message.senderID == _auth.appUser.uid;
-              return Container(
-                child: CustomChatListViewTile(
-                  deviceHeight: _deviceHeight,
-                  width: _deviceWidth * 0.80,
-                  message: _message,
-                  isOwnMessage: _isOwnMessage,
-                  sender: widget.chat.members
-                      .where((_m) => _m.uid == _message.senderID)
-                      .first,
-                ),
+            itemBuilder: (BuildContext context, int index) {
+              Message message = _pageProvider.messages![index];
+              bool isOwnMessage = message.senderID == _auth.appUser.uid;
+              return CustomChatListViewTile(
+                deviceHeight: _deviceHeight,
+                width: _deviceWidth * 0.80,
+                message: message,
+                isOwnMessage: isOwnMessage,
+                sender: widget.chat.members
+                    .where((m) => m.uid == message.senderID)
+                    .first,
               );
             },
           ),
@@ -184,8 +182,8 @@ class _ChatPageState extends State<ChatPage> {
     return SizedBox(
       width: _deviceWidth * 0.65,
       child: CustomTextFromField(
-          onSaved: (_value) {
-            _pageProvider.message = _value;
+          onSaved: (value) {
+            _pageProvider.message = value;
           },
           regEx: r"^(?!\s*$).+",
           hintText: "Type a message",
@@ -194,10 +192,10 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _sendMessageButton() {
-    double _size = _deviceHeight * 0.04;
-    return Container(
-      height: _size,
-      width: _size,
+    double size = _deviceHeight * 0.04;
+    return SizedBox(
+      height: size,
+      width: size,
       child: IconButton(
         icon: const Icon(
           Icons.send,
@@ -215,10 +213,10 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _imageMessageButton() {
-    double _size = _deviceHeight * 0.04;
-    return Container(
-      height: _size,
-      width: _size,
+    double size = _deviceHeight * 0.04;
+    return SizedBox(
+      height: size,
+      width: size,
       child: FloatingActionButton(
         backgroundColor: const Color.fromRGBO(
           0,

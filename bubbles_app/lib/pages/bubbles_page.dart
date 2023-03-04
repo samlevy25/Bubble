@@ -20,13 +20,12 @@ import '../services/navigation_service.dart';
 import 'bubble_page.dart';
 
 //Widgets
-import '../widgets/top_bar.dart';
 
 //Models
-import '../models/app_user.dart';
-import '../models/message.dart';
 
 class BubblesPage extends StatefulWidget {
+  const BubblesPage({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _BubblesPageState();
@@ -59,8 +58,8 @@ class _BubblesPageState extends State<BubblesPage> {
 
   Widget _buildUI() {
     return Builder(
-      builder: (BuildContext _context) {
-        _pageProvider = _context.watch<BubblesPageProvider>();
+      builder: (BuildContext context) {
+        _pageProvider = context.watch<BubblesPageProvider>();
         return Container(
           padding: EdgeInsets.symmetric(
             horizontal: _deviceWidth * 0.03,
@@ -84,16 +83,16 @@ class _BubblesPageState extends State<BubblesPage> {
   }
 
   Widget _bubblesList() {
-    List<Bubble>? _bubbles = _pageProvider.bubbles;
+    List<Bubble>? bubbles = _pageProvider.bubbles;
     return Expanded(
       child: (() {
-        if (_bubbles != null) {
-          if (_bubbles.length != 0) {
+        if (bubbles != null) {
+          if (bubbles.isNotEmpty) {
             return ListView.builder(
-              itemCount: _bubbles.length,
-              itemBuilder: (BuildContext _context, int _index) {
+              itemCount: bubbles.length,
+              itemBuilder: (BuildContext context, int index) {
                 return _bubbleTile(
-                  _bubbles[_index],
+                  bubbles[index],
                 );
               },
             );
@@ -116,15 +115,8 @@ class _BubblesPageState extends State<BubblesPage> {
     );
   }
 
-  Widget _bubbleTile(Bubble _bubble) {
-    List<AppUser> _recepients = _bubble.recepients();
-    bool _isActive = _recepients.any((_d) => _d.wasRecentlyActive());
-    String _subtitleText = "";
-    if (_bubble.messages.isNotEmpty) {
-      _subtitleText = _bubble.messages.first.type != MessageType.text
-          ? "Media Attachment"
-          : _bubble.messages.first.content;
-    }
+  Widget _bubbleTile(Bubble bubble) {
+    if (bubble.messages.isNotEmpty) {}
 
     return Center(
       child: Card(
@@ -134,17 +126,17 @@ class _BubblesPageState extends State<BubblesPage> {
           children: <Widget>[
             ListTile(
               leading: RoundedImageNetwork(
-                imagePath: _bubble.getImageURL(),
+                imagePath: bubble.getImageURL(),
                 size: _deviceHeight * 0.06,
                 key: UniqueKey(),
               ),
-              title: Text(_bubble.getName()),
+              title: Text(bubble.getName()),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Memmbers: ${_bubble.members.length}"),
-                  Text("Location: ${_bubble.getLocation()}"),
-                  Text("Method: ${_bubble.getMethod()}"),
+                  Text("Memmbers: ${bubble.members.length}"),
+                  Text("Location: ${bubble.getLocation()}"),
+                  Text("Method: ${bubble.getMethod()}"),
                 ],
               ),
             ),
@@ -154,8 +146,8 @@ class _BubblesPageState extends State<BubblesPage> {
                 TextButton(
                   child: const Text('Join'),
                   onPressed: () {
-                    _bubble;
-                    _navigation.navigateToPage(BubblePage(bubble: _bubble));
+                    bubble;
+                    _navigation.navigateToPage(BubblePage(bubble: bubble));
                   },
                 ),
                 const SizedBox(width: 8),
@@ -218,7 +210,7 @@ class _BubblesPageState extends State<BubblesPage> {
   Widget _createBubble() {
     return FloatingActionButton(
       onPressed: () {
-        _navigation.navigateToPage(CreateBubblePage());
+        _navigation.navigateToPage(const CreateBubblePage());
       },
       child: const Icon(Icons.add),
     );

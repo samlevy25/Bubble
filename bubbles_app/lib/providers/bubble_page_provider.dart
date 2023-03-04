@@ -5,7 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 //Services
 import '../services/database_service.dart';
@@ -19,39 +18,32 @@ import '../providers/authentication_provider.dart';
 //Models
 import '../models/message.dart';
 
-class bubblePageProvider extends ChangeNotifier {
+class BubblePageProvider extends ChangeNotifier {
   late DatabaseService _db;
   late CloudStorageService _storage;
   late MediaService _media;
   late NavigationService _navigation;
 
-  AuthenticationProvider _auth;
-  ScrollController _messagesListViewController;
+  final AuthenticationProvider _auth;
+  final ScrollController _messagesListViewController;
 
-  String _bubbleId;
+  final String _bubbleId;
   List<Message>? messages;
 
   late StreamSubscription _messagesStream;
-  late StreamSubscription _keyboardVisibilityStream;
-  late KeyboardVisibilityController _keyboardVisibilityController;
 
   String? _message;
 
-  String get message {
-    return message;
+  set message(String value) {
+    _message = value;
   }
 
-  void set message(String _value) {
-    _message = _value;
-  }
-
-  bubblePageProvider(
+  BubblePageProvider(
       this._bubbleId, this._auth, this._messagesListViewController) {
     _db = GetIt.instance.get<DatabaseService>();
     _storage = GetIt.instance.get<CloudStorageService>();
     _media = GetIt.instance.get<MediaService>();
     _navigation = GetIt.instance.get<NavigationService>();
-    _keyboardVisibilityController = KeyboardVisibilityController();
     listenToMessages();
     listenToKeyboardChanges();
   }
@@ -69,15 +61,15 @@ class bubblePageProvider extends ChangeNotifier {
   void listenToMessages() {
     try {
       _messagesStream = _db.streamMessagesForBubble(_bubbleId).listen(
-        (_snapshot) {
-          List<Message> _messages = _snapshot.docs.map(
-            (_m) {
-              Map<String, dynamic> _messageData =
-                  _m.data() as Map<String, dynamic>;
-              return Message.fromJSON(_messageData);
+        (snapshot) {
+          List<Message> messages = snapshot.docs.map(
+            (m) {
+              Map<String, dynamic> messageData =
+                  m.data() as Map<String, dynamic>;
+              return Message.fromJSON(messageData);
             },
           ).toList();
-          messages = _messages;
+          messages = messages;
           notifyListeners();
           WidgetsBinding.instance.addPostFrameCallback(
             (_) {
@@ -97,13 +89,7 @@ class bubblePageProvider extends ChangeNotifier {
     }
   }
 
-  void listenToKeyboardChanges() {
-    _keyboardVisibilityStream = _keyboardVisibilityController.onChange.listen(
-      (_event) {
-        _db.updateBubbleData(_bubbleId, {"is_activity": _event});
-      },
-    );
-  }
+  void listenToKeyboardChanges() {}
 
   void sendTextMessage() {
     if (_message != null) {

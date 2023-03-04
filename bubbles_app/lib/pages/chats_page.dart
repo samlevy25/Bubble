@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
 
 //Providers
-import '../models/bubble.dart';
 import '../providers/authentication_provider.dart';
 import '../providers/chats_page_provider.dart';
 
@@ -15,7 +14,6 @@ import '../services/navigation_service.dart';
 import '../pages/chat_page.dart';
 
 //Widgets
-import '../widgets/top_bar.dart';
 import '../widgets/custom_list_view_tiles.dart';
 
 //Models
@@ -24,6 +22,8 @@ import '../models/app_user.dart';
 import '../models/message.dart';
 
 class ChatsPage extends StatefulWidget {
+  const ChatsPage({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _ChatsPageState();
@@ -56,8 +56,8 @@ class _ChatsPageState extends State<ChatsPage> {
 
   Widget _buildUI() {
     return Builder(
-      builder: (BuildContext _context) {
-        _pageProvider = _context.watch<ChatsPageProvider>();
+      builder: (BuildContext context) {
+        _pageProvider = context.watch<ChatsPageProvider>();
         return Container(
           padding: EdgeInsets.symmetric(
             horizontal: _deviceWidth * 0.03,
@@ -79,16 +79,16 @@ class _ChatsPageState extends State<ChatsPage> {
   }
 
   Widget _chatsList() {
-    List<Chat>? _chats = _pageProvider.chats;
+    List<Chat>? chats = _pageProvider.chats;
     return Expanded(
       child: (() {
-        if (_chats != null) {
-          if (_chats.length != 0) {
+        if (chats != null) {
+          if (chats.isNotEmpty) {
             return ListView.builder(
-              itemCount: _chats.length,
-              itemBuilder: (BuildContext _context, int _index) {
+              itemCount: chats.length,
+              itemBuilder: (BuildContext context, int index) {
                 return _chatTile(
-                  _chats[_index],
+                  chats[index],
                 );
               },
             );
@@ -111,25 +111,25 @@ class _ChatsPageState extends State<ChatsPage> {
     );
   }
 
-  Widget _chatTile(Chat _chat) {
-    List<AppUser> _recepients = _chat.recepients();
-    bool _isActive = _recepients.any((_d) => _d.wasRecentlyActive());
-    String _subtitleText = "";
-    if (_chat.messages.isNotEmpty) {
-      _subtitleText = _chat.messages.first.type != MessageType.text
+  Widget _chatTile(Chat chat) {
+    List<AppUser> recepients = chat.recepients();
+    bool isActive = recepients.any((d) => d.wasRecentlyActive());
+    String subtitleText = "";
+    if (chat.messages.isNotEmpty) {
+      subtitleText = chat.messages.first.type != MessageType.text
           ? "Media Attachment"
-          : _chat.messages.first.content;
+          : chat.messages.first.content;
     }
     return CustomListViewTileWithActivity(
       height: _deviceHeight * 0.10,
-      title: _chat.title(),
-      subtitle: _subtitleText,
-      imagePath: _chat.imageURL(),
-      isActive: _isActive,
-      isActivity: _chat.activity,
+      title: chat.title(),
+      subtitle: subtitleText,
+      imagePath: chat.imageURL(),
+      isActive: isActive,
+      isActivity: chat.activity,
       onTap: () {
         _navigation.navigateToPage(
-          ChatPage(chat: _chat),
+          ChatPage(chat: chat),
         );
       },
     );

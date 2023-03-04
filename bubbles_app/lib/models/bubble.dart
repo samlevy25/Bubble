@@ -1,5 +1,4 @@
 import 'package:bubbles_app/models/geohash.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/app_user.dart';
 import 'message.dart';

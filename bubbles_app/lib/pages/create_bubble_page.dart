@@ -1,33 +1,33 @@
-// p
-import 'package:bubbles_app/models/bubble.dart';
-import 'package:bubbles_app/networks/gps.dart';
-import 'package:bubbles_app/pages/bubble_page.dart';
-import 'package:bubbles_app/widgets/custom_radio_button.dart';
-import 'package:bubbles_app/widgets/rounded_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
+// Packages
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
-//s
+// Pages
+import '../pages/bubble_page.dart';
+
+//Networks
+import '../networks/gps.dart';
+
+//Models
 import '../models/geohash.dart';
+import '../models/bubble.dart';
+
+//Services
 import '../services/media_service.dart';
 import '../services/database_service.dart';
 import '../services/cloud_storage_service.dart';
 import '../services/navigation_service.dart';
 
-//w
+//Widgets
 import '../widgets/custom_input_fields.dart';
 import '../widgets/rounded_button.dart';
+import '../widgets/custom_radio_button.dart';
+import '../widgets/rounded_image.dart';
 
-//pr
+//Providers
 import '../providers/authentication_provider.dart';
-
-//ex
-import 'package:network_info_plus/network_info_plus.dart';
 
 class CreateBubblePage extends StatefulWidget {
   const CreateBubblePage({super.key});
@@ -52,7 +52,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   int _bubbleRange = 5;
   int _bubbleKeyType = 0;
 
-  String? _bubbleKey = "wifi/nfc";
+  final String _bubbleKey = "wifi/nfc";
 
   @override
   Widget build(BuildContext context) {

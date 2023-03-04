@@ -51,10 +51,7 @@ class CloudStorageService {
   }
 }
 
-// exs
-//exs
-//esx
-extension x on CloudStorageService {
+extension CloudStorageServiceExtension on CloudStorageService {
   Future<String?> saveBubbleImageToStorage(String uid, PlatformFile file,
       [void param2]) async {
     try {

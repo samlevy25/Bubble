@@ -6,7 +6,7 @@ class TopBar extends StatelessWidget {
   final Widget? secondaryAction;
   final double? fontSize;
 
-  late double _deviceHeight;
+  late final double _deviceHeight;
   late double _deviceWidth;
 
   TopBar(

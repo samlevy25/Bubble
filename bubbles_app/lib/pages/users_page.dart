@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:get_it/get_it.dart';
 
 //Providers
 import '../providers/authentication_provider.dart';
@@ -50,8 +49,8 @@ class _UsersPageState extends State<UsersPage> {
 
   Widget _buildUI() {
     return Builder(
-      builder: (BuildContext _context) {
-        _pageProvider = _context.watch<UsersPageProvider>();
+      builder: (BuildContext context) {
+        _pageProvider = context.watch<UsersPageProvider>();
         return Container(
           padding: EdgeInsets.symmetric(
               horizontal: _deviceWidth * 0.03, vertical: _deviceHeight * 0.02),
@@ -75,8 +74,8 @@ class _UsersPageState extends State<UsersPage> {
                 ),
               ),
               CustomTextField(
-                onEditingComplete: (_value) {
-                  _pageProvider.getUsers(username: _value);
+                onEditingComplete: (value) {
+                  _pageProvider.getUsers(username: value);
                   FocusScope.of(context).unfocus();
                 },
                 hintText: "Search...",
@@ -94,25 +93,25 @@ class _UsersPageState extends State<UsersPage> {
   }
 
   Widget _usersList() {
-    List<AppUser>? _users = _pageProvider.users;
+    List<AppUser>? users = _pageProvider.users;
     return Expanded(child: () {
-      if (_users != null) {
-        if (_users.length != 0) {
+      if (users != null) {
+        if (users.isNotEmpty) {
           return ListView.builder(
-            itemCount: _users.length,
-            itemBuilder: (BuildContext _context, int _index) {
+            itemCount: users.length,
+            itemBuilder: (BuildContext context, int index) {
               return CustomListViewTile(
                 height: _deviceHeight * 0.10,
-                title: _users[_index].username,
-                subtitle: "Last Active: ${_users[_index].lastDayActive()}",
-                imagePath: _users[_index].imageURL,
-                isActive: _users[_index].wasRecentlyActive(),
+                title: users[index].username,
+                subtitle: "Last Active: ${users[index].lastDayActive()}",
+                imagePath: users[index].imageURL,
+                isActive: users[index].wasRecentlyActive(),
                 isSelected: _pageProvider.selectedUsers.contains(
-                  _users[_index],
+                  users[index],
                 ),
                 onTap: () {
                   _pageProvider.updateSelectedUsers(
-                    _users[_index],
+                    users[index],
                   );
                 },
               );

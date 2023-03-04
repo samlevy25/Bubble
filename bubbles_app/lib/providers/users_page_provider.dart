@@ -1,5 +1,5 @@
 //Packages
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 
@@ -18,7 +18,7 @@ import '../models/chat.dart';
 import '../pages/chat_page.dart';
 
 class UsersPageProvider extends ChangeNotifier {
-  AuthenticationProvider _auth;
+  final AuthenticationProvider _auth;
 
   late DatabaseService _database;
   late NavigationService _navigation;
@@ -37,81 +37,80 @@ class UsersPageProvider extends ChangeNotifier {
     getUsers();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   void getUsers({String? username}) async {
     _selectedUsers = [];
     try {
       _database.getUsers(username: username).then(
-        (_snapshot) {
-          users = _snapshot.docs.map(
-            (_doc) {
-              Map<String, dynamic> _data = _doc.data() as Map<String, dynamic>;
-              _data["uid"] = _doc.id;
-              return AppUser.fromJSON(_data);
+        (snapshot) {
+          users = snapshot.docs.map(
+            (doc) {
+              Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+              data["uid"] = doc.id;
+              return AppUser.fromJSON(data);
             },
           ).toList();
           notifyListeners();
         },
       );
     } catch (e) {
-      print("Error getting users.");
-      print(e);
+      if (kDebugMode) {
+        print("Error getting users.");
+        print(e);
+      }
     }
   }
 
-  void updateSelectedUsers(AppUser _user) {
-    _selectedUsers.contains(_user)
-        ? _selectedUsers.remove(_user)
-        : _selectedUsers.add(_user);
+  void updateSelectedUsers(AppUser user) {
+    _selectedUsers.contains(user)
+        ? _selectedUsers.remove(user)
+        : _selectedUsers.add(user);
     notifyListeners();
   }
 
   void createChat() async {
     try {
       //Create Chat
-      List<String> _membersIds =
-          _selectedUsers.map((_user) => _user.uid).toList();
-      _membersIds.add(_auth.appUser.uid);
-      bool _isGroup = _selectedUsers.length > 1;
-      DocumentReference? _doc = await _database.createChat(
+      List<String> membersIds = _selectedUsers.map((user) => user.uid).toList();
+      membersIds.add(_auth.appUser.uid);
+      bool isGroup = _selectedUsers.length > 1;
+      DocumentReference? doc = await _database.createChat(
         {
-          "is_group": _isGroup,
+          "is_group": isGroup,
           "is_activity": false,
-          "members": _membersIds,
+          "members": membersIds,
         },
       );
       //Navigate To Chat Page
-      List<AppUser> _members = [];
-      for (var _uid in _membersIds) {
-        DocumentSnapshot _userSnapshot = await _database.getUser(_uid);
-        Map<String, dynamic> _userData =
-            _userSnapshot.data() as Map<String, dynamic>;
-        _userData["uid"] = _userSnapshot.id;
-        _members.add(
+      List<AppUser> members = [];
+      // ignore: no_leading_underscores_for_local_identifiers
+      for (var mUid in membersIds) {
+        DocumentSnapshot userSnapshot = await _database.getUser(mUid);
+        Map<String, dynamic> userData =
+            userSnapshot.data() as Map<String, dynamic>;
+        userData["uid"] = userSnapshot.id;
+        members.add(
           AppUser.fromJSON(
-            _userData,
+            userData,
           ),
         );
       }
-      ChatPage _chatPage = ChatPage(
+      ChatPage chatPage = ChatPage(
         chat: Chat(
-            uid: _doc!.id,
+            uid: doc!.id,
             currentUserUid: _auth.appUser.uid,
-            members: _members,
+            members: members,
             messages: [],
             activity: false,
-            group: _isGroup),
+            group: isGroup),
       );
       _selectedUsers = [];
       notifyListeners();
-      _navigation.navigateToPage(_chatPage);
+      _navigation.navigateToPage(chatPage);
     } catch (e) {
-      print("Error creating chat.");
-      print(e);
+      if (kDebugMode) {
+        print("Error creating chat.");
+        print(e);
+      }
     }
   }
 }
