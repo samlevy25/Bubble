@@ -2,12 +2,14 @@ import 'dart:async';
 
 //Packages
 import 'package:bubbles_app/models/app_user.dart';
+import 'package:bubbles_app/networks/gps.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 //Services
+import '../models/geohash.dart';
 import '../services/database_service.dart';
 
 //Providers
@@ -40,8 +42,9 @@ class BubblesPageProvider extends ChangeNotifier {
   // need some changes
   void getBubble() async {
     try {
-      _bubblesStream =
-          _db.getBubblesForUser(_auth.appUser.uid).listen((snapshot) async {
+      _bubblesStream = _db
+          .getBubblesForUser(_auth.appUser.uid, await determinePosition(22))
+          .listen((snapshot) async {
         bubbles = await Future.wait(
           snapshot.docs.map(
             (d) async {
@@ -73,7 +76,7 @@ class BubblesPageProvider extends ChangeNotifier {
               String image = bubbleData['image'];
               int methodType = bubbleData['methodType'];
               String? methodValue = bubbleData['methodValue'];
-              GeoPoint location = bubbleData['location'];
+              GeoHash location = GeoHash.fromHash(bubbleData['location']);
 
               //Return Bubble Instance
               return Bubble(
@@ -85,7 +88,7 @@ class BubblesPageProvider extends ChangeNotifier {
                 messages: messages,
                 methodType: methodType,
                 methodValue: methodValue,
-                location: location,
+                geoHash: location,
               );
             },
           ).toList(),

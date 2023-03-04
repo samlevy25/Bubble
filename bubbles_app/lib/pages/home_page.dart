@@ -36,9 +36,9 @@ class _HomePageState extends State<HomePage> {
           });
         },
         items: const [
-          BottomNavigationBarItem(label: "", icon: Icon(Icons.chat)),
-          BottomNavigationBarItem(label: "", icon: Icon(Icons.circle)),
-          BottomNavigationBarItem(label: "", icon: Icon(Icons.person)),
+          BottomNavigationBarItem(label: "Chats", icon: Icon(Icons.chat)),
+          BottomNavigationBarItem(label: "Bubbles", icon: Icon(Icons.circle)),
+          BottomNavigationBarItem(label: "Profile", icon: Icon(Icons.person)),
         ],
       ),
     );

@@ -1,0 +1,18 @@
+{
+    "A":{ "precision":5,
+            "size": "4.9km x 4.9km"
+
+    },
+    "B":{ "precision":6,
+    "size": "1.2km x 609.4m"
+
+    },
+    "C":{   "precision":7,
+            "size": "152.9m x 152.4m"
+        },   
+    "D":{   "precision":1,
+            "size": "38.2m x 19m"
+        }
+
+}
+

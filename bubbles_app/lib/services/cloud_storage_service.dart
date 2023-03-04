@@ -55,8 +55,8 @@ class CloudStorageService {
 //exs
 //esx
 extension x on CloudStorageService {
-  Future<String?> saveBubbleImageToStorage(
-      String uid, PlatformFile file) async {
+  Future<String?> saveBubbleImageToStorage(String uid, PlatformFile file,
+      [void param2]) async {
     try {
       Reference ref =
           _storage.ref().child('images/bubbles/$uid/profile.${file.extension}');

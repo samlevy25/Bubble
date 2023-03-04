@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-
 // Packages
-
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 //Pages
 import './pages/splash_page.dart';

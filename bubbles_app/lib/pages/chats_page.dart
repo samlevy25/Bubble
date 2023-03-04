@@ -70,18 +70,6 @@ class _ChatsPageState extends State<ChatsPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TopBar(
-                'Chats',
-                primaryAction: IconButton(
-                  icon: Icon(
-                    Icons.logout,
-                    color: Color.fromRGBO(0, 82, 218, 1.0),
-                  ),
-                  onPressed: () {
-                    _auth.logout();
-                  },
-                ),
-              ),
               _chatsList(),
             ],
           ),

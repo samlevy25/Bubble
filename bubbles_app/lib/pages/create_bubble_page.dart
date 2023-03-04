@@ -1,15 +1,19 @@
 // p
 import 'package:bubbles_app/models/bubble.dart';
+import 'package:bubbles_app/networks/gps.dart';
 import 'package:bubbles_app/pages/bubble_page.dart';
+import 'package:bubbles_app/widgets/custom_radio_button.dart';
 import 'package:bubbles_app/widgets/rounded_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 //s
+import '../models/geohash.dart';
 import '../services/media_service.dart';
 import '../services/database_service.dart';
 import '../services/cloud_storage_service.dart';
@@ -43,11 +47,12 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
 
   final _registerFormKey = GlobalKey<FormState>();
 
-  String? _name;
+  String? _bubbleName;
   PlatformFile? _bubbleImage;
-  int _methodType = 0;
-  String? _methodValue;
-  final GeoPoint _location = const GeoPoint(0, 0);
+  int _bubbleRange = 5;
+  int _bubbleKeyType = 0;
+
+  String? _bubbleKey = "wifi/nfc";
 
   @override
   Widget build(BuildContext context) {
@@ -77,11 +82,10 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _bubbleImageField(),
-            SizedBox(height: _deviceHeight * 0.01),
-            _registerForm(),
-            SizedBox(height: _deviceHeight * 0.01),
-            joinInMethods(),
-            SizedBox(height: _deviceHeight * 0.01),
+            _nameForm(),
+            displayMethods(),
+            _rangesSelector(),
+            _methodsSelector(),
             _createButton(),
           ],
         ),
@@ -121,7 +125,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
     );
   }
 
-  Widget _registerForm() {
+  Widget _nameForm() {
     return SizedBox(
       height: _deviceHeight * 0.35,
       child: Form(
@@ -134,7 +138,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             CustomTextFromField(
               onSaved: (value) {
                 setState(() {
-                  _name = value;
+                  _bubbleName = value;
                 });
               },
               regEx: r'.{8,}',
@@ -157,19 +161,20 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
           _registerFormKey.currentState!.save();
           String createrUid = _auth.appUser.uid;
           String bubbleUid = _db.generateBubbleUid();
-
+          GeoHash location = await determinePosition(_bubbleRange);
           String? imageURL = await _cloudStorage.saveBubbleImageToStorage(
             bubbleUid,
             _bubbleImage!,
           );
+
           await _db.createBubble(
             bubbleUid: bubbleUid,
             createrUid: createrUid,
-            name: _name!,
+            name: _bubbleName!,
             imageURL: imageURL!,
-            methoudType: _methodType,
-            methodValue: _methodValue,
-            location: _location!,
+            methoudType: _bubbleKeyType,
+            methodValue: _bubbleKey,
+            location: location,
           );
           navigation.goBack();
           navigation.navigateToPage(
@@ -177,13 +182,13 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
               bubble: Bubble(
                 currentUserUid: createrUid,
                 uid: bubbleUid,
-                name: _name!,
+                name: _bubbleName!,
                 members: [_auth.appUser],
-                image: imageURL!,
+                image: imageURL,
                 messages: [],
-                methodType: _methodType,
-                methodValue: _methodValue,
-                location: _location,
+                methodType: _bubbleKeyType,
+                methodValue: _bubbleKey,
+                geoHash: location,
               ),
             ),
           );
@@ -192,34 +197,103 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
     );
   }
 
-  joinInMethods() {
+  Widget _methodsSelector() {
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            _methodRadioButton(0, text: "GPS", icon: Icons.gps_fixed),
-            _methodRadioButton(1, text: "WIFI", icon: Icons.wifi),
-            _methodRadioButton(2, text: "NFC", icon: Icons.nfc),
+            MyRadioListTile(
+              value: 0,
+              groupValue: _bubbleKeyType,
+              title: "GPS",
+              onChanged: (value) => setState(() => _bubbleKeyType = value!),
+              icon: Icons.gps_fixed,
+              width: _deviceWidth * 0.1,
+            ),
+            MyRadioListTile(
+              value: 1,
+              groupValue: _bubbleKeyType,
+              title: "WIFI",
+              onChanged: (value) => setState(() => _bubbleKeyType = value!),
+              icon: Icons.wifi,
+              width: _deviceWidth * 0.1,
+            ),
+            MyRadioListTile(
+              value: 2,
+              groupValue: _bubbleKeyType,
+              title: "NFC",
+              onChanged: (value) => setState(() => _bubbleKeyType = value!),
+              icon: Icons.nfc,
+              width: _deviceWidth * 0.1,
+            ),
           ],
         ),
-        selectedMethod(),
       ],
     );
   }
 
-  Widget selectedMethod() {
+  Widget _rangesSelector() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            MyRadioListTile(
+              value: 8,
+              groupValue: _bubbleRange,
+              title: "House",
+              onChanged: (value) => setState(() => _bubbleRange = value!),
+              icon: Icons.house,
+              width: _deviceWidth * 0.1,
+            ),
+            MyRadioListTile(
+              value: 7,
+              groupValue: _bubbleRange,
+              title: "Bulding",
+              onChanged: (value) => setState(() => _bubbleRange = value!),
+              icon: Icons.location_city,
+              width: _deviceWidth * 0.1,
+            ),
+            MyRadioListTile(
+              value: 6,
+              groupValue: _bubbleRange,
+              title: "area",
+              onChanged: (value) => setState(() => _bubbleRange = value!),
+              icon: Icons.map,
+              width: _deviceWidth * 0.1,
+            ),
+            MyRadioListTile(
+              value: 5,
+              groupValue: _bubbleRange,
+              title: "big area",
+              onChanged: (value) => setState(() => _bubbleRange = value!),
+              icon: Icons.public,
+              width: _deviceWidth * 0.1,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget displayMethods() {
     return SizedBox(
       width: _deviceWidth,
       height: _deviceHeight * 0.1,
-      child: const DecoratedBox(
-        child: Text("HI"),
-        decoration: BoxDecoration(color: Colors.blue),
+      child: DecoratedBox(
+        decoration: const BoxDecoration(color: Colors.blue),
+        child: Column(
+          children: [
+            currentLocation(),
+            currentKey(),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _methodRadioButton(int index, {String? text, IconData? icon}) {
+  Widget customRadioButton(int index, {String? text, IconData? icon}) {
     return Padding(
       padding: EdgeInsets.all(_deviceWidth * 0.1),
       child: InkResponse(
@@ -228,41 +302,44 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
           children: [
             Icon(
               icon,
-              color: _methodType == index ? Colors.red : null,
+              color: _bubbleKeyType == index ? Colors.red : null,
             ),
             Text(
               text!,
               style: TextStyle(
-                color: _methodType == index ? Colors.red : null,
+                color: _bubbleKeyType == index ? Colors.red : null,
               ),
             ),
           ],
         ),
         onTap: () => setState(
           () {
-            _methodType = index;
-            _methodValue = getMethodValue();
+            _bubbleKeyType = index;
           },
         ),
       ),
     );
   }
 
-  String? getMethodValue() {
-    switch (_methodType) {
-      case 0:
-        return "location";
-      case 1:
-        return "networkName";
-      case 2:
-        return "nfcCode";
-    }
-    return null;
+  FutureBuilder<String> currentLocation() {
+    return FutureBuilder<String>(
+      future: determinePosition(_bubbleRange).then((p) => p.toString()),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const Text('Loading...');
+          default:
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              return Text('Result: ${snapshot.data}');
+            }
+        }
+      },
+    );
   }
 
-  Widget gps() {
-    return Container(
-      child: Text("GPS"),
-    );
+  Widget currentKey() {
+    return Text(_bubbleKeyType.toString());
   }
 }

@@ -1,3 +1,4 @@
+import 'package:bubbles_app/models/geohash.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/app_user.dart';
@@ -19,7 +20,7 @@ class Bubble {
 
   final int methodType;
   final String? methodValue;
-  final GeoPoint location;
+  final GeoHash geoHash;
 
   late final List<AppUser> _recepients;
 
@@ -32,7 +33,7 @@ class Bubble {
     required this.messages,
     required this.methodType,
     required this.methodValue,
-    required this.location,
+    required this.geoHash,
   }) {
     _recepients = members.where((i) => i.uid != currentUserUid).toList();
   }
@@ -53,8 +54,8 @@ class Bubble {
     return members.length;
   }
 
-  List<double> getLocation() {
-    return [location.latitude, location.longitude];
+  String getLocation() {
+    return geoHash.hash;
   }
 
   int getMethod() {

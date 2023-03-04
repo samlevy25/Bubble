@@ -1,6 +1,8 @@
 import 'package:bubbles_app/models/bubble.dart';
+import 'package:bubbles_app/models/geohash.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../models/message.dart';
 
@@ -138,7 +140,7 @@ class DatabaseService {
 //e
 
 extension x on DatabaseService {
-  Stream<QuerySnapshot> getBubblesForUser(String uid) {
+  Stream<QuerySnapshot> getBubblesForUser(String uid, GeoHash geoPoint) {
     return _db
         .collection(bubblesCollection)
         .where('members', arrayContains: uid)
@@ -208,12 +210,12 @@ extension x on DatabaseService {
     required String imageURL,
     required int methoudType,
     required String? methodValue,
-    required GeoPoint location,
+    required GeoHash location,
   }) async {
     try {
       await _db.collection(bubblesCollection).doc(bubbleUid).set(
         {
-          "location": location,
+          "location": location.hash,
           "image": imageURL,
           "name": name,
           "members": [createrUid],

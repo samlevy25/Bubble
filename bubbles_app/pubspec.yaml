@@ -24,9 +24,9 @@ dependencies:
   flutter_keyboard_visibility: ^5.4.0
   cupertino_icons: ^1.0.2
   geolocator: ^9.0.2
-  google_maps_flutter: ^2.2.4
   flutter_map: ^3.1.0
   network_info_plus: ^3.0.2
+  flutter_geo_hash: ^0.0.4
 
 dev_dependencies:
   flutter_test:

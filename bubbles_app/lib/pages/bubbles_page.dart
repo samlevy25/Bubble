@@ -73,18 +73,6 @@ class _BubblesPageState extends State<BubblesPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TopBar(
-                'Bubbles',
-                primaryAction: IconButton(
-                  icon: const Icon(
-                    Icons.logout,
-                    color: Color.fromRGBO(0, 82, 218, 1.0),
-                  ),
-                  onPressed: () {
-                    _auth.logout();
-                  },
-                ),
-              ),
               _bubblesList(),
               _map(),
               _createBubble(),
