@@ -81,7 +81,7 @@ class ImageMessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Color> _colorScheme = isOwnMessage
+    List<Color> colorScheme = isOwnMessage
         ? [
             const Color.fromRGBO(0, 136, 249, 1.0),
             const Color.fromRGBO(0, 82, 218, 1.0),
@@ -102,7 +102,7 @@ class ImageMessageBubble extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         gradient: LinearGradient(
-          colors: _colorScheme,
+          colors: colorScheme,
           stops: const [0.30, 0.70],
           begin: Alignment.bottomLeft,
           end: Alignment.topRight,

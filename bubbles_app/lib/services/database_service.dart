@@ -1,8 +1,6 @@
-import 'package:bubbles_app/models/bubble.dart';
 import 'package:bubbles_app/models/geohash.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:geolocator/geolocator.dart';
 
 import '../models/message.dart';
 
@@ -51,18 +49,18 @@ class DatabaseService {
         .get();
   }
 
-  Stream<QuerySnapshot> streamMessagesForChat(String _chatID) {
+  Stream<QuerySnapshot> streamMessagesForChat(String chatID) {
     return _db
         .collection(chatsCollection)
-        .doc(_chatID)
+        .doc(chatID)
         .collection(messagesCollection)
         .orderBy("sent_time", descending: false)
         .snapshots();
   }
 
-  Future<void> updateChatData(String chatID, Map<String, dynamic> _data) async {
+  Future<void> updateChatData(String chatID, Map<String, dynamic> data) async {
     try {
-      await _db.collection(chatsCollection).doc(chatID).update(_data);
+      await _db.collection(chatsCollection).doc(chatID).update(data);
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -70,14 +68,14 @@ class DatabaseService {
     }
   }
 
-  Future<void> addMessageToChat(String _chatID, Message _message) async {
+  Future<void> addMessageToChat(String chatID, Message message) async {
     try {
       await _db
           .collection(chatsCollection)
-          .doc(_chatID)
+          .doc(chatID)
           .collection(messagesCollection)
           .add(
-            _message.toJson(),
+            message.toJson(),
           );
     } catch (e) {
       if (kDebugMode) {
@@ -91,13 +89,13 @@ class DatabaseService {
   }
 
   Future<QuerySnapshot> getUsers({String? username}) {
-    Query _query = _db.collection(userCollection);
+    Query query = _db.collection(userCollection);
     if (username != null) {
-      _query = _query
+      query = query
           .where("username", isGreaterThanOrEqualTo: username)
-          .where("username", isLessThanOrEqualTo: username + "z");
+          .where("username", isLessThanOrEqualTo: "${username}z");
     }
-    return _query.get();
+    return query.get();
   }
 
   Future<void> updateUserLastSeenTime(String uid) async {
@@ -114,9 +112,9 @@ class DatabaseService {
     }
   }
 
-  Future<void> deleteChat(String _chatID) async {
+  Future<void> deleteChat(String chatID) async {
     try {
-      await _db.collection(chatsCollection).doc(_chatID).delete();
+      await _db.collection(chatsCollection).doc(chatID).delete();
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -124,14 +122,16 @@ class DatabaseService {
     }
   }
 
-  Future<DocumentReference?> createChat(Map<String, dynamic> _data) async {
+  Future<DocumentReference?> createChat(Map<String, dynamic> data) async {
     try {
-      DocumentReference _chat =
-          await _db.collection(chatsCollection).add(_data);
-      return _chat;
+      DocumentReference chat = await _db.collection(chatsCollection).add(data);
+      return chat;
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
+    return null;
   }
 }
 
@@ -139,7 +139,7 @@ class DatabaseService {
 //e
 //e
 
-extension x on DatabaseService {
+extension DatabaseServiceExtension on DatabaseService {
   Stream<QuerySnapshot> getBubblesForUser(String uid, GeoHash geoPoint) {
     return _db
         .collection(bubblesCollection)
@@ -157,19 +157,19 @@ extension x on DatabaseService {
         .get();
   }
 
-  Stream<QuerySnapshot> streamMessagesForBubble(String _bubbleID) {
+  Stream<QuerySnapshot> streamMessagesForBubble(String bubbleID) {
     return _db
         .collection(bubblesCollection)
-        .doc(_bubbleID)
+        .doc(bubbleID)
         .collection(messagesCollection)
         .orderBy("sent_time", descending: false)
         .snapshots();
   }
 
   Future<void> updateBubbleData(
-      String bubbleID, Map<String, dynamic> _data) async {
+      String bubbleID, Map<String, dynamic> data) async {
     try {
-      await _db.collection(bubblesCollection).doc(bubbleID).update(_data);
+      await _db.collection(bubblesCollection).doc(bubbleID).update(data);
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -177,14 +177,14 @@ extension x on DatabaseService {
     }
   }
 
-  Future<void> addMessageToBubble(String _bubbleID, Message _message) async {
+  Future<void> addMessageToBubble(String bubbleID, Message message) async {
     try {
       await _db
           .collection(bubblesCollection)
-          .doc(_bubbleID)
+          .doc(bubbleID)
           .collection(messagesCollection)
           .add(
-            _message.toJson(),
+            message.toJson(),
           );
     } catch (e) {
       if (kDebugMode) {
@@ -193,9 +193,9 @@ extension x on DatabaseService {
     }
   }
 
-  Future<void> deleteBubble(String _bubbleID) async {
+  Future<void> deleteBubble(String bubbleID) async {
     try {
-      await _db.collection(bubblesCollection).doc(_bubbleID).delete();
+      await _db.collection(bubblesCollection).doc(bubbleID).delete();
     } catch (e) {
       if (kDebugMode) {
         print(e);

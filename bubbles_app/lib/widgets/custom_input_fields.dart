@@ -17,14 +17,14 @@ class CustomTextFromField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       onSaved: (value) => onSaved(value!),
-      cursorColor: Color.fromARGB(255, 108, 81, 81),
+      cursorColor: const Color.fromARGB(255, 108, 81, 81),
       style: const TextStyle(color: Color.fromARGB(255, 141, 43, 43)),
       obscureText: obscureText,
       validator: (value) {
         return RegExp(regEx).hasMatch(value!) ? null : "Error";
       },
       decoration: InputDecoration(
-        fillColor: Color.fromARGB(255, 180, 174, 208),
+        fillColor: const Color.fromARGB(255, 180, 174, 208),
         filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(100.0),
@@ -42,10 +42,11 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
   final TextEditingController controller;
-  IconData? icon;
+  final IconData? icon;
 
-  CustomTextField(
-      {required this.onEditingComplete,
+  const CustomTextField(
+      {super.key,
+      required this.onEditingComplete,
       required this.hintText,
       required this.obscureText,
       required this.controller,
