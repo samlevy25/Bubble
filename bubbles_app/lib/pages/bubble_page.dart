@@ -1,4 +1,5 @@
 //Packages
+import 'package:bubbles_app/providers/bubble_page_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +14,6 @@ import '../models/message.dart';
 
 //Providers
 import '../providers/authentication_provider.dart';
-import '../providers/chat_page_provider.dart';
 
 class BubblePage extends StatefulWidget {
   final Bubble bubble;
@@ -31,7 +31,7 @@ class _BubblePageState extends State<BubblePage> {
   late double _deviceWidth;
 
   late AuthenticationProvider _auth;
-  late ChatPageProvider _pageProvider;
+  late BubblePageProvider _pageProvider;
 
   late GlobalKey<FormState> _messageFormState;
   late ScrollController _messagesListViewController;
@@ -50,8 +50,8 @@ class _BubblePageState extends State<BubblePage> {
     _auth = Provider.of<AuthenticationProvider>(context);
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<ChatPageProvider>(
-          create: (_) => ChatPageProvider(
+        ChangeNotifierProvider<BubblePageProvider>(
+          create: (_) => BubblePageProvider(
               widget.bubble.uid, _auth, _messagesListViewController),
         ),
       ],
@@ -62,7 +62,7 @@ class _BubblePageState extends State<BubblePage> {
   Widget _buildUI() {
     return Builder(
       builder: (BuildContext context) {
-        _pageProvider = context.watch<ChatPageProvider>();
+        _pageProvider = context.watch<BubblePageProvider>();
         return Scaffold(
           body: SingleChildScrollView(
             child: Container(
@@ -86,7 +86,7 @@ class _BubblePageState extends State<BubblePage> {
                         color: Color.fromRGBO(0, 82, 218, 1.0),
                       ),
                       onPressed: () {
-                        _pageProvider.deleteChat();
+                        _pageProvider.deleteBubble();
                       },
                     ),
                     secondaryAction: IconButton(
@@ -181,7 +181,7 @@ class _BubblePageState extends State<BubblePage> {
   Widget _messageTextField() {
     return SizedBox(
       width: _deviceWidth * 0.65,
-      child: CustomTextFromField(
+      child: CustomTextFormField(
           onSaved: (value) {
             _pageProvider.message = value;
           },

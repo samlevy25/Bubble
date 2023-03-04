@@ -101,7 +101,7 @@ class _LoginPage extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CustomTextFromField(
+            CustomTextFormField(
               onSaved: (value) {
                 setState(() {
                   _email = value;
@@ -112,7 +112,7 @@ class _LoginPage extends State<LoginPage> {
               hintText: "Email",
               obscureText: false,
             ),
-            CustomTextFromField(
+            CustomTextFormField(
               onSaved: (value) {
                 setState(() {
                   _password = value;

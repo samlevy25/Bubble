@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //Widgets
-import '../models/chat.dart';
 import '../widgets/top_bar.dart';
 import '../widgets/custom_list_view_tiles.dart';
 import '../widgets/custom_input_fields.dart';
 
 //Models
+import '../models/chat.dart';
 import '../models/message.dart';
 
 //Providers
@@ -181,7 +181,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget _messageTextField() {
     return SizedBox(
       width: _deviceWidth * 0.65,
-      child: CustomTextFromField(
+      child: CustomTextFormField(
           onSaved: (value) {
             _pageProvider.message = value;
           },

@@ -1,4 +1,5 @@
 //Packages
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -152,27 +153,49 @@ class CustomChatListViewTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           !isOwnMessage
-              ? RoundedImageNetwork(
-                  key: UniqueKey(),
-                  imagePath: sender.imageURL,
-                  size: width * 0.08)
+              ? GestureDetector(
+                  child: RoundedImageNetwork(
+                      key: UniqueKey(),
+                      imagePath: sender.imageURL,
+                      size: width * 0.08),
+                  onLongPress: () {
+                    if (kDebugMode) {
+                      print("Other Pressed!");
+                    }
+                  },
+                )
               : Container(),
           SizedBox(
             width: width * 0.05,
           ),
-          message.type == MessageType.text
-              ? TextMessageBubble(
-                  isOwnMessage: isOwnMessage,
-                  message: message,
-                  height: deviceHeight * 0.06,
-                  width: width,
-                )
-              : ImageMessageBubble(
-                  isOwnMessage: isOwnMessage,
-                  message: message,
-                  height: deviceHeight * 0.30,
-                  width: width * 0.55,
+          Column(
+            children: [
+              GestureDetector(
+                child: Column(
+                  children: [
+                    message.type == MessageType.text
+                        ? TextMessageBubble(
+                            isOwnMessage: isOwnMessage,
+                            message: message,
+                            height: deviceHeight * 0.06,
+                            width: width,
+                          )
+                        : ImageMessageBubble(
+                            isOwnMessage: isOwnMessage,
+                            message: message,
+                            height: deviceHeight * 0.30,
+                            width: width * 0.55,
+                          ),
+                  ],
                 ),
+                onTap: () {
+                  if (kDebugMode) {
+                    print(isOwnMessage ? "my msg" : "Other msg");
+                  }
+                },
+              ),
+            ],
+          ),
         ],
       ),
     );

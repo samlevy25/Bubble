@@ -116,8 +116,6 @@ class _BubblesPageState extends State<BubblesPage> {
   }
 
   Widget _bubbleTile(Bubble bubble) {
-    if (bubble.messages.isNotEmpty) {}
-
     return Center(
       child: Card(
         color: const Color.fromARGB(204, 204, 252, 255),
@@ -125,38 +123,51 @@ class _BubblesPageState extends State<BubblesPage> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
+              title: Text(bubble.getName()),
               leading: RoundedImageNetwork(
                 imagePath: bubble.getImageURL(),
                 size: _deviceHeight * 0.06,
                 key: UniqueKey(),
               ),
-              title: Text(bubble.getName()),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Memmbers: ${bubble.members.length}"),
-                  Text("Location: ${bubble.getLocation()}"),
-                  Text("Method: ${bubble.getMethod()}"),
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                TextButton(
-                  child: const Text('Join'),
-                  onPressed: () {
-                    bubble;
-                    _navigation.navigateToPage(BubblePage(bubble: bubble));
-                  },
-                ),
-                const SizedBox(width: 8),
-                TextButton(
-                  child: const Text('Cancle'),
-                  onPressed: () {},
-                ),
-                const SizedBox(width: 8),
-              ],
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<Widget>(builder: (BuildContext context) {
+                    return Scaffold(
+                      appBar: AppBar(title: Text(bubble.name)),
+                      body: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(height: _deviceHeight * 0.05),
+                            RoundedImageNetwork(
+                              key: UniqueKey(),
+                              imagePath: bubble.getImageURL(),
+                              size: _deviceWidth * 0.5,
+                            ),
+                            SizedBox(height: _deviceHeight * 0.05),
+                            Text("Memmbers: ${bubble.getLenght()}"),
+                            SizedBox(height: _deviceHeight * 0.05),
+                            Text("Location: ${bubble.getLocation()}"),
+                            SizedBox(height: _deviceHeight * 0.05),
+                            Text("Method: ${bubble.getMethod()}"),
+                            SizedBox(height: _deviceHeight * 0.1),
+                            IconButton(
+                              iconSize: 72,
+                              icon: const Icon(Icons.login),
+                              onPressed: () {
+                                _navigation.goBack();
+                                _navigation
+                                    .navigateToPage(BubblePage(bubble: bubble));
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+                );
+              },
             ),
           ],
         ),
@@ -213,6 +224,52 @@ class _BubblesPageState extends State<BubblesPage> {
         _navigation.navigateToPage(const CreateBubblePage());
       },
       child: const Icon(Icons.add),
+    );
+  }
+
+  Widget f(Bubble bubble) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Hero(
+          tag: 'ListTile-Hero',
+          // Wrap the ListTile in a Material widget so the ListTile has someplace
+          // to draw the animated colors during the hero transition.
+          child: Material(
+            child: ListTile(
+              title: const Text('ListTile with Hero'),
+              subtitle: const Text('Tap here for Hero transition'),
+              tileColor: Colors.cyan,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<Widget>(builder: (BuildContext context) {
+                    return Scaffold(
+                      appBar: AppBar(title: const Text('ListTile Hero')),
+                      body: Center(
+                        child: Hero(
+                          tag: 'ListTile-Hero',
+                          child: Material(
+                            child: ListTile(
+                              title: const Text('ListTile with Hero'),
+                              subtitle: const Text('Tap here to go back'),
+                              tileColor: Colors.blue[700],
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                );
+              },
+            ),
+          ),
+        ),
+        SizedBox(height: 10),
+      ],
     );
   }
 }

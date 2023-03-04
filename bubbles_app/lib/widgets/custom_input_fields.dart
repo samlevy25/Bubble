@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class CustomTextFromField extends StatelessWidget {
+class CustomTextFormField extends StatelessWidget {
   final Function(String) onSaved;
   final String regEx;
   final String hintText;
   final bool obscureText;
 
-  const CustomTextFromField(
+  const CustomTextFormField(
       {super.key,
       required this.onSaved,
       required this.regEx,

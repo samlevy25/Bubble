@@ -62,14 +62,14 @@ class BubblePageProvider extends ChangeNotifier {
     try {
       _messagesStream = _db.streamMessagesForBubble(_bubbleId).listen(
         (snapshot) {
-          List<Message> messages = snapshot.docs.map(
+          List<Message> snapMessages = snapshot.docs.map(
             (m) {
               Map<String, dynamic> messageData =
                   m.data() as Map<String, dynamic>;
               return Message.fromJSON(messageData);
             },
           ).toList();
-          messages = messages;
+          messages = snapMessages;
           notifyListeners();
           WidgetsBinding.instance.addPostFrameCallback(
             (_) {
@@ -125,7 +125,7 @@ class BubblePageProvider extends ChangeNotifier {
     }
   }
 
-  void deletebubble() {
+  void deleteBubble() {
     goBack();
     _db.deleteBubble(_bubbleId);
   }

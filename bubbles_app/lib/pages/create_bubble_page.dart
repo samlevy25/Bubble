@@ -9,6 +9,7 @@ import '../pages/bubble_page.dart';
 
 //Networks
 import '../networks/gps.dart';
+import '../networks/wifi.dart';
 
 //Models
 import '../models/geohash.dart';
@@ -83,7 +84,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
           children: [
             _bubbleImageField(),
             _nameForm(),
-            displayMethods(),
+            dataDisplay(),
             _rangesSelector(),
             _methodsSelector(),
             _createButton(),
@@ -135,7 +136,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CustomTextFromField(
+            CustomTextFormField(
               onSaved: (value) {
                 setState(() {
                   _bubbleName = value;
@@ -227,6 +228,14 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
               icon: Icons.nfc,
               width: _deviceWidth * 0.1,
             ),
+            MyRadioListTile(
+              value: 3,
+              groupValue: _bubbleKeyType,
+              title: "Password",
+              onChanged: (value) => setState(() => _bubbleKeyType = value!),
+              icon: Icons.key,
+              width: _deviceWidth * 0.1,
+            ),
           ],
         ),
       ],
@@ -277,7 +286,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
     );
   }
 
-  Widget displayMethods() {
+  Widget dataDisplay() {
     return SizedBox(
       width: _deviceWidth,
       height: _deviceHeight * 0.1,
@@ -287,35 +296,8 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
           children: [
             currentLocation(),
             currentKey(),
+            currentWIFI(),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget customRadioButton(int index, {String? text, IconData? icon}) {
-    return Padding(
-      padding: EdgeInsets.all(_deviceWidth * 0.1),
-      child: InkResponse(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              color: _bubbleKeyType == index ? Colors.red : null,
-            ),
-            Text(
-              text!,
-              style: TextStyle(
-                color: _bubbleKeyType == index ? Colors.red : null,
-              ),
-            ),
-          ],
-        ),
-        onTap: () => setState(
-          () {
-            _bubbleKeyType = index;
-          },
         ),
       ),
     );
@@ -332,7 +314,25 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {
-              return Text('Result: ${snapshot.data}');
+              return Text('Location: ${snapshot.data}');
+            }
+        }
+      },
+    );
+  }
+
+  FutureBuilder<String> currentWIFI() {
+    return FutureBuilder<String>(
+      future: getWifiBSSID().then((p) => p.toString()),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const Text('Loading...');
+          default:
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              return Text('WIFI: ${snapshot.data}');
             }
         }
       },

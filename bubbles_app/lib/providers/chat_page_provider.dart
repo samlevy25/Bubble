@@ -53,22 +53,18 @@ class ChatPageProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  void goBack() {
-    _navigation.goBack();
-  }
-
   void listenToMessages() {
     try {
       _messagesStream = _db.streamMessagesForChat(_chatId).listen(
         (snapshot) {
-          List<Message> messages = snapshot.docs.map(
+          List<Message> snapMessages = snapshot.docs.map(
             (m) {
               Map<String, dynamic> messageData =
                   m.data() as Map<String, dynamic>;
               return Message.fromJSON(messageData);
             },
           ).toList();
-          messages = messages;
+          messages = snapMessages;
           notifyListeners();
           WidgetsBinding.instance.addPostFrameCallback(
             (_) {
@@ -127,5 +123,9 @@ class ChatPageProvider extends ChangeNotifier {
   void deleteChat() {
     goBack();
     _db.deleteChat(_chatId);
+  }
+
+  void goBack() {
+    _navigation.goBack();
   }
 }

@@ -126,7 +126,7 @@ class _RegisterPageState extends State<RegisterPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CustomTextFromField(
+            CustomTextFormField(
               onSaved: (value) {
                 setState(() {
                   _username = value;
@@ -136,7 +136,7 @@ class _RegisterPageState extends State<RegisterPage> {
               hintText: 'Username',
               obscureText: false,
             ),
-            CustomTextFromField(
+            CustomTextFormField(
               onSaved: (value) {
                 setState(() {
                   _email = value;
@@ -147,7 +147,7 @@ class _RegisterPageState extends State<RegisterPage> {
               hintText: 'Email',
               obscureText: false,
             ),
-            CustomTextFromField(
+            CustomTextFormField(
               onSaved: (value) {
                 setState(() {
                   _password = value;
