@@ -9,7 +9,7 @@ import './pages/home_page.dart';
 import './pages/register_page.dart';
 
 //Servies
-import 'services/navigation_service.dart';
+import './services/navigation_service.dart';
 
 //Provider
 import './providers/authentication_provider.dart';
@@ -46,7 +46,8 @@ class MainApp extends StatelessWidget {
         theme: ThemeData(
           scaffoldBackgroundColor: Colors.lightBlueAccent,
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-              backgroundColor: Colors.blueGrey),
+            backgroundColor: Colors.blueGrey,
+          ),
         ),
         navigatorKey: NavigationService.navigatorKey,
         initialRoute: '/login',

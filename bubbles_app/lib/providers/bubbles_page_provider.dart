@@ -38,60 +38,65 @@ class BubblesPageProvider extends ChangeNotifier {
     super.dispose();
   }
 
+  void filterBubbles() async {
+    String userLocation =
+        await determinePosition(22).then((value) => value.hash);
+    bubbles
+        ?.where((element) => userLocation.startsWith(element.getLocation()))
+        .toList();
+  }
+
   // need some changes
   void getBubble() async {
     try {
-      _bubblesStream = _db
-          .getBubblesForUser(_auth.appUser.uid, await determinePosition(22))
-          .listen((snapshot) async {
-        bubbles = await Future.wait(
-          snapshot.docs.map(
-            (d) async {
-              Map<String, dynamic> bubbleData =
-                  d.data() as Map<String, dynamic>;
+      _bubblesStream =
+          _db.getBubblesForUser(_auth.appUser.uid).listen((snapshot) async {
+        bubbles = await Future.wait(snapshot.docs.map(
+          (d) async {
+            Map<String, dynamic> bubbleData = d.data() as Map<String, dynamic>;
 
-              //Get Users In Bubble
-              List<AppUser> members = [];
-              for (var mUid in bubbleData["members"]) {
-                DocumentSnapshot userSnapshot = await _db.getUser(mUid);
-                Map<String, dynamic> userData =
-                    userSnapshot.data() as Map<String, dynamic>;
-                userData["uid"] = userSnapshot.id;
-                members.add(
-                  AppUser.fromJSON(userData),
-                );
-              }
-              //Get Last Message For Bubble
-              List<Message> messages = [];
-              QuerySnapshot bubbleMessage =
-                  await _db.getLastMessageForBubble(d.id);
-              if (bubbleMessage.docs.isNotEmpty) {
-                Map<String, dynamic> messageData =
-                    bubbleMessage.docs.first.data()! as Map<String, dynamic>;
-                Message message = Message.fromJSON(messageData);
-                messages.add(message);
-              }
-              String name = bubbleData['name'];
-              String image = bubbleData['image'];
-              int methodType = bubbleData['methodType'];
-              String? methodValue = bubbleData['methodValue'];
-              GeoHash location = GeoHash.fromHash(bubbleData['location']);
-
-              //Return Bubble Instance
-              return Bubble(
-                uid: d.id,
-                name: name,
-                currentUserUid: _auth.appUser.uid,
-                members: members,
-                image: image,
-                messages: messages,
-                methodType: methodType,
-                methodValue: methodValue,
-                geoHash: location,
+            //Get Users In Bubble
+            List<AppUser> members = [];
+            for (var mUid in bubbleData["members"]) {
+              DocumentSnapshot userSnapshot = await _db.getUser(mUid);
+              Map<String, dynamic> userData =
+                  userSnapshot.data() as Map<String, dynamic>;
+              userData["uid"] = userSnapshot.id;
+              members.add(
+                AppUser.fromJSON(userData),
               );
-            },
-          ).toList(),
-        );
+            }
+            //Get Last Message For Bubble
+            List<Message> messages = [];
+            QuerySnapshot bubbleMessage =
+                await _db.getLastMessageForBubble(d.id);
+            if (bubbleMessage.docs.isNotEmpty) {
+              Map<String, dynamic> messageData =
+                  bubbleMessage.docs.first.data()! as Map<String, dynamic>;
+              Message message = Message.fromJSON(messageData);
+              messages.add(message);
+            }
+            String name = bubbleData['name'];
+            String image = bubbleData['image'];
+            int methodType = bubbleData['methodType'];
+            String? methodValue = bubbleData['methodValue'];
+            GeoHash location = GeoHash.fromHash(bubbleData['location']);
+
+            //Return Bubble Instance
+            return Bubble(
+              uid: d.id,
+              name: name,
+              currentUserUid: _auth.appUser.uid,
+              members: members,
+              image: image,
+              messages: messages,
+              methodType: methodType,
+              methodValue: methodValue,
+              geoHash: location,
+            );
+          },
+        ).toList());
+
         notifyListeners();
       });
     } catch (e) {

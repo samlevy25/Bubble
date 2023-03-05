@@ -140,11 +140,8 @@ class DatabaseService {
 //e
 
 extension DatabaseServiceExtension on DatabaseService {
-  Stream<QuerySnapshot> getBubblesForUser(String uid, GeoHash geoPoint) {
-    return _db
-        .collection(bubblesCollection)
-        .where('members', arrayContains: uid)
-        .snapshots();
+  Stream<QuerySnapshot> getBubblesForUser(String uid) {
+    return _db.collection(bubblesCollection).snapshots();
   }
 
   Future<QuerySnapshot> getLastMessageForBubble(String bubbleID) {

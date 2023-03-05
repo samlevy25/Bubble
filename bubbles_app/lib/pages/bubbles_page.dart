@@ -1,4 +1,5 @@
 import 'package:bubbles_app/pages/create_bubble_page.dart';
+import 'package:bubbles_app/widgets/bubble_tile.dart';
 import 'package:flutter_map/flutter_map.dart'; // Suitable for most situations
 import 'package:flutter_map/plugin_api.dart'; // Only import if required functionality is not exposed by default
 
@@ -91,9 +92,7 @@ class _BubblesPageState extends State<BubblesPage> {
             return ListView.builder(
               itemCount: bubbles.length,
               itemBuilder: (BuildContext context, int index) {
-                return _bubbleTile(
-                  bubbles[index],
-                );
+                return BubbleTile(bubble: bubbles[index]);
               },
             );
           } else {
