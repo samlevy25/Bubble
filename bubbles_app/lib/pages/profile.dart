@@ -1,4 +1,5 @@
 //Packages
+import 'package:bubbles_app/widgets/rounded_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
@@ -21,16 +22,18 @@ import '../models/chat.dart';
 import '../models/app_user.dart';
 import '../models/message.dart';
 
-class ChatsPage extends StatefulWidget {
-  const ChatsPage({super.key});
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key, required, required this.appUser});
+
+  final AppUser appUser;
 
   @override
   State<StatefulWidget> createState() {
-    return _ChatsPageState();
+    return _ProfilePageState();
   }
 }
 
-class _ChatsPageState extends State<ChatsPage> {
+class _ProfilePageState extends State<ProfilePage> {
   late double _deviceHeight;
   late double _deviceWidth;
 
@@ -70,11 +73,35 @@ class _ChatsPageState extends State<ChatsPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              SizedBox(height: _deviceHeight * 0.05),
+              _image(),
+              SizedBox(height: _deviceHeight * 0.05),
+              _details(),
+              SizedBox(height: _deviceHeight * 0.05),
               _chatsList(),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _image() {
+    return RoundedImageNetwork(
+      key: UniqueKey(),
+      imagePath: widget.appUser.imageURL,
+      size: _deviceHeight * 0.2,
+    );
+  }
+
+  Widget _details() {
+    return Column(
+      children: [
+        Text("Username: ${widget.appUser.username}"),
+        Text("Email: ${widget.appUser.email}"),
+        Text("Email: ${widget.appUser.lastActive}"),
+        Text("Uid: ${widget.appUser.uid}"),
+      ],
     );
   }
 

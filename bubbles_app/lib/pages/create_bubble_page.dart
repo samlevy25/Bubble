@@ -50,7 +50,6 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
 
   String? _bubbleName;
   PlatformFile? _bubbleImage;
-  int _bubbleRange = 5;
   int _bubbleKeyType = 0;
 
   final String _bubbleKey = "wifi/nfc";
@@ -85,7 +84,6 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             _bubbleImageField(),
             _nameForm(),
             dataDisplay(),
-            _rangesSelector(),
             _methodsSelector(),
             _createButton(),
           ],
@@ -162,7 +160,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
           _registerFormKey.currentState!.save();
           String createrUid = _auth.appUser.uid;
           String bubbleUid = _db.generateBubbleUid();
-          GeoHash location = await determinePosition(_bubbleRange);
+          GeoHash location = await determinePosition(22);
           String? imageURL = await _cloudStorage.saveBubbleImageToStorage(
             bubbleUid,
             _bubbleImage!,
@@ -242,50 +240,6 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
     );
   }
 
-  Widget _rangesSelector() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            MyRadioListTile(
-              value: 8,
-              groupValue: _bubbleRange,
-              title: "House",
-              onChanged: (value) => setState(() => _bubbleRange = value!),
-              icon: Icons.house,
-              width: _deviceWidth * 0.1,
-            ),
-            MyRadioListTile(
-              value: 7,
-              groupValue: _bubbleRange,
-              title: "Bulding",
-              onChanged: (value) => setState(() => _bubbleRange = value!),
-              icon: Icons.location_city,
-              width: _deviceWidth * 0.1,
-            ),
-            MyRadioListTile(
-              value: 6,
-              groupValue: _bubbleRange,
-              title: "area",
-              onChanged: (value) => setState(() => _bubbleRange = value!),
-              icon: Icons.map,
-              width: _deviceWidth * 0.1,
-            ),
-            MyRadioListTile(
-              value: 5,
-              groupValue: _bubbleRange,
-              title: "big area",
-              onChanged: (value) => setState(() => _bubbleRange = value!),
-              icon: Icons.public,
-              width: _deviceWidth * 0.1,
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
   Widget dataDisplay() {
     return SizedBox(
       width: _deviceWidth,
@@ -305,7 +259,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
 
   FutureBuilder<String> currentLocation() {
     return FutureBuilder<String>(
-      future: determinePosition(_bubbleRange).then((p) => p.toString()),
+      future: determinePosition(22).then((p) => p.toString()),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:

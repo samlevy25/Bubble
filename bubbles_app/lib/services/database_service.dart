@@ -135,13 +135,13 @@ class DatabaseService {
   }
 }
 
-//exs
-//e
-//e
-
 extension DatabaseServiceExtension on DatabaseService {
-  Stream<QuerySnapshot> getBubblesForUser(String uid) {
-    return _db.collection(bubblesCollection).snapshots();
+  Stream<QuerySnapshot> getBubblesForUser(String uid, String hash) {
+    return _db
+        .collection(bubblesCollection)
+        .where("location", isGreaterThanOrEqualTo: hash)
+        .where("location", isLessThan: "{$hash}z")
+        .snapshots();
   }
 
   Future<QuerySnapshot> getLastMessageForBubble(String bubbleID) {

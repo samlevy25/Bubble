@@ -1,8 +1,11 @@
+import 'package:bubbles_app/pages/profile.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //p
-import '../pages/chats_page.dart';
-import '../pages/users_page.dart';
+import '../models/app_user.dart';
+
+import '../providers/authentication_provider.dart';
 import 'bubbles_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,11 +17,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int currentPage = 1;
-  final List<Widget> _pages = [
-    const ChatsPage(),
-    const BubblesPage(),
-    const UsersPage(),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +24,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildUI() {
+    final List<Widget> _pages = [
+      Container(),
+      const BubblesPage(),
+      ProfilePage(
+        appUser: currentUser(),
+      ),
+    ];
     return Scaffold(
       body: _pages[currentPage],
       bottomNavigationBar: BottomNavigationBar(
@@ -36,11 +41,16 @@ class _HomePageState extends State<HomePage> {
           });
         },
         items: const [
-          BottomNavigationBarItem(label: "Chats", icon: Icon(Icons.chat)),
+          BottomNavigationBarItem(
+              label: "Empty", icon: Icon(Icons.no_accounts)),
           BottomNavigationBarItem(label: "Bubbles", icon: Icon(Icons.circle)),
           BottomNavigationBarItem(label: "Profile", icon: Icon(Icons.person)),
         ],
       ),
     );
+  }
+
+  AppUser currentUser() {
+    return Provider.of<AuthenticationProvider>(context).appUser;
   }
 }

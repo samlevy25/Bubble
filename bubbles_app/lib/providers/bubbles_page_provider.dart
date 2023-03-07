@@ -20,11 +20,9 @@ import '../models/message.dart';
 
 class BubblesPageProvider extends ChangeNotifier {
   final AuthenticationProvider _auth;
-
   late DatabaseService _db;
 
   List<Bubble>? bubbles;
-
   late StreamSubscription _bubblesStream;
 
   BubblesPageProvider(this._auth) {
@@ -38,19 +36,13 @@ class BubblesPageProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  void filterBubbles() async {
-    String userLocation =
-        await determinePosition(22).then((value) => value.hash);
-    bubbles
-        ?.where((element) => userLocation.startsWith(element.getLocation()))
-        .toList();
-  }
-
   // need some changes
   void getBubble() async {
     try {
-      _bubblesStream =
-          _db.getBubblesForUser(_auth.appUser.uid).listen((snapshot) async {
+      String hash = await determinePosition(10).then((value) => value.hash);
+      _bubblesStream = _db
+          .getBubblesForUser(_auth.appUser.uid, hash)
+          .listen((snapshot) async {
         bubbles = await Future.wait(snapshot.docs.map(
           (d) async {
             Map<String, dynamic> bubbleData = d.data() as Map<String, dynamic>;

@@ -1,4 +1,5 @@
 //Packages
+import 'package:bubbles_app/widgets/popups.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -188,11 +189,7 @@ class CustomChatListViewTile extends StatelessWidget {
                           ),
                   ],
                 ),
-                onTap: () {
-                  if (kDebugMode) {
-                    print(isOwnMessage ? "my msg" : "Other msg");
-                  }
-                },
+                onTap: () => myMessagePopup(context),
               ),
             ],
           ),
