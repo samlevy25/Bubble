@@ -1,13 +1,12 @@
 import 'package:geolocator/geolocator.dart';
-
-import '../models/geohash.dart';
+import 'package:flutter_geo_hash/geohash.dart';
 
 /// Determine the current position of the device.
 ///
 /// When the location services are not enabled or permissions
 /// are denied the `Future` will return an error.
 
-Future<GeoHash> determinePosition(int range) async {
+Future<GeoPoint> getCurrentGeoPoint(int range) async {
   bool serviceEnabled;
   LocationPermission permission;
 
@@ -41,7 +40,14 @@ Future<GeoHash> determinePosition(int range) async {
 
   // When we reach here, permissions are granted and we can
   // continue accessing the position of the device.
-  return await Geolocator.getCurrentPosition().then((p) {
-    return GeoHash(p.latitude, p.longitude, range);
-  });
+  Position p = await Geolocator.getCurrentPosition();
+  return GeoPoint(p.latitude, p.longitude);
+}
+
+Future<String> getCurrentGeoHash(int range) async {
+  Position p = await Geolocator.getCurrentPosition();
+  return MyGeoHash().geoHashForLocation(
+    GeoPoint(p.latitude, p.longitude),
+    precision: range,
+  );
 }

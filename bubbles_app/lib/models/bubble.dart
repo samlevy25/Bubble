@@ -1,4 +1,5 @@
-import 'package:bubbles_app/models/geohash.dart';
+import 'package:bubbles_app/networks/gps.dart';
+import 'package:flutter/foundation.dart';
 
 import '../models/app_user.dart';
 import 'message.dart';
@@ -17,9 +18,9 @@ class Bubble {
   final String image;
   final List<Message> messages;
 
-  final int methodType;
-  final String? methodValue;
-  final GeoHash geoHash;
+  final int keyType;
+  final String? key;
+  final String geohash;
 
   late final List<AppUser> _recepients;
 
@@ -30,9 +31,9 @@ class Bubble {
     required this.members,
     required this.image,
     required this.messages,
-    required this.methodType,
-    required this.methodValue,
-    required this.geoHash,
+    required this.keyType,
+    required this.key,
+    required this.geohash,
   }) {
     _recepients = members.where((i) => i.uid != currentUserUid).toList();
   }
@@ -53,15 +54,38 @@ class Bubble {
     return members.length;
   }
 
-  String getLocation() {
-    return geoHash.hash;
+  String getGeohash() {
+    return geohash;
   }
 
   int getMethod() {
-    return methodType;
+    return keyType;
   }
 
   String? getMethodValue() {
-    return methodValue;
+    return key;
+  }
+
+  Future<bool> joinMemmber(AppUser user) async {
+    String userLocation = await getCurrentGeoHash(10);
+    if (members.contains(user)) {
+      if (kDebugMode) {
+        print("Already In");
+      }
+      return true;
+    }
+
+    if (geohash.startsWith(userLocation)) {
+      members.add(user);
+      if (kDebugMode) {
+        print("Joined");
+      }
+      return true;
+    } else {
+      if (kDebugMode) {
+        print("not allowed to join");
+      }
+      return false;
+    }
   }
 }

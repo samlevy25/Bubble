@@ -1,4 +1,3 @@
-import 'package:bubbles_app/models/geohash.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
@@ -139,8 +138,8 @@ extension DatabaseServiceExtension on DatabaseService {
   Stream<QuerySnapshot> getBubblesForUser(String uid, String hash) {
     return _db
         .collection(bubblesCollection)
-        .where("location", isGreaterThanOrEqualTo: hash)
-        .where("location", isLessThan: "{$hash}z")
+        .where("geohash", isGreaterThanOrEqualTo: hash)
+        .where("geohash", isLessThan: "{$hash}z")
         .snapshots();
   }
 
@@ -205,19 +204,19 @@ extension DatabaseServiceExtension on DatabaseService {
     required String createrUid,
     required String name,
     required String imageURL,
-    required int methoudType,
-    required String? methodValue,
-    required GeoHash location,
+    required int keyType,
+    required String? key,
+    required String geohash,
   }) async {
     try {
       await _db.collection(bubblesCollection).doc(bubbleUid).set(
         {
-          "location": location.hash,
+          "geohash": geohash,
           "image": imageURL,
           "name": name,
           "members": [createrUid],
-          "methodType": methoudType,
-          "methodValue": methodValue,
+          "keyType": keyType,
+          "key": key,
         },
       );
     } catch (e) {

@@ -27,9 +27,7 @@ class _HomePageState extends State<HomePage> {
     final List<Widget> _pages = [
       const BubblesPage(),
       Container(),
-      ProfilePage(
-        appUser: currentUser(),
-      ),
+      const ProfilePage(),
     ];
     return Scaffold(
       body: _pages[currentPage],

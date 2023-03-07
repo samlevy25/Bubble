@@ -4,6 +4,7 @@ import 'package:bubbles_app/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import '../models/app_user.dart';
 import '../pages/bubble_page.dart';
 import '../widgets/rounded_image.dart';
 
@@ -11,6 +12,8 @@ Future<String?> bubblePopup(BuildContext context, Bubble bubble) {
   NavigationService navigation = GetIt.instance.get<NavigationService>();
   double deviceHeight = MediaQuery.of(context).size.height;
   double deviceWidth = MediaQuery.of(context).size.width;
+  AppUser user =
+      Provider.of<AuthenticationProvider>(context, listen: false).appUser;
 
   return showDialog<String>(
     context: context,
@@ -31,7 +34,7 @@ Future<String?> bubblePopup(BuildContext context, Bubble bubble) {
                 key: UniqueKey(),
               ),
               Text("Name: ${bubble.getName()}"),
-              Text("Location: ${bubble.getLocation()}"),
+              Text("Location: ${bubble.getGeohash()}"),
               Text("Memmbers: ${bubble.getLenght()}"),
               Text("KeyType: ${bubble.getMethod()}"),
               const SizedBox(height: 15),
@@ -39,11 +42,15 @@ Future<String?> bubblePopup(BuildContext context, Bubble bubble) {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      navigation.navigateToPage(BubblePage(bubble: bubble));
-                    },
                     child: const Text('Join'),
+                    onPressed: () async {
+                      bool isIn = await bubble.joinMemmber(user);
+                      navigation.goBack();
+
+                      if (isIn) {
+                        navigation.navigateToPage(BubblePage(bubble: bubble));
+                      }
+                    },
                   ),
                   TextButton(
                     onPressed: () {
@@ -62,8 +69,6 @@ Future<String?> bubblePopup(BuildContext context, Bubble bubble) {
 }
 
 Future<String?> myMessagePopup(BuildContext context) {
-  NavigationService navigation = GetIt.instance.get<NavigationService>();
-
   return showDialog<String>(
     context: context,
     builder: (BuildContext context) => Dialog(
@@ -81,6 +86,35 @@ Future<String?> myMessagePopup(BuildContext context) {
                   TextButton(
                     onPressed: () {},
                     child: const Text('Delete'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+Future<String?> otherMessagePopup(BuildContext context) {
+  return showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      child: SizedBox(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text('Report'),
                   ),
                 ],
               ),

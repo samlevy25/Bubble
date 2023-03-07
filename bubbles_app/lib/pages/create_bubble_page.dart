@@ -160,7 +160,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
           _registerFormKey.currentState!.save();
           String createrUid = _auth.appUser.uid;
           String bubbleUid = _db.generateBubbleUid();
-          GeoHash location = await determinePosition(22);
+          String location = await getCurrentGeoHash(22);
           String? imageURL = await _cloudStorage.saveBubbleImageToStorage(
             bubbleUid,
             _bubbleImage!,
@@ -171,9 +171,9 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             createrUid: createrUid,
             name: _bubbleName!,
             imageURL: imageURL!,
-            methoudType: _bubbleKeyType,
-            methodValue: _bubbleKey,
-            location: location,
+            keyType: _bubbleKeyType,
+            key: _bubbleKey,
+            geohash: location,
           );
           navigation.goBack();
           navigation.navigateToPage(
@@ -185,9 +185,9 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                 members: [_auth.appUser],
                 image: imageURL,
                 messages: [],
-                methodType: _bubbleKeyType,
-                methodValue: _bubbleKey,
-                geoHash: location,
+                keyType: _bubbleKeyType,
+                key: _bubbleKey,
+                geohash: location,
               ),
             ),
           );
@@ -259,7 +259,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
 
   FutureBuilder<String> currentLocation() {
     return FutureBuilder<String>(
-      future: determinePosition(22).then((p) => p.toString()),
+      future: getCurrentGeoHash(22),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:

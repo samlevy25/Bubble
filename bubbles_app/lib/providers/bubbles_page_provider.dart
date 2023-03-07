@@ -8,7 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 //Services
-import '../models/geohash.dart';
+
 import '../services/database_service.dart';
 
 //Providers
@@ -39,7 +39,7 @@ class BubblesPageProvider extends ChangeNotifier {
   // need some changes
   void getBubble() async {
     try {
-      String hash = await determinePosition(10).then((value) => value.hash);
+      String hash = await getCurrentGeoHash(22);
       _bubblesStream = _db
           .getBubblesForUser(_auth.appUser.uid, hash)
           .listen((snapshot) async {
@@ -70,9 +70,9 @@ class BubblesPageProvider extends ChangeNotifier {
             }
             String name = bubbleData['name'];
             String image = bubbleData['image'];
-            int methodType = bubbleData['methodType'];
-            String? methodValue = bubbleData['methodValue'];
-            GeoHash location = GeoHash.fromHash(bubbleData['location']);
+            int methodType = bubbleData['keyType'];
+            String? methodValue = bubbleData['key'];
+            String location = bubbleData['geohash'];
 
             //Return Bubble Instance
             return Bubble(
@@ -82,9 +82,9 @@ class BubblesPageProvider extends ChangeNotifier {
               members: members,
               image: image,
               messages: messages,
-              methodType: methodType,
-              methodValue: methodValue,
-              geoHash: location,
+              keyType: methodType,
+              key: methodValue,
+              geohash: location,
             );
           },
         ).toList());

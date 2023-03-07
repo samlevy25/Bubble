@@ -22,12 +22,9 @@ import '../widgets/custom_list_view_tiles.dart';
 import '../models/chat.dart';
 import '../models/app_user.dart';
 import '../models/message.dart';
-import '../widgets/top_bar.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key, required, required this.appUser});
-
-  final AppUser appUser;
+  const ProfilePage({super.key, required});
 
   @override
   State<StatefulWidget> createState() {
@@ -43,12 +40,16 @@ class _ProfilePageState extends State<ProfilePage> {
   late NavigationService _navigation;
   late ChatsPageProvider _pageProvider;
 
+  late AppUser _user;
+
   @override
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
     _auth = Provider.of<AuthenticationProvider>(context);
     _navigation = GetIt.instance.get<NavigationService>();
+    _user = _auth.appUser;
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ChatsPageProvider>(
@@ -112,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _image() {
     return RoundedImageNetwork(
       key: UniqueKey(),
-      imagePath: widget.appUser.imageURL,
+      imagePath: _user.imageURL,
       size: _deviceHeight * 0.2,
     );
   }
@@ -120,10 +121,10 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _details() {
     return Column(
       children: [
-        Text("Username: ${widget.appUser.username}"),
-        Text("Email: ${widget.appUser.email}"),
-        Text("Email: ${widget.appUser.lastActive}"),
-        Text("Uid: ${widget.appUser.uid}"),
+        Text("Username: ${_user.username}"),
+        Text("Email: ${_user.email}"),
+        Text("Email: ${_user.lastActive}"),
+        Text("Uid: ${_user.uid}"),
       ],
     );
   }

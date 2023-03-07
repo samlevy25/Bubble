@@ -189,7 +189,13 @@ class CustomChatListViewTile extends StatelessWidget {
                           ),
                   ],
                 ),
-                onTap: () => myMessagePopup(context),
+                onTap: () {
+                  if (isOwnMessage) {
+                    myMessagePopup(context);
+                  } else {
+                    otherMessagePopup(context);
+                  }
+                },
               ),
             ],
           ),
