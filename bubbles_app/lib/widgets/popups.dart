@@ -163,3 +163,32 @@ Future<String?> settingsPopup(BuildContext context) {
     ),
   );
 }
+
+Future<String?> openChat(BuildContext context) {
+  return showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      child: SizedBox(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text('Report'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}

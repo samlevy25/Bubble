@@ -1,10 +1,14 @@
 //Packages
+import 'package:bubbles_app/pages/chat_page.dart';
 import 'package:bubbles_app/widgets/popups.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get_it/get_it.dart';
 
 //Widgets
+import '../models/chat.dart';
+import '../services/navigation_service.dart';
 import '../widgets/rounded_image.dart';
 import '../widgets/message_bubbles.dart';
 
@@ -134,7 +138,9 @@ class CustomChatListViewTile extends StatelessWidget {
   final Message message;
   final AppUser sender;
 
-  const CustomChatListViewTile({
+  late NavigationService _navigation;
+
+  CustomChatListViewTile({
     super.key,
     required this.width,
     required this.deviceHeight,
@@ -144,6 +150,7 @@ class CustomChatListViewTile extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    _navigation = GetIt.instance.get<NavigationService>();
     return Container(
       padding: const EdgeInsets.only(bottom: 10),
       width: width,
@@ -161,7 +168,14 @@ class CustomChatListViewTile extends StatelessWidget {
                       size: width * 0.08),
                   onLongPress: () {
                     if (kDebugMode) {
-                      print("Other Pressed!");
+                      _navigation.navigateToPage(ChatPage(
+                          chat: Chat(
+                              activity: false,
+                              currentUserUid: "x",
+                              group: false,
+                              members: [],
+                              messages: [],
+                              uid: 'x')));
                     }
                   },
                 )
