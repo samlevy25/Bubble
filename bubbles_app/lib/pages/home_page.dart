@@ -25,8 +25,8 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildUI() {
     final List<Widget> _pages = [
-      Container(),
       const BubblesPage(),
+      Container(),
       ProfilePage(
         appUser: currentUser(),
       ),
@@ -41,9 +41,8 @@ class _HomePageState extends State<HomePage> {
           });
         },
         items: const [
-          BottomNavigationBarItem(
-              label: "Empty", icon: Icon(Icons.no_accounts)),
           BottomNavigationBarItem(label: "Bubbles", icon: Icon(Icons.circle)),
+          BottomNavigationBarItem(label: "Empty", icon: Icon(Icons.square)),
           BottomNavigationBarItem(label: "Profile", icon: Icon(Icons.person)),
         ],
       ),
