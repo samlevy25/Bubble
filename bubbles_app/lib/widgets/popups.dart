@@ -1,7 +1,9 @@
 import 'package:bubbles_app/models/bubble.dart';
+import 'package:bubbles_app/providers/authentication_provider.dart';
 import 'package:bubbles_app/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import '../pages/bubble_page.dart';
 import '../widgets/rounded_image.dart';
 
@@ -81,6 +83,44 @@ Future<String?> myMessagePopup(BuildContext context) {
                     child: const Text('Delete'),
                   ),
                 ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+Future<String?> settingsPopup(BuildContext context) {
+  NavigationService navigation = GetIt.instance.get<NavigationService>();
+
+  return showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      child: SizedBox(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text("Settings"),
+              TextButton(
+                onPressed: () {},
+                child: const Text('Edit Profile'),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: const Text('About'),
+              ),
+              TextButton(
+                child: const Text('Logut'),
+                onPressed: () {
+                  Provider.of<AuthenticationProvider>(context, listen: false)
+                      .logout();
+                },
               ),
             ],
           ),

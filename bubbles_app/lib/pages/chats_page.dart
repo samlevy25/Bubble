@@ -1,6 +1,4 @@
 //Packages
-import 'package:bubbles_app/widgets/popups.dart';
-import 'package:bubbles_app/widgets/rounded_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
@@ -22,20 +20,17 @@ import '../widgets/custom_list_view_tiles.dart';
 import '../models/chat.dart';
 import '../models/app_user.dart';
 import '../models/message.dart';
-import '../widgets/top_bar.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key, required, required this.appUser});
-
-  final AppUser appUser;
+class ChatsPage extends StatefulWidget {
+  const ChatsPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _ProfilePageState();
+    return _ChatsPageState();
   }
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ChatsPageState extends State<ChatsPage> {
   late double _deviceHeight;
   late double _deviceWidth;
 
@@ -75,56 +70,11 @@ class _ProfilePageState extends State<ProfilePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _topbar(),
-              SizedBox(height: _deviceHeight * 0.05),
-              _image(),
-              SizedBox(height: _deviceHeight * 0.05),
-              _details(),
-              SizedBox(height: _deviceHeight * 0.05),
               _chatsList(),
             ],
           ),
         );
       },
-    );
-  }
-
-  Widget _topbar() {
-    return SizedBox(
-      height: _deviceHeight * 0.10,
-      width: _deviceWidth,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(),
-          IconButton(
-            icon: const Icon(
-              Icons.settings,
-              color: Color.fromRGBO(0, 82, 218, 1.0),
-            ),
-            onPressed: () => settingsPopup(context),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _image() {
-    return RoundedImageNetwork(
-      key: UniqueKey(),
-      imagePath: widget.appUser.imageURL,
-      size: _deviceHeight * 0.2,
-    );
-  }
-
-  Widget _details() {
-    return Column(
-      children: [
-        Text("Username: ${widget.appUser.username}"),
-        Text("Email: ${widget.appUser.email}"),
-        Text("Email: ${widget.appUser.lastActive}"),
-        Text("Uid: ${widget.appUser.uid}"),
-      ],
     );
   }
 
