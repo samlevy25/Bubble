@@ -18,6 +18,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int currentPage = 1;
 
+  final List<String> _titles = ['Bubbles', 'Empty', 'Profile'];
+
   @override
   Widget build(BuildContext context) {
     return _buildUI();
@@ -30,6 +32,10 @@ class _HomePageState extends State<HomePage> {
       const ProfilePage(),
     ];
     return Scaffold(
+      drawer: const Drawer(),
+      appBar: AppBar(
+        title: Text(_titles[currentPage]),
+      ),
       body: _pages[currentPage],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentPage,
