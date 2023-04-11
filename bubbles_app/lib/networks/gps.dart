@@ -18,8 +18,9 @@ Future<GeoPoint> getCurrentGeoPoint(int range) async {
     // App to enable the location services.
     return Future.error('Location services are disabled.');
   }
-
+  permission = await Geolocator.requestPermission();
   permission = await Geolocator.checkPermission();
+
   if (permission == LocationPermission.denied) {
     permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {

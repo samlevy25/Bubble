@@ -32,10 +32,10 @@ class _HomePageState extends State<HomePage> {
       const ProfilePage(),
     ];
     return Scaffold(
-      drawer: const Drawer(),
-      appBar: AppBar(
-        title: Text(_titles[currentPage]),
-      ),
+      // drawer: const Drawer(),
+      // appBar: AppBar(
+      //   title: Text(_titles[currentPage]),
+      // ),
       body: _pages[currentPage],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentPage,
