@@ -19,6 +19,7 @@ class _HomePageState extends State<HomePage> {
   int currentPage = 1;
 
   final List<String> _titles = ['Bubbles', 'Empty', 'Profile'];
+  late AppUser _user;
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +33,10 @@ class _HomePageState extends State<HomePage> {
       const ProfilePage(),
     ];
     return Scaffold(
-      // drawer: const Drawer(),
-      // appBar: AppBar(
-      //   title: Text(_titles[currentPage]),
-      // ),
+      drawer: const Drawer(),
+      appBar: AppBar(
+        title: Text(_titles[currentPage]),
+      ),
       body: _pages[currentPage],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentPage,
