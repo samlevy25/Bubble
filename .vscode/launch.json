@@ -6,43 +6,31 @@
     "configurations": [
         
         {
-            "name": "flutter_demo",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "flutter_demo (profile mode)",
+            "name": "Android Device 1",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "deviceId": "emulator-5554",
+            "cwd": "${workspaceRoot}/bubbles_app",
+            "program": "lib/main.dart"
         },
         {
-            "name": "flutter_demo (release mode)",
+            "name": "Android Device 2",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
-        },
-
-        {
-            "name": "S8+",
-            "request": "launch",
-            "type": "dart",
-            "deviceId": "emulator-5554"
-        },
-        {
-            "name": "J6",
-            "request": "launch",
-            "type": "dart",
-            "deviceId": "emulator-5556"
+            "deviceId": "emulator-5556",
+            "cwd": "${workspaceRoot}/bubbles_app",
+            "program": "lib/main.dart"
         },
     ],
+
     "compounds": [
         {
             "name": "All Devices",
             "configurations": [
-                "S8+",
-                "J6",
+                "Android Device 1",
+                "Android Device 2",
             ],
+            "cwd": "${workspaceRoot}/bubbles_app",
             "program": "lib/main.dart"
         }
     ]

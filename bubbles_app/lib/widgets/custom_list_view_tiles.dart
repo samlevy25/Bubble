@@ -1,6 +1,5 @@
 //Packages
 import 'package:bubbles_app/pages/chat_page.dart';
-import 'package:bubbles_app/widgets/popups.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -205,9 +204,13 @@ class CustomChatListViewTile extends StatelessWidget {
                 ),
                 onTap: () {
                   if (isOwnMessage) {
-                    myMessagePopup(context);
+                    Container(
+                      color: Colors.purple,
+                    );
                   } else {
-                    otherMessagePopup(context);
+                    Container(
+                      color: Colors.purple,
+                    );
                   }
                 },
               ),

@@ -1,7 +1,9 @@
 import 'package:bubbles_app/networks/gps.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 
 import '../models/app_user.dart';
+import '../services/database_service.dart';
 import 'message.dart';
 
 enum JoinMethod {
@@ -23,6 +25,8 @@ class Bubble {
   final String geohash;
 
   late final List<AppUser> _recepients;
+
+  final DatabaseService _db = GetIt.instance.get<DatabaseService>();
 
   Bubble({
     required this.currentUserUid,
@@ -77,6 +81,8 @@ class Bubble {
 
     if (geohash.startsWith(userLocation)) {
       members.add(user);
+      _db.addMembertoBubble(uid, user.uid);
+
       if (kDebugMode) {
         print("Joined");
       }

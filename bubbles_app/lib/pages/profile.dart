@@ -1,5 +1,5 @@
 //Packages
-import 'package:bubbles_app/widgets/popups.dart';
+
 import 'package:bubbles_app/widgets/rounded_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -103,7 +103,9 @@ class _ProfilePageState extends State<ProfilePage> {
               Icons.settings,
               color: Color.fromRGBO(0, 82, 218, 1.0),
             ),
-            onPressed: () => settingsPopup(context),
+            onPressed: () => Container(
+              color: Colors.purple,
+            ),
           ),
         ],
       ),

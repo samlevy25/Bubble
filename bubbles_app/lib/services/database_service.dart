@@ -173,6 +173,23 @@ extension DatabaseServiceExtension on DatabaseService {
     }
   }
 
+  Future<void> addMembertoBubble(String bubbleID, String memberUid) async {
+    try {
+      await _db
+          .collection(bubblesCollection)
+          .doc(bubbleID)
+          .update({
+            'members': FieldValue.arrayUnion([memberUid])
+          })
+          .then((_) => print('Added'))
+          .catchError((error) => print('Add failed: $error'));
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
   Future<void> addMessageToBubble(String bubbleID, Message message) async {
     try {
       await _db
