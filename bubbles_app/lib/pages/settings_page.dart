@@ -8,6 +8,8 @@ import '../services/database_service.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
+import '../widgets/custom_radio_button.dart';
+
 class SettingsPage extends StatefulWidget {
   const SettingsPage();
 
@@ -16,20 +18,26 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  late double _deviceHeight;
+  late double _deviceWidth;
+
   late AuthenticationProvider _auth;
   late DatabaseService _db;
 
   String? _username;
   final _usernameFormKey = GlobalKey<FormState>();
-
   String? _email;
   final _emailFormKey = GlobalKey<FormState>();
-
   String? _password;
   final _passwordFormKey = GlobalKey<FormState>();
 
+  String _lang = "EN";
+
   @override
   Widget build(BuildContext context) {
+    _deviceHeight = MediaQuery.of(context).size.height;
+    _deviceWidth = MediaQuery.of(context).size.width;
+
     _auth = Provider.of<AuthenticationProvider>(context);
     _db = GetIt.instance.get<DatabaseService>();
     return _buildUI();
@@ -64,7 +72,7 @@ class _SettingsPageState extends State<SettingsPage> {
 // Profile
   Widget _changeProfileImage() {
     return ExpansionTile(
-      leading: const Icon(Icons.person),
+      leading: const Icon(Icons.image),
       title: const Text('Profile Image'),
       subtitle: const Text('change the display Image'),
       children: [Container()],
@@ -172,10 +180,48 @@ class _SettingsPageState extends State<SettingsPage> {
   //App
   Widget _changeLanguage() {
     return ExpansionTile(
-      leading: const Icon(Icons.language),
+      leading: const Icon(Icons.gps_fixed),
       title: const Text('Language'),
-      subtitle: const Text('change the App Language'),
-      children: [Container()],
+      subtitle: const Text('change App Language'),
+      children: [ 
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            MyRadioListTile(
+              value: "EN",
+              groupValue: _lang,
+              title: "GPS",
+              onChanged: (value) => setState(() => _lang = value!),
+              icon: Icons.gps_fixed,
+              width: _deviceWidth * 0.1,
+            ),
+            MyRadioListTile(
+              value: "HEB",
+              groupValue: _lang,
+              title: "WIFI",
+              onChanged: (value) => setState(() => _lang = value!),
+              icon: Icons.wifi,
+              width: _deviceWidth * 0.1,
+            ),
+            MyRadioListTile(
+              value: "FR",
+              groupValue: _lang,
+              title: "NFC",
+              onChanged: (value) => setState(() => _lang = value!),
+              icon: Icons.nfc,
+              width: _deviceWidth * 0.1,
+            ),
+            MyRadioListTile(
+              value: "RUS",
+              groupValue: _lang,
+              title: "Password",
+              onChanged: (value) => setState(() => _lang = value!),
+              icon: Icons.key,
+              width: _deviceWidth * 0.1,
+            ),
+          ],
+        ),
+      ],
     );
   }
 

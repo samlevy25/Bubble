@@ -259,7 +259,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
 
   FutureBuilder<String> currentLocation() {
     return FutureBuilder<String>(
-      future: getCurrentGeoHash(22),
+      future: getCurrentLocationName(),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
@@ -277,7 +277,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
 
   FutureBuilder<String> currentWIFI() {
     return FutureBuilder<String>(
-      future: getWifiBSSID().then((p) => p.toString()),
+      future: getWifiName().then((p) => p.toString()),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:

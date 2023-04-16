@@ -52,3 +52,7 @@ Future<String> getCurrentGeoHash(int range) async {
     precision: range,
   );
 }
+
+Future<String> getCurrentLocationName() async {
+  return "Location";
+}

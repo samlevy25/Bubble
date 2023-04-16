@@ -9,10 +9,10 @@ import 'package:get_it/get_it.dart';
 //Providers
 import '../providers/authentication_provider.dart';
 import '../providers/bubbles_page_provider.dart';
-import '../providers/map_provider.dart';
 
 //Services
 import '../services/navigation_service.dart';
+import '../services/map_service.dart';
 
 //Models
 import '../models/bubble.dart';
