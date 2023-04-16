@@ -90,4 +90,24 @@ class AuthenticationProvider extends ChangeNotifier {
       }
     }
   }
+
+  Future<void> changeEmail(newEmail) async {
+    try {
+      await _auth.currentUser?.updateEmail(newEmail);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  Future<void> changePassword(newPassword) async {
+    try {
+      await _auth.currentUser?.updatePassword(newPassword);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
 }

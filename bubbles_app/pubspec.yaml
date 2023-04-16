@@ -27,6 +27,7 @@ dependencies:
   flutter_map: ^3.1.0
   network_info_plus: ^3.0.2
   flutter_geo_hash: ^0.0.4
+  url_launcher: ^6.1.10
 
 dev_dependencies:
   flutter_test:

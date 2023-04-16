@@ -1,4 +1,4 @@
-import 'package:bubbles_app/experimental_widgets/profilePage.dart';
+import 'package:bubbles_app/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,13 +30,9 @@ class _HomePageState extends State<HomePage> {
     final List<Widget> _pages = [
       const BubblesPage(),
       Container(),
-      ProfilePage(),
+      const ProfilePage(),
     ];
     return Scaffold(
-      drawer: const Drawer(),
-      appBar: AppBar(
-        title: Text(_titles[currentPage]),
-      ),
       body: _pages[currentPage],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentPage,

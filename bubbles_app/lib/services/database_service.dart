@@ -31,6 +31,22 @@ class DatabaseService {
     }
   }
 
+  Future<void> updateUsername(
+    String uid,
+    newUsername,
+  ) async {
+    try {
+      await _db
+          .collection(userCollection)
+          .doc(uid)
+          .update({"username": newUsername});
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
   Stream<QuerySnapshot> getChatsForUser(String uid) {
     return _db
         .collection(chatsCollection)
