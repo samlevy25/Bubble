@@ -2,7 +2,7 @@ import 'package:bubbles_app/widgets/custom_input_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-
+import 'package:async_button_builder/async_button_builder.dart';
 import '../providers/authentication_provider.dart';
 import '../services/database_service.dart';
 
@@ -99,13 +99,20 @@ class _SettingsPageState extends State<SettingsPage> {
             obscureText: false,
           ),
         ),
-        TextButton(
-          child: const Text("Apply"),
+        AsyncButtonBuilder(
+          child: const Text('Click Me'),
           onPressed: () async {
             if (_usernameFormKey.currentState!.validate()) {
               _usernameFormKey.currentState!.save();
               _db.updateUsername(_auth.appUser.uid, _username);
             }
+            await Future.delayed(const Duration(seconds: 1));
+          },
+          builder: (context, child, callback, _) {
+            return TextButton(
+              onPressed: callback,
+              child: child,
+            );
           },
         ),
       ],
@@ -184,7 +191,45 @@ class _SettingsPageState extends State<SettingsPage> {
       leading: const Icon(Icons.gps_fixed),
       title: const Text('Language'),
       subtitle: const Text('change App Language'),
-      children: [],
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            MyRadioListTile(
+              value: "EN",
+              groupValue: _lang,
+              title: "GPS",
+              onChanged: (value) => setState(() => _lang = value!),
+              icon: Icons.gps_fixed,
+              width: _deviceWidth * 0.1,
+            ),
+            MyRadioListTile(
+              value: "HEB",
+              groupValue: _lang,
+              title: "WIFI",
+              onChanged: (value) => setState(() => _lang = value!),
+              icon: Icons.wifi,
+              width: _deviceWidth * 0.1,
+            ),
+            MyRadioListTile(
+              value: "FR",
+              groupValue: _lang,
+              title: "NFC",
+              onChanged: (value) => setState(() => _lang = value!),
+              icon: Icons.nfc,
+              width: _deviceWidth * 0.1,
+            ),
+            MyRadioListTile(
+              value: "RUS",
+              groupValue: _lang,
+              title: "Password",
+              onChanged: (value) => setState(() => _lang = value!),
+              icon: Icons.key,
+              width: _deviceWidth * 0.1,
+            ),
+          ],
+        ),
+      ],
     );
   }
 

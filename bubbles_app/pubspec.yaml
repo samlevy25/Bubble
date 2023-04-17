@@ -29,6 +29,7 @@ dependencies:
   flutter_geo_hash: ^0.0.4
   url_launcher: ^6.1.10
   flashy_tab_bar2: ^0.0.6
+  async_button_builder: ^3.0.0+1
 
 
 
