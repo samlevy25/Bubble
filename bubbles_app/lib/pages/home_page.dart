@@ -1,6 +1,7 @@
 import 'package:bubbles_app/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 
 //p
 import '../models/app_user.dart';
@@ -34,17 +35,27 @@ class _HomePageState extends State<HomePage> {
     ];
     return Scaffold(
       body: _pages[currentPage],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentPage,
-        onTap: (index) {
-          setState(() {
-            currentPage = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(label: "Bubbles", icon: Icon(Icons.circle)),
-          BottomNavigationBarItem(label: "Empty", icon: Icon(Icons.square)),
-          BottomNavigationBarItem(label: "Profile", icon: Icon(Icons.person)),
+      bottomNavigationBar: FlashyTabBar(
+        animationCurve: Curves.linear,
+        selectedIndex: currentPage,
+        iconSize: 30,
+        showElevation: false,
+        onItemSelected: (index) => setState(() {
+          currentPage = index;
+        }),
+        items: [
+          FlashyTabBarItem(
+            icon: const Icon(Icons.circle),
+            title: const Text('Bubbles'),
+          ),
+          FlashyTabBarItem(
+            icon: const Icon(Icons.square),
+            title: const Text("Empty"),
+          ),
+          FlashyTabBarItem(
+            icon: const Icon(Icons.person),
+            title: const Text("Profile"),
+          ),
         ],
       ),
     );
