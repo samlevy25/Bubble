@@ -30,8 +30,9 @@ class _SettingsPageState extends State<SettingsPage> {
   final _emailFormKey = GlobalKey<FormState>();
   String? _password;
   final _passwordFormKey = GlobalKey<FormState>();
-
   String _lang = "EN";
+
+  double _currentSliderValue = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -183,45 +184,7 @@ class _SettingsPageState extends State<SettingsPage> {
       leading: const Icon(Icons.gps_fixed),
       title: const Text('Language'),
       subtitle: const Text('change App Language'),
-      children: [ 
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            MyRadioListTile(
-              value: "EN",
-              groupValue: _lang,
-              title: "GPS",
-              onChanged: (value) => setState(() => _lang = value!),
-              icon: Icons.gps_fixed,
-              width: _deviceWidth * 0.1,
-            ),
-            MyRadioListTile(
-              value: "HEB",
-              groupValue: _lang,
-              title: "WIFI",
-              onChanged: (value) => setState(() => _lang = value!),
-              icon: Icons.wifi,
-              width: _deviceWidth * 0.1,
-            ),
-            MyRadioListTile(
-              value: "FR",
-              groupValue: _lang,
-              title: "NFC",
-              onChanged: (value) => setState(() => _lang = value!),
-              icon: Icons.nfc,
-              width: _deviceWidth * 0.1,
-            ),
-            MyRadioListTile(
-              value: "RUS",
-              groupValue: _lang,
-              title: "Password",
-              onChanged: (value) => setState(() => _lang = value!),
-              icon: Icons.key,
-              width: _deviceWidth * 0.1,
-            ),
-          ],
-        ),
-      ],
+      children: [],
     );
   }
 
@@ -230,7 +193,20 @@ class _SettingsPageState extends State<SettingsPage> {
       leading: const Icon(Icons.gps_fixed),
       title: const Text('Radius'),
       subtitle: const Text('change the Radius'),
-      children: [Container()],
+      children: [
+        Slider(
+          value: _currentSliderValue,
+          max: 3,
+          min: 0,
+          divisions: 3,
+          label: ["30m", "150m", "1Km", "5Km"][_currentSliderValue.round()],
+          onChanged: (double value) {
+            setState(() {
+              _currentSliderValue = value;
+            });
+          },
+        ),
+      ],
     );
   }
 
