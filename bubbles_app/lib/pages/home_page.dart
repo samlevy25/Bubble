@@ -19,15 +19,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int currentPage = 1;
 
-  final List<String> _titles = ['Bubbles', 'Empty', 'Profile'];
-  late AppUser _user;
-
   @override
   Widget build(BuildContext context) {
     return _buildUI();
   }
 
   Widget _buildUI() {
+    // ignore: no_leading_underscores_for_local_identifiers
     final List<Widget> _pages = [
       const BubblesPage(),
       Container(),

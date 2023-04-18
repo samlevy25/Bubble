@@ -1,4 +1,5 @@
 import 'package:bubbles_app/widgets/custom_input_fields.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import '../services/database_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets/custom_radio_button.dart';
+import '../widgets/profile_widget.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage();
@@ -20,6 +22,8 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   late double _deviceHeight;
   late double _deviceWidth;
+
+  bool validate = true;
 
   late AuthenticationProvider _auth;
   late DatabaseService _db;
@@ -46,6 +50,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget _buildUI() {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text("Settings"),
@@ -76,7 +81,15 @@ class _SettingsPageState extends State<SettingsPage> {
       leading: const Icon(Icons.image),
       title: const Text('Profile Image'),
       subtitle: const Text('change the display Image'),
-      children: [Container()],
+      children: [
+        Form(
+          child: ProfileWidget(
+            isEdit: true,
+            imagePath: _auth.appUser.imageURL,
+            onClicked: () {},
+          ),
+        ),
+      ],
     );
   }
 
@@ -100,20 +113,39 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
         AsyncButtonBuilder(
-          child: const Text('Click Me'),
           onPressed: () async {
+            await Future.delayed(const Duration(seconds: 1));
             if (_usernameFormKey.currentState!.validate()) {
+              validate = true;
               _usernameFormKey.currentState!.save();
               _db.updateUsername(_auth.appUser.uid, _username);
+            } else {
+              validate = false;
+              throw 'yikes';
             }
-            await Future.delayed(const Duration(seconds: 1));
           },
-          builder: (context, child, callback, _) {
-            return TextButton(
-              onPressed: callback,
-              child: child,
+          builder: (context, child, callback, buttonState) {
+            final buttonColor = buttonState.when(
+              idle: () => null,
+              loading: () => null,
+              success: () => null,
+              error: (err, stack) => null,
             );
+
+            return validate
+                ? TextButton(
+                    onPressed: callback,
+                    child: child,
+                  )
+                : TextButton(
+                    onPressed: callback,
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: buttonColor,
+                    ),
+                    child: child,
+                  );
           },
+          child: const Text('Apply'),
         ),
       ],
     );
@@ -140,14 +172,40 @@ class _SettingsPageState extends State<SettingsPage> {
             obscureText: false,
           ),
         ),
-        TextButton(
-          child: const Text("Apply"),
+        AsyncButtonBuilder(
           onPressed: () async {
+            await Future.delayed(const Duration(seconds: 1));
             if (_emailFormKey.currentState!.validate()) {
+              validate = true;
               _emailFormKey.currentState!.save();
               _auth.changeEmail(_email);
+            } else {
+              validate = false;
+              throw 'yikes';
             }
           },
+          builder: (context, child, callback, buttonState) {
+            final buttonColor = buttonState.when(
+              idle: () => null,
+              loading: () => null,
+              success: () => null,
+              error: (err, stack) => null,
+            );
+
+            return validate
+                ? TextButton(
+                    onPressed: callback,
+                    child: child,
+                  )
+                : TextButton(
+                    onPressed: callback,
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: buttonColor,
+                    ),
+                    child: child,
+                  );
+          },
+          child: const Text('Apply'),
         ),
       ],
     );
@@ -188,7 +246,7 @@ class _SettingsPageState extends State<SettingsPage> {
   //App
   Widget _changeLanguage() {
     return ExpansionTile(
-      leading: const Icon(Icons.gps_fixed),
+      leading: const Icon(Icons.language),
       title: const Text('Language'),
       subtitle: const Text('change App Language'),
       children: [

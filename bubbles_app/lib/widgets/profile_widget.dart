@@ -17,11 +17,11 @@ class ProfileWidget extends StatelessWidget {
     final color = Theme.of(context).colorScheme.primary;
 
     return Center(
-      child: Stack(
-        children: [
-          buildImage(),
-        ],
-      ),
+      child: !isEdit
+          ? buildImage()
+          : Stack(
+              children: [buildImage(), buildEditIcon(color)],
+            ),
     );
   }
 

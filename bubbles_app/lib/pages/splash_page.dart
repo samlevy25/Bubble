@@ -39,6 +39,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Bubbles',
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
