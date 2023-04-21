@@ -98,20 +98,18 @@ class _RegisterPageState extends State<RegisterPage> {
             );
       },
       child: () {
-        if (_profileImage != null) {
-          return RoundedImageFile(
-            key: UniqueKey(),
-            image: _profileImage!,
-            size: _deviceHeight * 0.15,
-          );
-        } else {
-          return RoundedImageNetwork(
-            key: UniqueKey(),
-            imagePath:
-                "https://firebasestorage.googleapis.com/v0/b/bubbles-96944.appspot.com/o/gui%2Fno_profile.jpeg?alt=media&token=a84c7e69-bb15-4f39-9279-ef031d19cd72",
-            size: _deviceHeight * 0.15,
-          );
-        }
+        return _profileImage != null
+            ? RoundedImageFile(
+                key: UniqueKey(),
+                image: _profileImage!,
+                size: _deviceHeight * 0.15,
+              )
+            : RoundedImageNetwork(
+                key: UniqueKey(),
+                imagePath:
+                    "https://firebasestorage.googleapis.com/v0/b/bubbles-96944.appspot.com/o/gui%2Fno_profile.jpeg?alt=media&token=a84c7e69-bb15-4f39-9279-ef031d19cd72",
+                size: _deviceHeight * 0.15,
+              );
       }(),
     );
   }

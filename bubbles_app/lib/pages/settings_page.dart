@@ -1,5 +1,4 @@
 import 'package:bubbles_app/widgets/custom_input_fields.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
@@ -28,15 +27,20 @@ class _SettingsPageState extends State<SettingsPage> {
   late AuthenticationProvider _auth;
   late DatabaseService _db;
 
+  // image
   String? _username;
   final _usernameFormKey = GlobalKey<FormState>();
+
+  // email
   String? _email;
   final _emailFormKey = GlobalKey<FormState>();
+
+  // password
   String? _password;
   final _passwordFormKey = GlobalKey<FormState>();
-  String _lang = "EN";
 
   double _currentSliderValue = 0;
+  String _lang = "EN";
 
   @override
   Widget build(BuildContext context) {
