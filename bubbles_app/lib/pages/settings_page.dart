@@ -27,6 +27,7 @@ class _SettingsPageState extends State<SettingsPage> {
   late AuthenticationProvider _auth;
   late DatabaseService _db;
 
+  String? _currentPassword;
   // image
   String? _username;
   final _usernameFormKey = GlobalKey<FormState>();
@@ -36,7 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
   final _emailFormKey = GlobalKey<FormState>();
 
   // password
-  String? _password;
+  String? _newPassword;
   final _passwordFormKey = GlobalKey<FormState>();
 
   double _currentSliderValue = 0;
@@ -164,16 +165,30 @@ class _SettingsPageState extends State<SettingsPage> {
       children: [
         Form(
           key: _emailFormKey,
-          child: CustomTextFormField(
-            onSaved: (value) {
-              setState(() {
-                _email = value;
-              });
-            },
-            regEx:
-                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
-            hintText: "Enter your new email here",
-            obscureText: false,
+          child: Column(
+            children: [
+              CustomTextFormField(
+                onSaved: (value) {
+                  setState(() {
+                    _email = value;
+                  });
+                },
+                regEx:
+                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+                hintText: "Enter your new email here",
+                obscureText: false,
+              ),
+              CustomTextFormField(
+                onSaved: (value) {
+                  setState(() {
+                    _currentPassword = value;
+                  });
+                },
+                regEx: r'.{8,}',
+                hintText: "Enter your current password ",
+                obscureText: true,
+              ),
+            ],
           ),
         ),
         AsyncButtonBuilder(
@@ -182,7 +197,7 @@ class _SettingsPageState extends State<SettingsPage> {
             if (_emailFormKey.currentState!.validate()) {
               validate = true;
               _emailFormKey.currentState!.save();
-              _auth.changeEmail(_email);
+              _auth.changeEmail(_email, _currentPassword);
             } else {
               validate = false;
               throw 'yikes';
@@ -223,15 +238,29 @@ class _SettingsPageState extends State<SettingsPage> {
       children: [
         Form(
           key: _passwordFormKey,
-          child: CustomTextFormField(
-            onSaved: (value) {
-              setState(() {
-                _password = value;
-              });
-            },
-            regEx: r'.{8,}',
-            hintText: "Enter your new password here",
-            obscureText: true,
+          child: Column(
+            children: [
+              CustomTextFormField(
+                onSaved: (value) {
+                  setState(() {
+                    _currentPassword = value;
+                  });
+                },
+                regEx: r'.{8,}',
+                hintText: "Enter your current password ",
+                obscureText: true,
+              ),
+              CustomTextFormField(
+                onSaved: (value) {
+                  setState(() {
+                    _newPassword = value;
+                  });
+                },
+                regEx: r'.{8,}',
+                hintText: "Enter your new password here",
+                obscureText: true,
+              ),
+            ],
           ),
         ),
         TextButton(
@@ -239,7 +268,7 @@ class _SettingsPageState extends State<SettingsPage> {
           onPressed: () async {
             if (_passwordFormKey.currentState!.validate()) {
               _passwordFormKey.currentState!.save();
-              _auth.changePassword(_password);
+              _auth.changePassword(_newPassword, _currentPassword);
             }
           },
         ),

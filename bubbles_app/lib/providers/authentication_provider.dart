@@ -91,7 +91,7 @@ class AuthenticationProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> changeEmail(newEmail) async {
+  Future<void> changeEmail(newEmail, currentPassword) async {
     try {
       await _auth.currentUser?.updateEmail(newEmail);
     } catch (e) {
@@ -101,7 +101,7 @@ class AuthenticationProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> changePassword(newPassword) async {
+  Future<void> changePassword(newPassword, currrentPassword) async {
     try {
       await _auth.currentUser?.updatePassword(newPassword);
     } catch (e) {
