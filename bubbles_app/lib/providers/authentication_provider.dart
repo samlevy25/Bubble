@@ -93,7 +93,14 @@ class AuthenticationProvider extends ChangeNotifier {
 
   Future<void> changeEmail(newEmail, currentPassword) async {
     try {
-      await _auth.currentUser?.updateEmail(newEmail);
+      UserCredential? authResult =
+          await _auth.currentUser?.reauthenticateWithCredential(
+        EmailAuthProvider.credential(
+          email: _auth.currentUser!.email!,
+          password: currentPassword,
+        ),
+      );
+      await authResult?.user?.updateEmail(newEmail);
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -103,7 +110,14 @@ class AuthenticationProvider extends ChangeNotifier {
 
   Future<void> changePassword(newPassword, currrentPassword) async {
     try {
-      await _auth.currentUser?.updatePassword(newPassword);
+      UserCredential? authResult =
+          await _auth.currentUser?.reauthenticateWithCredential(
+        EmailAuthProvider.credential(
+          email: _auth.currentUser!.email!,
+          password: currrentPassword,
+        ),
+      );
+      await authResult?.user?.updatePassword(newPassword);
     } catch (e) {
       if (kDebugMode) {
         print(e);
