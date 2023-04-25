@@ -9,7 +9,7 @@ enum MessageType {
 class Message {
   final String senderID;
   final MessageType type;
-  final String content;
+  String content;
   final DateTime sentTime;
 
   Message(
