@@ -143,8 +143,8 @@ class _BubblesPageState extends State<BubblesPage> {
             ),
           ),
           onPressed: () => {
-            bubble.joinMemmber(_auth.appUser),
-            _navigation.navigateToPage(BubblePage(bubble: bubble))
+            bubble.joinMemmber(_auth.appUser).then((value) =>
+                _navigation.navigateToPage(BubblePage(bubble: bubble)))
           },
         ),
       ],

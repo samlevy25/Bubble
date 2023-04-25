@@ -32,6 +32,8 @@ dependencies:
   async_button_builder: ^3.0.0+1
   easy_autocomplete: ^1.6.0
   list_picker: ^1.1.0
+  translator: ^0.1.7
+  shared_preferences: ^2.0.0-nullsafety.1
 
 
 

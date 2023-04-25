@@ -17,6 +17,7 @@ import '../widgets/profile_widget.dart';
 import '../widgets/rounded_image.dart';
 
 import 'package:list_picker/list_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage();
@@ -56,7 +57,7 @@ class _SettingsPageState extends State<SettingsPage> {
   // radius
   double _currentSliderValue = 0;
   // lang
-  
+
   String? lang;
 
   @override
@@ -67,6 +68,7 @@ class _SettingsPageState extends State<SettingsPage> {
     _auth = Provider.of<AuthenticationProvider>(context);
     _cloudStorage = GetIt.instance.get<CloudStorageService>();
     _db = GetIt.instance.get<DatabaseService>();
+
     return _buildUI();
   }
 
@@ -372,6 +374,8 @@ class _SettingsPageState extends State<SettingsPage> {
         Center(
           child: ElevatedButton(
             onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+
               lang = await showDialog(
                 context: context,
                 builder: (context) => Scaffold(
@@ -495,6 +499,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
               );
+
+              await prefs.setString('lang', lang!);
             },
             child: const Text('Select your Language'),
           ),

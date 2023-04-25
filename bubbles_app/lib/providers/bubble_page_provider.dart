@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //Services
 import '../services/database_service.dart';
@@ -18,6 +19,8 @@ import '../providers/authentication_provider.dart';
 //Models
 import '../models/message.dart';
 
+import 'package:translator/translator.dart';
+
 class BubblePageProvider extends ChangeNotifier {
   late DatabaseService _db;
   late CloudStorageService _storage;
@@ -29,10 +32,10 @@ class BubblePageProvider extends ChangeNotifier {
 
   final String _bubbleId;
   List<Message>? messages;
-
   late StreamSubscription _messagesStream;
-
   String? _message;
+
+  final translator = GoogleTranslator();
 
   set message(String value) {
     _message = value;
@@ -44,6 +47,7 @@ class BubblePageProvider extends ChangeNotifier {
     _storage = GetIt.instance.get<CloudStorageService>();
     _media = GetIt.instance.get<MediaService>();
     _navigation = GetIt.instance.get<NavigationService>();
+
     listenToMessages();
     listenToKeyboardChanges();
   }
@@ -72,9 +76,9 @@ class BubblePageProvider extends ChangeNotifier {
 
           messages = snapMessages;
 
-          messages?.forEach((message) {
+          messages?.forEach((message) async {
             if (message.type == MessageType.text) {
-              message.content = translator(message.content);
+              message.content = await translateMsg(message.content);
             }
           });
 
@@ -138,7 +142,13 @@ class BubblePageProvider extends ChangeNotifier {
     _db.deleteBubble(_bubbleId);
   }
 
-  String translator(String msg) {
-    return "${msg}- works";
+  Future<String> translateMsg(String msg) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var x = prefs.get("lang");
+    Translation translation = await msg.translate(to: 'fr');
+    msg = translation.toString();
+    print(translation);
+    print(msg);
+    return msg;
   }
 }
