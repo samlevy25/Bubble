@@ -1,5 +1,5 @@
+import 'package:bubbles_app/pages/bubble_page.dart';
 import 'package:bubbles_app/pages/create_bubble_page.dart';
-import 'package:bubbles_app/widgets/bubble_tile.dart';
 
 //Packages
 import 'package:flutter/material.dart';
@@ -16,6 +16,7 @@ import '../services/map_service.dart';
 
 //Models
 import '../models/bubble.dart';
+import '../widgets/rounded_image.dart';
 
 class BubblesPage extends StatefulWidget {
   const BubblesPage({super.key});
@@ -85,7 +86,7 @@ class _BubblesPageState extends State<BubblesPage> {
             return ListView.builder(
               itemCount: bubbles.length,
               itemBuilder: (BuildContext context, int index) {
-                return BubbleTile(bubble: bubbles[index]);
+                return _bubbleTile(bubbles[index]);
               },
             );
           } else {
@@ -117,6 +118,36 @@ class _BubblesPageState extends State<BubblesPage> {
         _navigation.navigateToPage(const CreateBubblePage());
       },
       child: const Icon(Icons.add),
+    );
+  }
+
+  Widget _bubbleTile(Bubble bubble) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TextButton(
+          child: Card(
+            color: const Color.fromARGB(204, 104, 225, 234),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  title: Text(bubble.getName()),
+                  leading: RoundedImageNetwork(
+                    imagePath: bubble.getImageURL(),
+                    size: _deviceHeight * 0.06,
+                    key: UniqueKey(),
+                  ),
+                )
+              ],
+            ),
+          ),
+          onPressed: () => {
+            bubble.joinMemmber(_auth.appUser),
+            _navigation.navigateToPage(BubblePage(bubble: bubble))
+          },
+        ),
+      ],
     );
   }
 }

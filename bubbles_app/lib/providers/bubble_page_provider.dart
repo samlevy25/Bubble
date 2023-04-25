@@ -69,7 +69,9 @@ class BubblePageProvider extends ChangeNotifier {
               return Message.fromJSON(messageData);
             },
           ).toList();
+
           messages = snapMessages;
+          print(messages);
           notifyListeners();
           WidgetsBinding.instance.addPostFrameCallback(
             (_) {
