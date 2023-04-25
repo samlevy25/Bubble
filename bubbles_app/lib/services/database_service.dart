@@ -47,6 +47,19 @@ class DatabaseService {
     }
   }
 
+  Future<void> updateImageURL(
+    String uid,
+    imgUrl,
+  ) async {
+    try {
+      await _db.collection(userCollection).doc(uid).update({"image": imgUrl});
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
   Stream<QuerySnapshot> getChatsForUser(String uid) {
     return _db
         .collection(chatsCollection)

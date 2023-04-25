@@ -1,15 +1,22 @@
 import 'package:bubbles_app/widgets/custom_input_fields.dart';
+import 'package:easy_autocomplete/easy_autocomplete.dart';
+import 'package:file_picker/src/platform_file.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:async_button_builder/async_button_builder.dart';
 import '../providers/authentication_provider.dart';
+import '../services/cloud_storage_service.dart';
 import '../services/database_service.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
+import '../services/media_service.dart';
 import '../widgets/custom_radio_button.dart';
 import '../widgets/profile_widget.dart';
+import '../widgets/rounded_image.dart';
+
+import 'package:list_picker/list_picker.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage();
@@ -25,10 +32,16 @@ class _SettingsPageState extends State<SettingsPage> {
   bool validate = true;
 
   late AuthenticationProvider _auth;
+  late CloudStorageService _cloudStorage;
   late DatabaseService _db;
 
+  // current password for re-auth
   String? _currentPassword;
+
   // image
+  PlatformFile? _profileImage;
+
+  //username
   String? _username;
   final _usernameFormKey = GlobalKey<FormState>();
 
@@ -40,8 +53,11 @@ class _SettingsPageState extends State<SettingsPage> {
   String? _newPassword;
   final _passwordFormKey = GlobalKey<FormState>();
 
+  // radius
   double _currentSliderValue = 0;
-  String _lang = "EN";
+  // lang
+  
+  String? lang;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +65,7 @@ class _SettingsPageState extends State<SettingsPage> {
     _deviceWidth = MediaQuery.of(context).size.width;
 
     _auth = Provider.of<AuthenticationProvider>(context);
+    _cloudStorage = GetIt.instance.get<CloudStorageService>();
     _db = GetIt.instance.get<DatabaseService>();
     return _buildUI();
   }
@@ -87,12 +104,64 @@ class _SettingsPageState extends State<SettingsPage> {
       title: const Text('Profile Image'),
       subtitle: const Text('change the display Image'),
       children: [
-        Form(
-          child: ProfileWidget(
-            isEdit: true,
-            imagePath: _auth.appUser.imageURL,
-            onClicked: () {},
-          ),
+        GestureDetector(
+          onTap: () {
+            GetIt.instance.get<MediaService>().pickedImageFromLibary().then(
+                  (file) => {
+                    setState(
+                      () {
+                        _profileImage = file;
+                      },
+                    )
+                  },
+                );
+          },
+          child: () {
+            return _profileImage != null
+                ? RoundedImageFile(
+                    key: UniqueKey(),
+                    image: _profileImage!,
+                    size: _deviceHeight * 0.15,
+                  )
+                : RoundedImageNetwork(
+                    key: UniqueKey(),
+                    imagePath: _auth.appUser.imageURL,
+                    size: _deviceHeight * 0.15,
+                  );
+          }(),
+        ),
+        AsyncButtonBuilder(
+          onPressed: () async {
+            await Future.delayed(const Duration(seconds: 1));
+            if (_profileImage != null) {
+              validate = true;
+              String? imageURL = await _cloudStorage.saveUserImageToStorage(
+                  _auth.appUser.uid, _profileImage!);
+              _db.updateImageURL(_auth.appUser.uid, imageURL!);
+            } else {
+              validate = false;
+              throw 'yikes';
+            }
+          },
+          builder: (context, child, callback, buttonState) {
+            final buttonColor = buttonState.when(
+              idle: () => null,
+              loading: () => null,
+              success: () => null,
+              error: (err, stack) => null,
+            );
+
+            return TextButton(
+              onPressed: callback,
+              style: validate
+                  ? null
+                  : OutlinedButton.styleFrom(
+                      backgroundColor: buttonColor,
+                    ),
+              child: child,
+            );
+          },
+          child: const Text('Submit'),
         ),
       ],
     );
@@ -300,42 +369,135 @@ class _SettingsPageState extends State<SettingsPage> {
       title: const Text('Language'),
       subtitle: const Text('change App Language'),
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            MyRadioListTile(
-              value: "EN",
-              groupValue: _lang,
-              title: "GPS",
-              onChanged: (value) => setState(() => _lang = value!),
-              icon: Icons.gps_fixed,
-              width: _deviceWidth * 0.1,
-            ),
-            MyRadioListTile(
-              value: "HEB",
-              groupValue: _lang,
-              title: "WIFI",
-              onChanged: (value) => setState(() => _lang = value!),
-              icon: Icons.wifi,
-              width: _deviceWidth * 0.1,
-            ),
-            MyRadioListTile(
-              value: "FR",
-              groupValue: _lang,
-              title: "NFC",
-              onChanged: (value) => setState(() => _lang = value!),
-              icon: Icons.nfc,
-              width: _deviceWidth * 0.1,
-            ),
-            MyRadioListTile(
-              value: "RUS",
-              groupValue: _lang,
-              title: "Password",
-              onChanged: (value) => setState(() => _lang = value!),
-              icon: Icons.key,
-              width: _deviceWidth * 0.1,
-            ),
-          ],
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              lang = await showDialog(
+                context: context,
+                builder: (context) => Scaffold(
+                  appBar: AppBar(
+                    title: const Text('Select your Language'),
+                  ),
+                  body: const ListPickerDialog(
+                    label: "Language",
+                    items: [
+                      'Afrikaans',
+                      'Albanian',
+                      'Amharic',
+                      'Arabic',
+                      'Armenian',
+                      'Azerbaijani',
+                      'Basque',
+                      'Belarusian',
+                      'Bengali',
+                      'Bosnian',
+                      'Bulgarian',
+                      'Catalan',
+                      'Cebuano',
+                      'Chichewa',
+                      'Chinese (Simplified)',
+                      'Chinese (Traditional)',
+                      'Corsican',
+                      'Croatian',
+                      'Czech',
+                      'Danish',
+                      'Dutch',
+                      'English',
+                      'Esperanto',
+                      'Estonian',
+                      'Filipino',
+                      'Finnish',
+                      'French',
+                      'Frisian',
+                      'Galician',
+                      'Georgian',
+                      'German',
+                      'Greek',
+                      'Gujarati',
+                      'Haitian Creole',
+                      'Hausa',
+                      'Hawaiian',
+                      'Hebrew',
+                      'Hindi',
+                      'Hmong',
+                      'Hungarian',
+                      'Icelandic',
+                      'Igbo',
+                      'Indonesian',
+                      'Irish',
+                      'Italian',
+                      'Japanese',
+                      'Javanese',
+                      'Kannada',
+                      'Kazakh',
+                      'Khmer',
+                      'Kinyarwanda',
+                      'Korean',
+                      'Kurdish (Kurmanji)',
+                      'Kurdish (Sorani)',
+                      'Kyrgyz',
+                      'Lao',
+                      'Latin',
+                      'Latvian',
+                      'Lithuanian',
+                      'Luxembourgish',
+                      'Macedonian',
+                      'Malagasy',
+                      'Malay',
+                      'Malayalam',
+                      'Maltese',
+                      'Maori',
+                      'Marathi',
+                      'Mongolian',
+                      'Myanmar (Burmese)',
+                      'Nepali',
+                      'Norwegian',
+                      'Odia (Oriya)',
+                      'Pashto',
+                      'Persian',
+                      'Polish',
+                      'Portuguese',
+                      'Punjabi',
+                      'Romanian',
+                      'Russian',
+                      'Samoan',
+                      'Scots Gaelic',
+                      'Serbian',
+                      'Sesotho',
+                      'Shona',
+                      'Sindhi',
+                      'Sinhala',
+                      'Slovak',
+                      'Slovenian',
+                      'Somali',
+                      'Spanish',
+                      'Sundanese',
+                      'Swahili',
+                      'Swedish',
+                      'Tajik',
+                      'Tamil',
+                      'Tatar',
+                      'Telugu',
+                      'Thai',
+                      'Turkish',
+                      'Turkmen',
+                      'Ukrainian',
+                      'Urdu',
+                      'Uyghur',
+                      'Uzbek',
+                      'Vietnamese',
+                      'Welsh',
+                      'Xhosa',
+                      'Yiddish',
+                      'Yoruba',
+                      'Zulu'
+                    ],
+                  ),
+                ),
+              );
+            },
+            child: const Text('Select your Language'),
+          ),
         ),
       ],
     );
