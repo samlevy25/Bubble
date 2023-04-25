@@ -137,20 +137,17 @@ class _SettingsPageState extends State<SettingsPage> {
               error: (err, stack) => null,
             );
 
-            return validate
-                ? TextButton(
-                    onPressed: callback,
-                    child: child,
-                  )
-                : TextButton(
-                    onPressed: callback,
-                    style: OutlinedButton.styleFrom(
+            return TextButton(
+              onPressed: callback,
+              style: validate
+                  ? null
+                  : OutlinedButton.styleFrom(
                       backgroundColor: buttonColor,
                     ),
-                    child: child,
-                  );
+              child: child,
+            );
           },
-          child: const Text('Apply'),
+          child: const Text('Submit'),
         ),
       ],
     );
@@ -211,20 +208,17 @@ class _SettingsPageState extends State<SettingsPage> {
               error: (err, stack) => null,
             );
 
-            return validate
-                ? TextButton(
-                    onPressed: callback,
-                    child: child,
-                  )
-                : TextButton(
-                    onPressed: callback,
-                    style: OutlinedButton.styleFrom(
+            return TextButton(
+              onPressed: callback,
+              style: validate
+                  ? null
+                  : OutlinedButton.styleFrom(
                       backgroundColor: buttonColor,
                     ),
-                    child: child,
-                  );
+              child: child,
+            );
           },
-          child: const Text('Apply'),
+          child: const Text('Submit'),
         ),
       ],
     );
@@ -263,14 +257,37 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           ),
         ),
-        TextButton(
-          child: const Text("Apply"),
+        AsyncButtonBuilder(
           onPressed: () async {
+            await Future.delayed(const Duration(seconds: 1));
             if (_passwordFormKey.currentState!.validate()) {
+              validate = true;
               _passwordFormKey.currentState!.save();
               _auth.changePassword(_newPassword, _currentPassword);
+            } else {
+              validate = false;
+              throw 'yikes';
             }
           },
+          builder: (context, child, callback, buttonState) {
+            final buttonColor = buttonState.when(
+              idle: () => null,
+              loading: () => null,
+              success: () => null,
+              error: (err, stack) => null,
+            );
+
+            return TextButton(
+              onPressed: callback,
+              style: validate
+                  ? null
+                  : OutlinedButton.styleFrom(
+                      backgroundColor: buttonColor,
+                    ),
+              child: child,
+            );
+          },
+          child: const Text('Submit'),
         ),
       ],
     );
