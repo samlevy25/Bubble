@@ -180,6 +180,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             BubblePage(
               bubble: Bubble(
                 currentUserUid: createrUid,
+                admin: createrUid,
                 uid: bubbleUid,
                 name: _bubbleName!,
                 members: [_auth.appUser],

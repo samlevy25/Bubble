@@ -1,13 +1,14 @@
 import 'dart:async';
 
 //Packages
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 //Services
+import '../models/app_user.dart';
 import '../services/database_service.dart';
 import '../services/cloud_storage_service.dart';
 import '../services/media_service.dart';
@@ -32,7 +33,9 @@ class BubblePageProvider extends ChangeNotifier {
 
   final String _bubbleId;
   List<Message>? messages;
+  List<AppUser> memmbers = [];
   late StreamSubscription _messagesStream;
+  late StreamSubscription _participantsStream;
   String? _message;
 
   final translator = GoogleTranslator();
@@ -47,14 +50,15 @@ class BubblePageProvider extends ChangeNotifier {
     _storage = GetIt.instance.get<CloudStorageService>();
     _media = GetIt.instance.get<MediaService>();
     _navigation = GetIt.instance.get<NavigationService>();
-
     listenToMessages();
+    listenToParticipants();
     listenToKeyboardChanges();
   }
 
   @override
   void dispose() {
     _messagesStream.cancel();
+    _participantsStream.cancel();
     super.dispose();
   }
 
@@ -101,6 +105,26 @@ class BubblePageProvider extends ChangeNotifier {
     }
   }
 
+  void listenToParticipants() {
+    _participantsStream = _db
+        .streamParticipantsForBubble(_bubbleId)
+        .listen((newParticipants) async {
+      List<AppUser> members = [];
+      for (var mUid in newParticipants) {
+        DocumentSnapshot userSnapshot = await _db.getUser(mUid);
+        Map<String, dynamic> userData =
+            userSnapshot.data() as Map<String, dynamic>;
+        userData["uid"] = userSnapshot.id;
+        members.add(
+          AppUser.fromJSON(userData),
+        );
+      }
+
+      memmbers = members;
+      notifyListeners();
+    });
+  }
+
   void listenToKeyboardChanges() {}
 
   void sendTextMessage() {
@@ -143,12 +167,7 @@ class BubblePageProvider extends ChangeNotifier {
   }
 
   Future<String> translateMsg(String msg) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var x = prefs.get("lang");
-    Translation translation = await msg.translate(to: 'fr');
-    msg = translation.toString();
-    print(translation);
-    print(msg);
-    return msg;
+    Translation translated = await msg.translate(to: 'fr');
+    return translated.toString();
   }
 }

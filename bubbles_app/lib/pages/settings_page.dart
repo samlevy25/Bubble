@@ -17,7 +17,6 @@ import '../widgets/profile_widget.dart';
 import '../widgets/rounded_image.dart';
 
 import 'package:list_picker/list_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage();
@@ -374,8 +373,6 @@ class _SettingsPageState extends State<SettingsPage> {
         Center(
           child: ElevatedButton(
             onPressed: () async {
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-
               lang = await showDialog(
                 context: context,
                 builder: (context) => Scaffold(
@@ -499,8 +496,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
               );
-
-              await prefs.setString('lang', lang!);
             },
             child: const Text('Select your Language'),
           ),

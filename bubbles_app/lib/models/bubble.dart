@@ -23,6 +23,7 @@ class Bubble {
   final int keyType;
   final String? key;
   final String geohash;
+  final String admin;
 
   late final List<AppUser> _recepients;
 
@@ -30,6 +31,7 @@ class Bubble {
 
   Bubble({
     required this.currentUserUid,
+    required this.admin,
     required this.uid,
     required this.name,
     required this.members,

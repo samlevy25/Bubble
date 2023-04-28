@@ -191,6 +191,13 @@ extension DatabaseServiceExtension on DatabaseService {
         .snapshots();
   }
 
+  Stream<List<String>> streamParticipantsForBubble(String bubbleId) {
+    return _db.collection('bubbles').doc(bubbleId).snapshots().map((snapshot) {
+      List<String> participants = snapshot.data()!['memmbers'].cast<String>();
+      return participants;
+    });
+  }
+
   Future<void> updateBubbleData(
       String bubbleID, Map<String, dynamic> data) async {
     try {
@@ -258,6 +265,7 @@ extension DatabaseServiceExtension on DatabaseService {
       await _db.collection(bubblesCollection).doc(bubbleUid).set(
         {
           "geohash": geohash,
+          "admin": createrUid,
           "image": imageURL,
           "name": name,
           "members": [createrUid],

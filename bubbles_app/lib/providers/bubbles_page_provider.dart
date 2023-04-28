@@ -73,10 +73,12 @@ class BubblesPageProvider extends ChangeNotifier {
             int methodType = bubbleData['keyType'];
             String? methodValue = bubbleData['key'];
             String location = bubbleData['geohash'];
+            String admin = bubbleData['admin'];
 
             //Return Bubble Instance
             return Bubble(
               uid: d.id,
+              admin: admin,
               name: name,
               currentUserUid: _auth.appUser.uid,
               members: members,

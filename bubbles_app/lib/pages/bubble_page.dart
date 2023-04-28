@@ -126,7 +126,7 @@ class _BubblePageState extends State<BubblePage> {
                 width: _deviceWidth * 0.80,
                 message: message,
                 isOwnMessage: isOwnMessage,
-                sender: widget.bubble.members
+                sender: _pageProvider.memmbers
                     .where((m) => m.uid == message.senderID)
                     .first,
               );
