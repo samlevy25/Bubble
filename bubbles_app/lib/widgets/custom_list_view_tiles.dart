@@ -1,4 +1,5 @@
 //Packages
+import 'package:bubbles_app/models/post.dart';
 import 'package:bubbles_app/pages/chat_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,9 @@ import '../widgets/message_bubbles.dart';
 
 //Models
 import '../models/message.dart';
-import '../models/app_user.dart';
+import '../models/user.dart';
+
+//
 
 class CustomListViewTile extends StatelessWidget {
   final double height;
@@ -213,6 +216,92 @@ class CustomChatListViewTile extends StatelessWidget {
                     );
                   }
                 },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CustomExplorerListViewTile extends StatelessWidget {
+  final double width;
+  final double deviceHeight;
+  final bool isOwnMessage;
+  final Post post;
+
+  late NavigationService _navigation;
+
+  CustomExplorerListViewTile({
+    super.key,
+    required this.width,
+    required this.deviceHeight,
+    required this.isOwnMessage,
+    required this.post,
+  });
+  @override
+  Widget build(BuildContext context) {
+    _navigation = GetIt.instance.get<NavigationService>();
+    return _buildUI();
+  }
+
+  Widget _buildUI() {
+    return Container(
+      padding: const EdgeInsets.only(bottom: 10),
+      width: width,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment:
+            isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          !isOwnMessage
+              ? RoundedImageNetwork(
+                  key: UniqueKey(),
+                  imagePath: "post.sender",
+                  size: width * 0.08)
+              : Container(),
+          SizedBox(
+            width: width * 0.05,
+          ),
+          Column(
+            children: [
+              Column(
+                children: [
+                  post.type == PostType.text
+                      ? TextPostBubble(
+                          isOwnMessage: isOwnMessage,
+                          post: post,
+                          height: deviceHeight * 0.06,
+                          width: width,
+                        )
+                      : ImagePostBubble(
+                          isOwnMessage: isOwnMessage,
+                          post: post,
+                          height: deviceHeight * 0.30,
+                          width: width * 0.55,
+                        ),
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: () {},
+                        child: const Text("Comment"),
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: const Text(
+                          'Hello, world!',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 0, 0, 0),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
               ),
             ],
           ),

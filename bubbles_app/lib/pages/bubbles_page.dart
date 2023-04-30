@@ -1,3 +1,4 @@
+import 'package:async_button_builder/async_button_builder.dart';
 import 'package:bubbles_app/pages/bubble_page.dart';
 import 'package:bubbles_app/pages/create_bubble_page.dart';
 
@@ -16,6 +17,7 @@ import '../services/map_service.dart';
 
 //Models
 import '../models/bubble.dart';
+
 import '../widgets/rounded_image.dart';
 
 class BubblesPage extends StatefulWidget {
@@ -86,7 +88,12 @@ class _BubblesPageState extends State<BubblesPage> {
             return ListView.builder(
               itemCount: bubbles.length,
               itemBuilder: (BuildContext context, int index) {
-                return _bubbleTile(bubbles[index]);
+                return Column(
+                  children: [
+                    _bubbleTile(bubbles[index]),
+                    const SizedBox(height: 10)
+                  ],
+                );
               },
             );
           } else {
@@ -122,32 +129,50 @@ class _BubblesPageState extends State<BubblesPage> {
   }
 
   Widget _bubbleTile(Bubble bubble) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        TextButton(
-          child: Card(
-            color: const Color.fromARGB(204, 104, 225, 234),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  title: Text(bubble.getName()),
-                  leading: RoundedImageNetwork(
-                    imagePath: bubble.getImageURL(),
-                    size: _deviceHeight * 0.06,
-                    key: UniqueKey(),
-                  ),
-                )
-              ],
-            ),
-          ),
-          onPressed: () => {
-            bubble.joinMemmber(_auth.appUser).then((value) =>
-                _navigation.navigateToPage(BubblePage(bubble: bubble)))
-          },
+    return Container(
+      color: Colors.white,
+      child: ExpansionTile(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(100.0),
         ),
-      ],
+        trailing: Icon(
+          [
+            Icons.wifi,
+            Icons.nfc,
+            Icons.password,
+            Icons.bluetooth,
+          ][bubble.keyType],
+        ),
+        leading: RoundedImageNetwork(
+          imagePath: bubble.image,
+          key: ValueKey(bubble.uid),
+          size: 50,
+        ),
+        title: Text(bubble.name),
+        children: [
+          Column(
+            children: [
+              Text("Location: ${bubble.geohash}"),
+              Text("Members: ${bubble.members.length.toString()}"),
+              Text("Key: ${bubble.key}"),
+              AsyncButtonBuilder(
+                showError: true,
+                child: const Text('Click Me'),
+                onPressed: () async {
+                  await Future.delayed(const Duration(seconds: 1));
+                  throw Exception("yo yo");
+                },
+                builder: (context, child, callback, _) {
+                  return TextButton(
+                    onPressed: callback,
+                    child: child,
+                  );
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

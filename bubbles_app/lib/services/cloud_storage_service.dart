@@ -51,7 +51,7 @@ class CloudStorageService {
   }
 }
 
-extension CloudStorageServiceExtension on CloudStorageService {
+extension BubbleCloudStorageService on CloudStorageService {
   Future<String?> saveBubbleImageToStorage(String uid, PlatformFile file,
       [void param2]) async {
     try {
@@ -76,6 +76,46 @@ extension CloudStorageServiceExtension on CloudStorageService {
     try {
       Reference ref = _storage.ref().child(
           'images/bubbles/$bubbleID/${userID}_${Timestamp.now().millisecondsSinceEpoch}.${file.extension}');
+      UploadTask task = ref.putFile(
+        File(file.path!),
+      );
+      return await task.then(
+        (result) => result.ref.getDownloadURL(),
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return null;
+  }
+}
+
+extension ExplorerCloudStorageService on CloudStorageService {
+  Future<String?> saveExplorerImageToStorage(String uid, PlatformFile file,
+      [void param2]) async {
+    try {
+      Reference ref =
+          _storage.ref().child('images/bubbles/$uid/profile.${file.extension}');
+      UploadTask task = ref.putFile(
+        File(file.path!),
+      );
+      return await task.then(
+        (result) => result.ref.getDownloadURL(),
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return null;
+  }
+
+  Future<String?> saveSentExplorerImageToStorage(
+      String userID, PlatformFile file) async {
+    try {
+      Reference ref = _storage.ref().child(
+          'images/explorer/${userID}_${Timestamp.now().millisecondsSinceEpoch}.${file.extension}');
       UploadTask task = ref.putFile(
         File(file.path!),
       );

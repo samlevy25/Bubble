@@ -1,46 +1,46 @@
 //Packages
-import 'package:bubbles_app/providers/bubble_page_provider.dart';
+import 'package:bubbles_app/models/post.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //Widgets
-import '../models/bubble.dart';
+import '../providers/explorer_page_provider.dart';
 import '../widgets/top_bar.dart';
 import '../widgets/custom_list_view_tiles.dart';
 import '../widgets/custom_input_fields.dart';
 
 //Models
+import '../models/chat.dart';
 import '../models/message.dart';
 
 //Providers
 import '../providers/authentication_provider.dart';
+import '../providers/chat_page_provider.dart';
 
-class BubblePage extends StatefulWidget {
-  final Bubble bubble;
-
-  const BubblePage({super.key, required this.bubble});
+class ExplorerPage extends StatefulWidget {
+  const ExplorerPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _BubblePageState();
+    return _ExplorerPageState();
   }
 }
 
-class _BubblePageState extends State<BubblePage> {
+class _ExplorerPageState extends State<ExplorerPage> {
   late double _deviceHeight;
   late double _deviceWidth;
 
   late AuthenticationProvider _auth;
-  late BubblePageProvider _pageProvider;
+  late ExplorerPageProvider _pageProvider;
 
-  late GlobalKey<FormState> _messageFormState;
-  late ScrollController _messagesListViewController;
+  late GlobalKey<FormState> _postFormState;
+  late ScrollController _postsListViewController;
 
   @override
   void initState() {
     super.initState();
-    _messageFormState = GlobalKey<FormState>();
-    _messagesListViewController = ScrollController();
+    _postFormState = GlobalKey<FormState>();
+    _postsListViewController = ScrollController();
   }
 
   @override
@@ -50,9 +50,8 @@ class _BubblePageState extends State<BubblePage> {
     _auth = Provider.of<AuthenticationProvider>(context);
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<BubblePageProvider>(
-          create: (_) => BubblePageProvider(
-              widget.bubble.uid, _auth, _messagesListViewController),
+        ChangeNotifierProvider<ExplorerPageProvider>(
+          create: (_) => ExplorerPageProvider(_auth, _postsListViewController),
         ),
       ],
       child: _buildUI(),
@@ -62,73 +61,69 @@ class _BubblePageState extends State<BubblePage> {
   Widget _buildUI() {
     return Builder(
       builder: (BuildContext context) {
-        _pageProvider = context.watch<BubblePageProvider>();
+        _pageProvider = context.watch<ExplorerPageProvider>();
         return Scaffold(
-          body: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: _deviceWidth * 0.03,
-                vertical: _deviceHeight * 0.02,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return _sendPostForm();
+                },
+              );
+            },
+            child: const Icon(Icons.add),
+          ),
+          body: CustomScrollView(
+            slivers: [
+              const SliverAppBar(
+                title: Text('Explorer'),
+                pinned: true,
+                floating: false,
+                snap: false,
+                // additional properties for the app bar
               ),
-              height: _deviceHeight,
-              width: _deviceWidth * 0.97,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TopBar(
-                    widget.bubble.getName(),
-                    fontSize: 10,
-                    primaryAction: IconButton(
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Color.fromRGBO(0, 82, 218, 1.0),
-                      ),
-                      onPressed: () {
-                        _pageProvider.deleteBubble();
-                      },
-                    ),
-                    secondaryAction: IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back,
-                        color: Color.fromRGBO(0, 82, 218, 1.0),
-                      ),
-                      onPressed: () {
-                        _pageProvider.goBack();
-                      },
-                    ),
+              SliverToBoxAdapter(
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: _deviceWidth * 0.03,
+                    vertical: _deviceHeight * 0.02,
                   ),
-                  _messagesListView(),
-                  _sendMessageForm(),
-                ],
+                  height: _deviceHeight,
+                  width: _deviceWidth * 0.97,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _postsListView(),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         );
       },
     );
   }
 
-  Widget _messagesListView() {
-    if (_pageProvider.messages != null) {
-      if (_pageProvider.messages!.isNotEmpty) {
+  Widget _postsListView() {
+    if (_pageProvider.posts != null) {
+      if (_pageProvider.posts!.isNotEmpty) {
         return SizedBox(
           height: _deviceHeight * 0.74,
           child: ListView.builder(
-            controller: _messagesListViewController,
-            itemCount: _pageProvider.messages!.length,
+            controller: _postsListViewController,
+            itemCount: _pageProvider.posts!.length,
             itemBuilder: (BuildContext context, int index) {
-              Message message = _pageProvider.messages![index];
-              bool isOwnMessage = message.senderID == _auth.appUser.uid;
-              return CustomChatListViewTile(
+              Post post = _pageProvider.posts![index];
+              bool isOwnMessage = post.senderID == _auth.appUser.uid;
+              return CustomExplorerListViewTile(
                 deviceHeight: _deviceHeight,
                 width: _deviceWidth * 0.80,
-                message: message,
+                post: post,
                 isOwnMessage: isOwnMessage,
-                sender: widget.bubble.members
-                    .where((m) => m.uid == message.senderID)
-                    .first,
               );
             },
           ),
@@ -151,7 +146,7 @@ class _BubblePageState extends State<BubblePage> {
     }
   }
 
-  Widget _sendMessageForm() {
+  Widget _sendPostForm() {
     return Container(
       height: _deviceHeight * 0.06,
       decoration: BoxDecoration(
@@ -163,7 +158,7 @@ class _BubblePageState extends State<BubblePage> {
         vertical: _deviceHeight * 0.03,
       ),
       child: Form(
-        key: _messageFormState,
+        key: _postFormState,
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -183,7 +178,7 @@ class _BubblePageState extends State<BubblePage> {
       width: _deviceWidth * 0.65,
       child: CustomTextFormField(
           onSaved: (value) {
-            _pageProvider.message = value;
+            _pageProvider.post = value;
           },
           regEx: r"^(?!\s*$).+",
           hintText: "Type a message",
@@ -202,10 +197,10 @@ class _BubblePageState extends State<BubblePage> {
           color: Colors.white,
         ),
         onPressed: () {
-          if (_messageFormState.currentState!.validate()) {
-            _messageFormState.currentState!.save();
-            _pageProvider.sendTextMessage();
-            _messageFormState.currentState!.reset();
+          if (_postFormState.currentState!.validate()) {
+            _postFormState.currentState!.save();
+            _pageProvider.sendTextPost();
+            _postFormState.currentState!.reset();
           }
         },
       ),
@@ -225,7 +220,7 @@ class _BubblePageState extends State<BubblePage> {
           1.0,
         ),
         onPressed: () {
-          _pageProvider.sendImageMessage();
+          _pageProvider.sendImagePost();
         },
         child: const Icon(Icons.camera_enhance),
       ),

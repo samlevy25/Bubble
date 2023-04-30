@@ -1,10 +1,11 @@
+import 'package:bubbles_app/pages/explorer_page.dart';
 import 'package:bubbles_app/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 
 //p
-import '../models/app_user.dart';
+import '../models/user.dart';
 
 import '../providers/authentication_provider.dart';
 import 'bubbles_page.dart';
@@ -28,7 +29,7 @@ class _HomePageState extends State<HomePage> {
     // ignore: no_leading_underscores_for_local_identifiers
     final List<Widget> _pages = [
       const BubblesPage(),
-      Container(),
+      const ExplorerPage(),
       const ProfilePage(),
     ];
     return Scaffold(

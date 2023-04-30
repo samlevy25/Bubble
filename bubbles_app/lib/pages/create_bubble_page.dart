@@ -12,7 +12,7 @@ import '../networks/gps.dart';
 import '../networks/wifi.dart';
 
 //Models
-import '../models/geohash.dart';
+
 import '../models/bubble.dart';
 
 //Services

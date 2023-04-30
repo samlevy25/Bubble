@@ -12,7 +12,7 @@ import '../widgets/custom_list_view_tiles.dart';
 import '../widgets/rounded_button.dart';
 
 //Models
-import '../models/app_user.dart';
+import '../models/user.dart';
 
 class UsersPage extends StatefulWidget {
   const UsersPage({super.key});

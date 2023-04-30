@@ -2,11 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 import '../models/message.dart';
+import '../models/post.dart';
 
 const String userCollection = "Users";
 const String chatsCollection = "Chats";
 const String bubblesCollection = "Bubbles";
 const String messagesCollection = "Messages";
+const String postsCollection = "Posts";
 
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -163,7 +165,7 @@ class DatabaseService {
   }
 }
 
-extension DatabaseServiceExtension on DatabaseService {
+extension BubbleDatabaseService on DatabaseService {
   Stream<QuerySnapshot> getBubblesForUser(String uid, String hash) {
     return _db
         .collection(bubblesCollection)
@@ -282,5 +284,26 @@ extension DatabaseServiceExtension on DatabaseService {
 
   String generateBubbleUid() {
     return _db.collection(bubblesCollection).doc().id;
+  }
+}
+
+extension ExplorerDatabaseService on DatabaseService {
+  Stream<QuerySnapshot> streamPostsForExplorer() {
+    return _db
+        .collection(postsCollection)
+        .orderBy("sent_time", descending: false)
+        .snapshots();
+  }
+
+  Future<void> addPostToExplorer(Post message) async {
+    try {
+      await _db.collection(postsCollection).add(
+            message.toJson(),
+          );
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 }

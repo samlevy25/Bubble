@@ -11,7 +11,7 @@ import '../services/navigation_service.dart';
 import '../providers/authentication_provider.dart';
 
 //Models
-import '../models/app_user.dart';
+import '../models/user.dart';
 import '../models/chat.dart';
 
 //Pages

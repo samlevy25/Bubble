@@ -1,4 +1,4 @@
-import 'package:bubbles_app/models/app_user.dart';
+import 'package:bubbles_app/models/user.dart';
 import 'package:bubbles_app/pages/chats_page.dart';
 
 import 'package:flutter/material.dart';
@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import '../providers/authentication_provider.dart';
 import '../providers/chats_page_provider.dart';
 import '../services/navigation_service.dart';
-import '../widgets/button_widget.dart';
 
 import '../widgets/profile_widget.dart';
 import 'settings_page.dart';

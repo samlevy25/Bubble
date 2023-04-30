@@ -1,4 +1,4 @@
-import '../models/app_user.dart';
+import 'user.dart';
 import 'message.dart';
 
 class Chat {
