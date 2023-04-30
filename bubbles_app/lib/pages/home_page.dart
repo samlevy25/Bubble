@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 
 //p
-import '../models/user.dart';
+import '../models/app_user.dart';
 
 import '../providers/authentication_provider.dart';
 import 'bubbles_page.dart';

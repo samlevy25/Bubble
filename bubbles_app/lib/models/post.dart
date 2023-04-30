@@ -1,3 +1,4 @@
+import 'package:bubbles_app/models/comment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum PostType {
@@ -11,12 +12,14 @@ class Post {
   final PostType type;
   final String content;
   final DateTime sentTime;
+  List<Comment> comments;
 
   Post(
       {required this.content,
       required this.type,
       required this.senderID,
-      required this.sentTime});
+      required this.sentTime,
+      required this.comments});
 
   factory Post.fromJSON(Map<String, dynamic> json) {
     PostType postType;
@@ -30,12 +33,22 @@ class Post {
       default:
         postType = PostType.unkown;
     }
+
+    List<Comment> comments = [];
+    if (json["Comments"] != null) {
+      for (var comment in json["Comments"]) {
+        comments.add(
+          Comment.fromJSON(comment),
+        );
+      }
+    }
+
     return Post(
-      content: json["content"],
-      type: postType,
-      senderID: json["sender_id"],
-      sentTime: json["sent_time"].toDate(),
-    );
+        content: json["content"],
+        type: postType,
+        senderID: json["sender_id"],
+        sentTime: json["sent_time"].toDate(),
+        comments: comments);
   }
   Map<String, dynamic> toJson() {
     String postType;

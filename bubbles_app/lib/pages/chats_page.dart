@@ -18,7 +18,7 @@ import '../widgets/custom_list_view_tiles.dart';
 
 //Models
 import '../models/chat.dart';
-import '../models/user.dart';
+import '../models/app_user.dart';
 import '../models/message.dart';
 
 class ChatsPage extends StatefulWidget {

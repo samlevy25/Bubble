@@ -1,4 +1,4 @@
-import 'package:bubbles_app/models/user.dart';
+import 'package:bubbles_app/models/app_user.dart';
 import 'package:bubbles_app/pages/chats_page.dart';
 
 import 'package:flutter/material.dart';

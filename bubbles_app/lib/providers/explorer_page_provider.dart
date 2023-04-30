@@ -83,11 +83,11 @@ class ExplorerPageProvider extends ChangeNotifier {
   void sendTextPost() {
     if (post != null) {
       Post postToSend = Post(
-        content: post!,
-        type: PostType.text,
-        senderID: _auth.appUser.uid,
-        sentTime: DateTime.now(),
-      );
+          content: post!,
+          type: PostType.text,
+          senderID: _auth.appUser.uid,
+          sentTime: DateTime.now(),
+          comments: []);
       _db.addPostToExplorer(postToSend);
     }
   }
@@ -99,11 +99,11 @@ class ExplorerPageProvider extends ChangeNotifier {
         String? downloadURL =
             await _storage.saveExplorerImageToStorage(_auth.appUser.uid, file);
         Post postToSend = Post(
-          content: downloadURL!,
-          type: PostType.image,
-          senderID: _auth.appUser.uid,
-          sentTime: DateTime.now(),
-        );
+            content: downloadURL!,
+            type: PostType.image,
+            senderID: _auth.appUser.uid,
+            sentTime: DateTime.now(),
+            comments: []);
         _db.addPostToExplorer(postToSend);
       }
     } catch (e) {

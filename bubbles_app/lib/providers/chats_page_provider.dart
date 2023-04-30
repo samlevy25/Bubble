@@ -1,7 +1,7 @@
 import 'dart:async';
 
 //Packages
-import 'package:bubbles_app/models/user.dart';
+import 'package:bubbles_app/models/app_user.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

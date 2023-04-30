@@ -14,7 +14,7 @@ import '../widgets/message_bubbles.dart';
 
 //Models
 import '../models/message.dart';
-import '../models/user.dart';
+import '../models/app_user.dart';
 
 //
 
@@ -259,7 +259,8 @@ class CustomExplorerListViewTile extends StatelessWidget {
           !isOwnMessage
               ? RoundedImageNetwork(
                   key: UniqueKey(),
-                  imagePath: "post.sender",
+                  imagePath:
+                      "https://fastly.picsum.photos/id/361/200/300.jpg?hmac=unS_7uvpA3Q-hJTvI1xNCnlhta-oC6XnWZ4Y11UpjAo",
                   size: width * 0.08)
               : Container(),
           SizedBox(

@@ -2,7 +2,7 @@ import 'package:bubbles_app/networks/gps.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
-import 'user.dart';
+import 'app_user.dart';
 import '../services/database_service.dart';
 import 'message.dart';
 

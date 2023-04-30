@@ -1,6 +1,6 @@
 //p
 
-import 'package:bubbles_app/models/user.dart';
+import 'package:bubbles_app/models/app_user.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

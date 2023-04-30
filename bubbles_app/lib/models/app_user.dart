@@ -1,3 +1,4 @@
+
 class AppUser {
   final String uid;
   final String username;

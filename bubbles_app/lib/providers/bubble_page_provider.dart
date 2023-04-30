@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 //Services
-import '../models/user.dart';
+import '../models/app_user.dart';
 import '../services/database_service.dart';
 import '../services/cloud_storage_service.dart';
 import '../services/media_service.dart';
