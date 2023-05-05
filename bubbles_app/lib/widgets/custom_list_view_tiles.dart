@@ -1,4 +1,5 @@
 //Packages
+import 'package:bubbles_app/models/comment.dart';
 import 'package:bubbles_app/models/post.dart';
 import 'package:bubbles_app/pages/chat_page.dart';
 import 'package:flutter/foundation.dart';
@@ -247,67 +248,34 @@ class CustomExplorerListViewTile extends StatelessWidget {
   }
 
   Widget _buildUI() {
-    return Container(
-      padding: const EdgeInsets.only(bottom: 10),
-      width: width,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment:
-            isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          !isOwnMessage
-              ? RoundedImageNetwork(
-                  key: UniqueKey(),
-                  imagePath:
-                      "https://fastly.picsum.photos/id/361/200/300.jpg?hmac=unS_7uvpA3Q-hJTvI1xNCnlhta-oC6XnWZ4Y11UpjAo",
-                  size: width * 0.08)
-              : Container(),
-          SizedBox(
-            width: width * 0.05,
-          ),
-          Column(
-            children: [
-              Column(
-                children: [
-                  post.type == PostType.text
-                      ? TextPostBubble(
-                          isOwnMessage: isOwnMessage,
-                          post: post,
-                          height: deviceHeight * 0.06,
-                          width: width,
-                        )
-                      : ImagePostBubble(
-                          isOwnMessage: isOwnMessage,
-                          post: post,
-                          height: deviceHeight * 0.30,
-                          width: width * 0.55,
-                        ),
-                  Row(
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text("Comment"),
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text(
-                          'Hello, world!',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 0, 0, 0),
-                          ),
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start, // Add this line
+          children: [
+            RoundedImageNetwork(
+              key: UniqueKey(),
+              imagePath:
+                  "https://fastly.picsum.photos/id/361/200/300.jpg?hmac=unS_7uvpA3Q-hJTvI1xNCnlhta-oC6XnWZ4Y11UpjAo",
+              size: width * 0.08,
+            ),
+            Expanded(
+              child: post.type == PostType.text
+                  ? TextPostBubble(
+                      post: post,
+                      height: deviceHeight * 0.06,
+                      width: width,
+                    )
+                  : ImagePostBubble(
+                      post: post,
+                      height: deviceHeight * 0.30,
+                      width: width * 0.55,
+                    ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+      ],
     );
   }
 }

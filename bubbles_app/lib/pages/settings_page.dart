@@ -1,5 +1,4 @@
 import 'package:bubbles_app/widgets/custom_input_fields.dart';
-import 'package:easy_autocomplete/easy_autocomplete.dart';
 import 'package:file_picker/src/platform_file.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -12,8 +11,7 @@ import '../services/database_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../services/media_service.dart';
-import '../widgets/custom_radio_button.dart';
-import '../widgets/profile_widget.dart';
+
 import '../widgets/rounded_image.dart';
 
 import 'package:list_picker/list_picker.dart';

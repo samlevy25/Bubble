@@ -44,7 +44,7 @@ class MainApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Bubbles',
         theme: ThemeData(
-          scaffoldBackgroundColor: Colors.lightBlueAccent,
+          scaffoldBackgroundColor: Colors.white,
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
             backgroundColor: Colors.blueGrey,
           ),

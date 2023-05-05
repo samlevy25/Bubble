@@ -1,6 +1,8 @@
 import 'dart:async';
 
 //Packages
+import 'package:bubbles_app/models/comment.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -51,13 +53,22 @@ class ExplorerPageProvider extends ChangeNotifier {
   void listenToPosts() {
     try {
       _postsStream = _db.streamPostsForExplorer().listen(
-        (snapshot) {
-          List<Post> snapPosts = snapshot.docs.map(
-            (m) {
-              Map<String, dynamic> postData = m.data() as Map<String, dynamic>;
-              return Post.fromJSON(postData);
-            },
-          ).toList();
+        (snapshot) async {
+          List<Post> snapPosts = await Future.wait(snapshot.docs.map((m) async {
+            Map<String, dynamic> postData = m.data() as Map<String, dynamic>;
+            // Construct a reference to the `comment` sub-collection of the post document
+            CollectionReference commentsRef =
+                m.reference.collection('Comments');
+            // Retrieve the comments data for the post
+            QuerySnapshot commentsSnapshot = await commentsRef.get();
+            List<Comment> comments = commentsSnapshot.docs.map((comment) {
+              Map<String, dynamic> commentData =
+                  comment.data() as Map<String, dynamic>;
+              return Comment.fromJSON(commentData);
+            }).toList();
+            postData['comments'] = comments;
+            return Post.fromJSON(postData);
+          }).toList());
           posts = snapPosts;
           notifyListeners();
           WidgetsBinding.instance.addPostFrameCallback(

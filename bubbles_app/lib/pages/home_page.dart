@@ -44,15 +44,15 @@ class _HomePageState extends State<HomePage> {
         }),
         items: [
           FlashyTabBarItem(
-            icon: const Icon(Icons.circle),
+            icon: const Icon(Icons.circle, color: Colors.blue),
             title: const Text('Bubbles'),
           ),
           FlashyTabBarItem(
-            icon: const Icon(Icons.square),
-            title: const Text("Empty"),
+            icon: const Icon(Icons.explore, color: Colors.blue),
+            title: const Text("Explorer"),
           ),
           FlashyTabBarItem(
-            icon: const Icon(Icons.person),
+            icon: const Icon(Icons.person, color: Colors.blue),
             title: const Text("Profile"),
           ),
         ],

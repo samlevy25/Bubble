@@ -21,9 +21,9 @@ class Post {
       required this.sentTime,
       required this.comments});
 
-  factory Post.fromJSON(Map<String, dynamic> json) {
+  factory Post.fromJSON(Map<String, dynamic> jsonPost) {
     PostType postType;
-    switch (json["type"]) {
+    switch (jsonPost["type"]) {
       case "text":
         postType = PostType.text;
         break;
@@ -34,21 +34,12 @@ class Post {
         postType = PostType.unkown;
     }
 
-    List<Comment> comments = [];
-    if (json["Comments"] != null) {
-      for (var comment in json["Comments"]) {
-        comments.add(
-          Comment.fromJSON(comment),
-        );
-      }
-    }
-
     return Post(
-        content: json["content"],
+        content: jsonPost["content"],
         type: postType,
-        senderID: json["sender_id"],
-        sentTime: json["sent_time"].toDate(),
-        comments: comments);
+        senderID: jsonPost["sender_id"],
+        sentTime: jsonPost["sent_time"].toDate(),
+        comments: jsonPost["comments"]);
   }
   Map<String, dynamic> toJson() {
     String postType;
