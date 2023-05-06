@@ -57,22 +57,27 @@ class _BubblesPageState extends State<BubblesPage> {
     return Builder(
       builder: (BuildContext context) {
         _pageProvider = context.watch<BubblesPageProvider>();
-        return Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: _deviceWidth * 0.03,
-            vertical: _deviceHeight * 0.02,
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Bubbles'),
           ),
-          height: _deviceHeight * 0.98,
-          width: _deviceWidth * 0.97,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _bubblesList(),
-              _map(),
-              _createBubble(),
-            ],
+          body: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: _deviceWidth * 0.03,
+              vertical: _deviceHeight * 0.02,
+            ),
+            height: _deviceHeight * 0.98,
+            width: _deviceWidth * 0.97,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _bubblesList(),
+                _map(),
+                _createBubble(),
+              ],
+            ),
           ),
         );
       },
