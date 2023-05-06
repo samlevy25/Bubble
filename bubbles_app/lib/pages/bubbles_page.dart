@@ -129,7 +129,7 @@ class _BubblesPageState extends State<BubblesPage> {
       onPressed: () {
         _navigation.navigateToPage(const CreateBubblePage());
       },
-      child: const Icon(Icons.add),
+      child: const Icon(Icons.create),
     );
   }
 

@@ -1,5 +1,6 @@
 //Packages
 import 'package:bubbles_app/models/post.dart';
+import 'package:bubbles_app/pages/post_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -119,11 +120,21 @@ class _ExplorerPageState extends State<ExplorerPage> {
             itemBuilder: (BuildContext context, int index) {
               Post post = _pageProvider.posts![index];
               bool isOwnMessage = post.senderID == _auth.appUser.uid;
-              return CustomExplorerListViewTile(
-                deviceHeight: _deviceHeight,
-                width: _deviceWidth * 0.80,
-                post: post,
-                isOwnMessage: isOwnMessage,
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PostPage(post: post),
+                    ),
+                  );
+                },
+                child: CustomExplorerListViewTile(
+                  deviceHeight: _deviceHeight,
+                  width: _deviceWidth * 0.80,
+                  post: post,
+                  isOwnMessage: isOwnMessage,
+                ),
               );
             },
           ),
