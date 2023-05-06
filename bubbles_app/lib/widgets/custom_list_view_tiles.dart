@@ -94,42 +94,51 @@ class CustomListViewTileWithActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () => onTap(),
-      minVerticalPadding: height * 0.20,
-      leading: RoundedImageNetworkWithStatusIndicator(
-        key: UniqueKey(),
-        size: height / 2,
-        imagePath: imagePath,
-        isActive: isActive,
-      ),
-      title: Text(
-        title,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 18,
-          fontWeight: FontWeight.w500,
+    return Container(
+      decoration: ShapeDecoration(
+        color: Colors.blue, // set the background color of the container
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+              15.0), // set the corner radius of the container
         ),
       ),
-      subtitle: isActivity
-          ? Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SpinKitThreeBounce(
-                  color: Colors.white54,
-                  size: height * 0.10,
-                ),
-              ],
-            )
-          : Text(
-              subtitle,
-              style: const TextStyle(
-                  color: Colors.white54,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400),
-            ),
+      child: ListTile(
+        onTap: () => onTap(),
+        minVerticalPadding: height * 0.20,
+        leading: RoundedImageNetworkWithStatusIndicator(
+          key: UniqueKey(),
+          size: height / 2,
+          imagePath: imagePath,
+          isActive: isActive,
+        ),
+        title: Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        subtitle: isActivity
+            ? Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SpinKitThreeBounce(
+                    color: Colors.white,
+                    size: height * 0.10,
+                  ),
+                ],
+              )
+            : Text(
+                subtitle,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400),
+              ),
+      ),
     );
   }
 }

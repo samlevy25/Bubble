@@ -40,6 +40,17 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildUI() {
     return Builder(
       builder: (context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Profile'),
+          actions: [
+            IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
+            IconButton(
+                onPressed: () {
+                  _navigation.navigateToPage(const SettingsPage());
+                },
+                icon: const Icon(Icons.settings))
+          ],
+        ),
         body: ListView(
           children: [
             ProfileWidget(
@@ -47,9 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
               onClicked: () {},
             ),
             const SizedBox(height: 24),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [_title(), _settingButton()]),
+            _title(),
             const SizedBox(height: 24),
             _chats(),
           ],
@@ -71,15 +80,6 @@ class _ProfilePageState extends State<ProfilePage> {
           )
         ],
       );
-
-  Widget _settingButton() {
-    return IconButton(
-      icon: const Icon(Icons.settings),
-      onPressed: () {
-        _navigation.navigateToPage(const SettingsPage());
-      },
-    );
-  }
 
   Widget _chats() {
     return const ChatsPage();

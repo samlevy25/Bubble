@@ -1,4 +1,6 @@
 //Packages
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
@@ -87,8 +89,13 @@ class _ChatsPageState extends State<ChatsPage> {
             return ListView.builder(
               itemCount: chats.length,
               itemBuilder: (BuildContext context, int index) {
-                return _chatTile(
-                  chats[index],
+                return Column(
+                  children: [
+                    _chatTile(
+                      chats[index],
+                    ),
+                    SizedBox(height: 10)
+                  ],
                 );
               },
             );
