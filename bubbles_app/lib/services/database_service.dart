@@ -114,8 +114,14 @@ class DatabaseService {
     }
   }
 
-  Future<DocumentSnapshot> getUser(String uid) {
-    return _db.collection(userCollection).doc(uid).get();
+  Future<DocumentSnapshot> getUser(String uid) async {
+    try {
+      final userDoc = await _db.collection(userCollection).doc(uid).get();
+      return userDoc;
+    } catch (e) {
+      print('Error getting user document: $e');
+      rethrow;
+    }
   }
 
   Future<QuerySnapshot> getUsers({String? username}) {

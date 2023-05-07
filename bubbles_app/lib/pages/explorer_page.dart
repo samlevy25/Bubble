@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 //Widgets
 import '../providers/explorer_page_provider.dart';
-import '../widgets/top_bar.dart';
+
 import '../widgets/custom_list_view_tiles.dart';
 import '../widgets/custom_input_fields.dart';
 
