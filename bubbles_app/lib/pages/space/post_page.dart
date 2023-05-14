@@ -1,12 +1,16 @@
 import 'package:bubbles_app/models/comment.dart';
 import 'package:bubbles_app/services/database_service.dart';
+import 'package:bubbles_app/widgets/rounded_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import '../models/app_user.dart';
-import '../models/post.dart';
-import '../widgets/custom_list_view_tiles.dart';
+import '../../models/app_user.dart';
+import '../../models/post.dart';
+import '../../widgets/custom_list_view_tiles.dart';
+
+//Packages
+import 'package:timeago/timeago.dart' as timeago;
 
 enum SortBy { newest, oldest }
 
@@ -106,9 +110,14 @@ class _PostPageState extends State<PostPage> {
                       final commenter = AppUser.fromJSON(userData);
                       commenter;
                       return ListTile(
+                        leading: RoundedImageNetwork(
+                          key: UniqueKey(),
+                          imagePath: commenter.imageURL,
+                          size: _deviceWidth * 0.08,
+                        ),
                         title: Text(comment.content),
-                        subtitle:
-                            Text("${commenter.username}, ${comment.sentTime}"),
+                        subtitle: Text(
+                            "${commenter.username}, ${timeago.format(comment.sentTime)} "),
                       );
                     } else if (snapshot.hasError) {
                       return const Text('Something went wrong');

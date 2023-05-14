@@ -1,6 +1,6 @@
 import 'package:async_button_builder/async_button_builder.dart';
-import 'package:bubbles_app/pages/bubble_page.dart';
-import 'package:bubbles_app/pages/create_bubble_page.dart';
+
+import 'package:bubbles_app/pages/bubbles/create_bubble_page.dart';
 
 //Packages
 import 'package:flutter/material.dart';
@@ -8,17 +8,13 @@ import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
 
 //Providers
-import '../providers/authentication_provider.dart';
-import '../providers/bubbles_page_provider.dart';
+import '../../models/bubble.dart';
+import '../../providers/authentication_provider.dart';
+import '../../providers/bubbles_page_provider.dart';
+import '../../services/navigation_service.dart';
+import '../../widgets/rounded_image.dart';
 
 //Services
-import '../services/navigation_service.dart';
-import '../services/map_service.dart';
-
-//Models
-import '../models/bubble.dart';
-
-import '../widgets/rounded_image.dart';
 
 class BubblesPage extends StatefulWidget {
   const BubblesPage({super.key});
@@ -74,8 +70,10 @@ class _BubblesPageState extends State<BubblesPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _bubblesList(),
-                _map(),
-                _createBubble(),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: _createBubble(),
+                ),
               ],
             ),
           ),
@@ -118,10 +116,6 @@ class _BubblesPageState extends State<BubblesPage> {
         }
       })(),
     );
-  }
-
-  Widget _map() {
-    return const BubblesMap();
   }
 
   Widget _createBubble() {

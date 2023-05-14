@@ -3,17 +3,14 @@ import 'package:bubbles_app/providers/bubble_page_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/bubble.dart';
+import '../../models/message.dart';
+import '../../providers/authentication_provider.dart';
+import '../../widgets/custom_input_fields.dart';
+import '../../widgets/custom_list_view_tiles.dart';
+import '../../widgets/top_bar.dart';
+
 //Widgets
-import '../models/bubble.dart';
-import '../widgets/top_bar.dart';
-import '../widgets/custom_list_view_tiles.dart';
-import '../widgets/custom_input_fields.dart';
-
-//Models
-import '../models/message.dart';
-
-//Providers
-import '../providers/authentication_provider.dart';
 
 class BubblePage extends StatefulWidget {
   final Bubble bubble;
@@ -151,6 +148,7 @@ class _BubblePageState extends State<BubblePage> {
     }
   }
 
+  // ignore: unused_element
   Widget _sendMessageForm() {
     return Container(
       height: _deviceHeight * 0.06,

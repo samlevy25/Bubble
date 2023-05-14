@@ -1,7 +1,7 @@
 //Packages
 import 'package:bubbles_app/models/comment.dart';
 import 'package:bubbles_app/models/post.dart';
-import 'package:bubbles_app/pages/chat_page.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -9,6 +9,7 @@ import 'package:get_it/get_it.dart';
 
 //Widgets
 import '../models/chat.dart';
+import '../pages/chats/chat_page.dart';
 import '../services/navigation_service.dart';
 import '../widgets/rounded_image.dart';
 import '../widgets/message_bubbles.dart';

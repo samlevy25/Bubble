@@ -1,5 +1,4 @@
 import 'package:bubbles_app/models/app_user.dart';
-import 'package:bubbles_app/pages/chats_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -10,6 +9,7 @@ import '../providers/chats_page_provider.dart';
 import '../services/navigation_service.dart';
 
 import '../widgets/profile_widget.dart';
+import 'chats/chats_page.dart';
 import 'settings_page.dart';
 
 class ProfilePage extends StatefulWidget {

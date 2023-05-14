@@ -5,30 +5,30 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 // Pages
-import '../pages/bubble_page.dart';
 
 //Networks
-import '../networks/gps.dart';
-import '../networks/wifi.dart';
+import '../../networks/gps.dart';
+import '../../networks/wifi.dart';
 
 //Models
 
-import '../models/bubble.dart';
+import '../../models/bubble.dart';
 
 //Services
-import '../services/media_service.dart';
-import '../services/database_service.dart';
-import '../services/cloud_storage_service.dart';
-import '../services/navigation_service.dart';
+import '../../services/media_service.dart';
+import '../../services/database_service.dart';
+import '../../services/cloud_storage_service.dart';
+import '../../services/navigation_service.dart';
 
 //Widgets
-import '../widgets/custom_input_fields.dart';
-import '../widgets/rounded_button.dart';
-import '../widgets/custom_radio_button.dart';
-import '../widgets/rounded_image.dart';
+import '../../widgets/custom_input_fields.dart';
+import '../../widgets/rounded_button.dart';
+import '../../widgets/custom_radio_button.dart';
+import '../../widgets/rounded_image.dart';
 
 //Providers
-import '../providers/authentication_provider.dart';
+import '../../providers/authentication_provider.dart';
+import 'bubble_page.dart';
 
 class CreateBubblePage extends StatefulWidget {
   const CreateBubblePage({super.key});

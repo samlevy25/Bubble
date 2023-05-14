@@ -5,23 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../models/app_user.dart';
+import '../../models/chat.dart';
+import '../../models/message.dart';
+import '../../providers/authentication_provider.dart';
+import '../../providers/chats_page_provider.dart';
+import '../../services/navigation_service.dart';
+import '../../widgets/custom_list_view_tiles.dart';
+import 'chat_page.dart';
+
 //Providers
-import '../providers/authentication_provider.dart';
-import '../providers/chats_page_provider.dart';
-
-//Services
-import '../services/navigation_service.dart';
-
-//Pages
-import '../pages/chat_page.dart';
-
-//Widgets
-import '../widgets/custom_list_view_tiles.dart';
-
-//Models
-import '../models/chat.dart';
-import '../models/app_user.dart';
-import '../models/message.dart';
 
 class ChatsPage extends StatefulWidget {
   const ChatsPage({super.key});

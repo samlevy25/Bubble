@@ -1,5 +1,5 @@
-import 'package:bubbles_app/pages/explorer_page.dart';
 import 'package:bubbles_app/pages/profile_page.dart';
+import 'package:bubbles_app/pages/space/explorer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
@@ -8,7 +8,9 @@ import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import '../models/app_user.dart';
 
 import '../providers/authentication_provider.dart';
-import 'bubbles_page.dart';
+import 'bubbles/bubbles_page.dart';
+
+import 'chats/chats_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,6 +32,8 @@ class _HomePageState extends State<HomePage> {
     final List<Widget> _pages = [
       const BubblesPage(),
       const ExplorerPage(),
+      Container(), // place holder for chats
+      const ChatsPage(),
       const ProfilePage(),
     ];
     return Scaffold(
@@ -44,12 +48,20 @@ class _HomePageState extends State<HomePage> {
         }),
         items: [
           FlashyTabBarItem(
-            icon: const Icon(Icons.circle, color: Colors.blue),
+            icon: const Icon(Icons.bubble_chart, color: Colors.blue),
             title: const Text('Bubbles'),
           ),
           FlashyTabBarItem(
-            icon: const Icon(Icons.explore, color: Colors.blue),
+            icon: const Icon(Icons.feed, color: Colors.blue),
             title: const Text("Explorer"),
+          ),
+          FlashyTabBarItem(
+            icon: const Icon(Icons.explore, color: Colors.blue),
+            title: const Text("Explore"),
+          ),
+          FlashyTabBarItem(
+            icon: const Icon(Icons.chat, color: Colors.blue),
+            title: const Text("Chats"),
           ),
           FlashyTabBarItem(
             icon: const Icon(Icons.person, color: Colors.blue),

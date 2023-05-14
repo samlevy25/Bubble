@@ -1,22 +1,20 @@
 //Packages
+import 'package:comment_tree/comment_tree.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //Widgets
-import '../widgets/top_bar.dart';
-import '../widgets/custom_list_view_tiles.dart';
-import '../widgets/custom_input_fields.dart';
-
-//Models
-import '../models/chat.dart';
-import '../models/message.dart';
-
-//Providers
-import '../providers/authentication_provider.dart';
-import '../providers/chat_page_provider.dart';
+import '../../models/chat.dart';
+import '../../models/message.dart';
+import '../../providers/authentication_provider.dart';
+import '../../providers/chat_page_provider.dart';
+import '../../widgets/custom_input_fields.dart';
+import '../../widgets/custom_list_view_tiles.dart';
+import '../../widgets/top_bar.dart';
 
 class ChatPage extends StatefulWidget {
   final Chat chat;
+  //add function here to delete chat
 
   const ChatPage({super.key, required this.chat});
 
@@ -232,3 +230,6 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 }
+
+// hello world function here 
+// Path: bubbles_app/lib/pages/chat_page.dart
