@@ -6,6 +6,7 @@ class RoundedButton extends StatelessWidget {
   final double height;
   final double width;
   final Function onPressed;
+  final bool empty;
 
   const RoundedButton({
     super.key,
@@ -13,6 +14,7 @@ class RoundedButton extends StatelessWidget {
     required this.height,
     required this.width,
     required this.onPressed,
+    this.empty = false,
   });
 
   @override
@@ -22,15 +24,25 @@ class RoundedButton extends StatelessWidget {
       width: width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(height * 0.25),
-        color: const Color.fromARGB(255, 21, 0, 255),
+        color: empty
+            ? const Color(0xffffffff)
+            : const Color.fromARGB(255, 21, 0, 255),
+        border: empty
+            ? Border.all(
+                color: const Color.fromARGB(255, 21, 0, 255),
+                width: 1.0,
+              )
+            : const Border.fromBorderSide(BorderSide.none),
       ),
       child: TextButton(
         onPressed: () => onPressed(),
         child: Text(
           name,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 22,
-            color: Colors.white,
+            color: empty
+                ? const Color.fromARGB(255, 21, 0, 255)
+                : const Color(0xffffffff),
             height: 1.5,
           ),
         ),
