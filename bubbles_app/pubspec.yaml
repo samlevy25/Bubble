@@ -34,6 +34,8 @@ dependencies:
   list_picker: ^1.1.0
   translator: ^0.1.7
   comment_tree: ^0.3.0
+  geocoding: ^2.1.0
+  geohash: ^0.2.1
 
 
 

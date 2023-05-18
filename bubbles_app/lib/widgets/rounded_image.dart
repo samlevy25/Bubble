@@ -19,14 +19,25 @@ class RoundedImageNetwork extends StatelessWidget {
       height: size,
       width: size,
       decoration: BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: NetworkImage(imagePath),
+        border: Border.all(
+          color: Colors.white,
+          width: 2.0,
         ),
         borderRadius: BorderRadius.all(
           Radius.circular(size),
         ),
-        color: Colors.black,
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: NetworkImage(imagePath),
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(size),
+          ),
+          color: Colors.black,
+        ),
       ),
     );
   }

@@ -7,7 +7,7 @@ import './pages/splash_page.dart';
 import './pages/login_page.dart';
 import './pages/home_page.dart';
 import './pages/register_page.dart';
-import '/pages/sign_in_page.dart';
+
 //Servies
 import './services/navigation_service.dart';
 
@@ -52,7 +52,7 @@ class MainApp extends StatelessWidget {
         navigatorKey: NavigationService.navigatorKey,
         initialRoute: '/login',
         routes: {
-          '/login': (BuildContext context) => const SignIn(),
+          '/login': (BuildContext context) => const LoginPage(),
           '/register': (BuildContext context) => const RegisterPage(),
           '/home': (BuildContext context) => HomePage(),
         },

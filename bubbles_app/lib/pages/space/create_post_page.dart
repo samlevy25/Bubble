@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CreatePostPage extends StatefulWidget {
   const CreatePostPage({Key? key}) : super(key: key);
 
   @override
-  _CreatePostPageState createState() => _CreatePostPageState();
+  State<CreatePostPage> createState() => _CreatePostPageState();
 }
 
 class _CreatePostPageState extends State<CreatePostPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _contentController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
 
   @override
   void dispose() {
@@ -28,54 +29,69 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
       // Reset the form
       _formKey.currentState!.reset();
+      _contentController.clear(); // Clear the text field's controller
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    return _buildUI();
+  }
+
+  Widget _buildUI() {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Post'),
+        title: const Text('Create Post'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: _titleController,
-                decoration: InputDecoration(
-                  labelText: 'Title',
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  width: double.infinity, // Set the desired width
+                  height: 200, // Set the desired height
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: TextFormField(
+                    controller: _contentController,
+                    maxLines: null,
+                    maxLength: 300,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.deny(
+                          RegExp(r'[\n\r]')), // Disallow new lines
+                    ],
+                    decoration: const InputDecoration(
+                      labelText: 'Content',
+                      border: InputBorder.none, // Remove the border
+                      contentPadding: EdgeInsets.all(10.0),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some content';
+                      }
+                      if (value.length > 300) {
+                        return 'Content cannot exceed 300 characters';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a title';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16.0),
-              TextFormField(
-                controller: _contentController,
-                maxLines: null,
-                decoration: InputDecoration(
-                  labelText: 'Content',
+                const SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: _submitForm,
+                  child: const Text('Create Post'),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some content';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: Text('Create Post'),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

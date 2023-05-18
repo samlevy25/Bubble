@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_geo_hash/geohash.dart';
+import 'package:geocoding/geocoding.dart';
 
 /// Determine the current position of the device.
 ///
@@ -54,5 +56,17 @@ Future<String> getCurrentGeoHash(int range) async {
 }
 
 Future<String> getCurrentLocationName() async {
-  return "Location";
+  try {
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(52.2165157, 6.9437819);
+
+    Placemark p = placemarks[0];
+    if (kDebugMode) {
+      print(p.name);
+    }
+
+    return "${p.street},  ${p.country}";
+  } catch (e) {
+    return "Unknown";
+  }
 }

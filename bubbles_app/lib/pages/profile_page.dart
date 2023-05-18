@@ -59,8 +59,6 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 24),
             _title(),
-            const SizedBox(height: 24),
-            _chats(),
           ],
         ),
       ),
@@ -80,8 +78,4 @@ class _ProfilePageState extends State<ProfilePage> {
           )
         ],
       );
-
-  Widget _chats() {
-    return const ChatsPage();
-  }
 }

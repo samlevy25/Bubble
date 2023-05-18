@@ -3,7 +3,7 @@ import 'package:bubbles_app/models/post.dart';
 
 import 'package:bubbles_app/pages/space/create_post_page.dart';
 import 'package:bubbles_app/pages/space/post_page.dart';
-import 'package:bubbles_app/services/map_service.dart';
+
 import 'package:bubbles_app/widgets/custom_list_view_tiles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

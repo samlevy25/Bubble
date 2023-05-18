@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:async_button_builder/async_button_builder.dart';
+import 'package:bubbles_app/pages/bubbles/bubble_tile.dart';
 
 import 'package:bubbles_app/pages/bubbles/create_bubble_page.dart';
 
@@ -9,12 +12,16 @@ import 'package:get_it/get_it.dart';
 
 //Providers
 import '../../models/bubble.dart';
+import '../../networks/gps.dart';
 import '../../providers/authentication_provider.dart';
 import '../../providers/bubbles_page_provider.dart';
 import '../../services/navigation_service.dart';
 import '../../widgets/rounded_image.dart';
 
 //Services
+
+//constants
+import '../../constants/colors.dart';
 
 class BubblesPage extends StatefulWidget {
   const BubblesPage({super.key});
@@ -93,7 +100,7 @@ class _BubblesPageState extends State<BubblesPage> {
               itemBuilder: (BuildContext context, int index) {
                 return Column(
                   children: [
-                    _bubbleTile(bubbles[index]),
+                    BubbleTile(bubble: bubbles[index]),
                     const SizedBox(height: 10)
                   ],
                 );
@@ -127,51 +134,9 @@ class _BubblesPageState extends State<BubblesPage> {
     );
   }
 
-  Widget _bubbleTile(Bubble bubble) {
-    return Container(
-      color: Colors.white,
-      child: ExpansionTile(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(100.0),
-        ),
-        trailing: Icon(
-          [
-            Icons.wifi,
-            Icons.nfc,
-            Icons.password,
-            Icons.bluetooth,
-          ][bubble.keyType],
-        ),
-        leading: RoundedImageNetwork(
-          imagePath: bubble.image,
-          key: ValueKey(bubble.uid),
-          size: 50,
-        ),
-        title: Text(bubble.name),
-        children: [
-          Column(
-            children: [
-              Text("Location: ${bubble.geohash}"),
-              Text("Members: ${bubble.members.length.toString()}"),
-              Text("Key: ${bubble.key}"),
-              AsyncButtonBuilder(
-                showError: true,
-                child: const Text('Click Me'),
-                onPressed: () async {
-                  await Future.delayed(const Duration(seconds: 1));
-                  throw Exception("yo yo");
-                },
-                builder: (context, child, callback, _) {
-                  return TextButton(
-                    onPressed: callback,
-                    child: child,
-                  );
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+  LinearGradient getGradientColorForBubble(String uid) {
+    final Random random = Random(uid.hashCode);
+    final int randomIndex = random.nextInt(gradientColors.length);
+    return gradientColors[randomIndex];
   }
 }
