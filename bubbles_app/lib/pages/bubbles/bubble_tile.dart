@@ -43,14 +43,7 @@ class _BubbleTileState extends State<BubbleTile> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0),
               ),
-              trailing: Icon(
-                [
-                  Icons.wifi,
-                  Icons.nfc,
-                  Icons.password,
-                  Icons.bluetooth,
-                ][0],
-              ),
+              trailing: Icon(widget.bubble.keyType.icon),
               leading: RoundedImageNetwork(
                 imagePath: widget.bubble.image,
                 key: ValueKey(widget.bubble.uid),
@@ -58,7 +51,7 @@ class _BubbleTileState extends State<BubbleTile> {
               ),
               title: Text(
                 widget.bubble.name,
-                style: const TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white),
               ),
               children: [
                 Column(
@@ -71,7 +64,7 @@ class _BubbleTileState extends State<BubbleTile> {
                         const SizedBox(width: 5.0),
                         Text(
                           locationName,
-                          style: const TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white),
                         ),
                       ],
                     ),
@@ -110,7 +103,8 @@ class _BubbleTileState extends State<BubbleTile> {
                       ),
                     ElevatedButton(
                       onPressed: () async {
-                        if (true) {
+                        if (widget.bubble.keyType == BubbleKeyType.password &&
+                            !showPasswordInput) {
                           setState(() {
                             showPasswordInput = true;
                           });

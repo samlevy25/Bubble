@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 //Services
 
+import '../constants/enums.dart';
 import '../services/database_service.dart';
 
 //Providers
@@ -84,7 +85,7 @@ class BubblesPageProvider extends ChangeNotifier {
               members: members,
               image: image,
               messages: messages,
-              keyType: methodType,
+              keyType: BubbleKeyType.getKeyTypeByIndex(methodType),
               key: methodValue,
               geohash: location,
             );

@@ -1,3 +1,4 @@
+import 'package:bubbles_app/constants/enums.dart';
 import 'package:bubbles_app/networks/gps.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
@@ -20,7 +21,7 @@ class Bubble {
   final String image;
   final List<Message> messages;
 
-  final int keyType;
+  final BubbleKeyType keyType;
   final String? key;
   final String geohash;
   final String admin;
@@ -64,7 +65,7 @@ class Bubble {
     return geohash;
   }
 
-  int getMethod() {
+  BubbleKeyType getMethod() {
     return keyType;
   }
 
