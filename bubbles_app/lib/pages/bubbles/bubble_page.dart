@@ -1,4 +1,5 @@
 //Packages
+import 'package:bubbles_app/models/activity.dart';
 import 'package:bubbles_app/providers/bubble_page_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +44,12 @@ class _BubblePageState extends State<BubblePage> {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
     _auth = Provider.of<AuthenticationProvider>(context);
+
+    _auth.appUser.addActivity(Activity(
+      "You joined ${widget.bubble.name}",
+      DateTime.now(),
+    ));
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<BubblePageProvider>(

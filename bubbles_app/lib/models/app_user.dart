@@ -1,4 +1,8 @@
 import 'package:bubbles_app/models/activity.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get_it/get_it.dart';
+
+import '../services/database_service.dart';
 
 class AppUser {
   final String uid;
@@ -7,6 +11,8 @@ class AppUser {
   final String imageURL;
   late DateTime lastActive;
   late List<Activity> activities;
+
+  final DatabaseService _db = GetIt.instance.get<DatabaseService>();
 
   AppUser({
     required this.uid,
@@ -24,7 +30,7 @@ class AppUser {
     if (activitiesJson != null && activitiesJson is List) {
       activities = activitiesJson.map((activityJson) {
         final String description = activityJson["description"];
-        final DateTime date = DateTime.parse(activityJson["date"]);
+        final DateTime date = (activityJson["date"] as Timestamp).toDate();
         return Activity(description, date);
       }).toList();
     }
@@ -54,5 +60,10 @@ class AppUser {
 
   bool wasRecentlyActive() {
     return DateTime.now().difference(lastActive).inHours < 1;
+  }
+
+  Future<void> addActivity(Activity activity) async {
+    activities.add(activity);
+    _db.updateUserActivities(uid, activities);
   }
 }

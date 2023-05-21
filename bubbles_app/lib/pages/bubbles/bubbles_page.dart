@@ -76,7 +76,7 @@ class _BubblesPageState extends State<BubblesPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _bubblesList(),
-                // _createBubble(),
+                _createBubble(),
               ],
             ),
           ),

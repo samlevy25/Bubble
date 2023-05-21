@@ -98,13 +98,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _activityList() {
-    // Generate some sample activities
-    List<Activity> activities = [
-      Activity('Activity 1', DateTime.now()),
-      Activity('Activity 2', DateTime.now()),
-      Activity('Activity 3', DateTime.now()),
-    ];
-
-    return ActivityList(activities: activities);
+    return ActivityList(activities: _auth.appUser.activities);
   }
 }

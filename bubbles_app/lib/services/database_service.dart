@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
+import '../models/activity.dart';
 import '../models/message.dart';
 import '../models/post.dart';
 
@@ -56,6 +57,25 @@ class DatabaseService {
   ) async {
     try {
       await _db.collection(userCollection).doc(uid).update({"image": imgUrl});
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  Future<void> updateUserActivities(
+      String uid, List<Activity> activities) async {
+    try {
+      final userDoc = _db.collection(userCollection).doc(uid);
+
+      // Convert the activities list to a JSON-compatible format
+      final activitiesJson =
+          activities.map((activity) => activity.toJson()).toList();
+
+      await userDoc.update({
+        'activities': FieldValue.arrayUnion(activitiesJson),
+      });
     } catch (e) {
       if (kDebugMode) {
         print(e);

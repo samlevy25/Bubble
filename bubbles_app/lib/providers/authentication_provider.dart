@@ -29,6 +29,11 @@ class AuthenticationProvider extends ChangeNotifier {
           (snapshot) {
             Map<String, dynamic> userData =
                 snapshot.data()! as Map<String, dynamic>;
+
+            // Ensure activities is always a list
+            List<dynamic> activities =
+                userData["activities"] is List ? userData["activities"] : [];
+
             appUser = AppUser.fromJSON(
               {
                 "uid": user.uid,
@@ -36,7 +41,7 @@ class AuthenticationProvider extends ChangeNotifier {
                 "email": userData["email"],
                 "last_active": userData["last_active"],
                 "image": userData["image"],
-                "activities": userData["activities"] ?? [],
+                "activities": activities,
               },
             );
             _navigationService.removeAndNavigateToRoute('/home');

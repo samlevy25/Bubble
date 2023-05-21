@@ -139,6 +139,7 @@ class _BubbleTileState extends State<BubbleTile> {
               return;
             }
           }
+          
           // Navigate to bubble
           Navigator.push(
             context,
