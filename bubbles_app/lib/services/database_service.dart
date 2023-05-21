@@ -24,6 +24,7 @@ class DatabaseService {
           "image": imageURL,
           "last_active": DateTime.now().toUtc(),
           "username": username,
+          "activities": [],
         },
       );
     } catch (e) {
@@ -268,6 +269,7 @@ extension BubbleDatabaseService on DatabaseService {
     required int keyType,
     required String? key,
     required String geohash,
+    String? description,
   }) async {
     try {
       await _db.collection(bubblesCollection).doc(bubbleUid).set(
@@ -276,6 +278,7 @@ extension BubbleDatabaseService on DatabaseService {
           "admin": createrUid,
           "image": imageURL,
           "name": name,
+          "description": description,
           "members": [createrUid],
           "keyType": keyType,
           "key": key,

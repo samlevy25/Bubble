@@ -36,6 +36,7 @@ class AuthenticationProvider extends ChangeNotifier {
                 "email": userData["email"],
                 "last_active": userData["last_active"],
                 "image": userData["image"],
+                "activities": userData["activities"] ?? [],
               },
             );
             _navigationService.removeAndNavigateToRoute('/home');
@@ -49,7 +50,9 @@ class AuthenticationProvider extends ChangeNotifier {
 
   Future<void> loginUsingEmailAndPassword(String email, String password) async {
     try {
+      _auth.signOut();
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      print("User logged in");
     } on FirebaseAuthException {
       if (kDebugMode) {
         print("Error logging user into Firebase");

@@ -1,7 +1,7 @@
-import 'package:bubbles_app/constants/enums.dart';
+import 'package:bubbles_app/constants/bubble_key_types.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_blue/flutter_blue.dart';
+
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +24,8 @@ import '../../widgets/rounded_image.dart';
 import '../../providers/authentication_provider.dart';
 import 'bubble_page.dart';
 
+import '../../constants/bubble_key_types.dart';
+
 class CreateBubblePage extends StatefulWidget {
   const CreateBubblePage({Key? key}) : super(key: key);
 
@@ -41,8 +43,9 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
 
   final _registerFormKey = GlobalKey<FormState>();
 
-  String? _bubbleName;
   PlatformFile? _bubbleImage;
+  String? _bubbleName;
+  String? _bubbleDescription;
   BubbleKeyType _bubbleKeyType = BubbleKeyType.gps;
   String? bubbleKey;
 
@@ -59,7 +62,6 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
     return _buildUI();
   }
 
-  // This method constructs the UI
   Widget _buildUI() {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -75,11 +77,26 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _bubbleImageField(),
-            _nameForm(),
-            dataDisplay(),
-            _methodsSelector(),
-            _createButton(),
+            Padding(
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: _bubbleImageField(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: _bubbleForms(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 30.0),
+              child: _keyTypeSelector(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 50.0),
+              child: dataDisplay(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: _createButton(),
+            ),
           ],
         ),
       ),
@@ -114,9 +131,8 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   }
 
   // This widget provides the form to enter the bubble's name
-  Widget _nameForm() {
+  Widget _bubbleForms() {
     return SizedBox(
-      height: _deviceHeight * 0.35,
       child: Form(
         key: _registerFormKey,
         child: Column(
@@ -130,13 +146,21 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
               hintText: "Bubble's Name",
               obscureText: false,
             ),
+            SizedBox(
+              height: _deviceHeight * 0.01,
+            ),
+            CustomTextFormField(
+              onSaved: (value) => setState(() => _bubbleDescription = value),
+              regEx: r'.{8,}',
+              hintText: "Bubble's Description",
+              obscureText: false,
+            ),
           ],
         ),
       ),
     );
   }
 
-  // This widget creates the bubble when all the fields are validated
   Widget _createButton() {
     return RoundedButton(
       name: "Create",
@@ -155,15 +179,19 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             _bubbleImage!,
           );
 
+          // Get the description and topics from the respective form fields
+          String? description = _bubbleDescription;
+
           await _db.createBubble(
-            bubbleUid: bubbleUid,
-            createrUid: createrUid,
-            name: _bubbleName!,
-            imageURL: imageURL!,
-            keyType: _bubbleKeyType.index,
-            key: bubbleKey,
-            geohash: location,
-          );
+              bubbleUid: bubbleUid,
+              createrUid: createrUid,
+              name: _bubbleName!,
+              imageURL: imageURL!,
+              keyType: _bubbleKeyType.index,
+              key: bubbleKey,
+              geohash: location,
+              description: description);
+
           navigation.goBack();
 
           navigation.navigateToPage(
@@ -178,7 +206,8 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                   messages: [],
                   keyType: _bubbleKeyType,
                   key: bubbleKey,
-                  geohash: location),
+                  geohash: location,
+                  description: description!),
             ),
           );
         }
@@ -210,7 +239,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   // This widget allows the user to select the bubble's access method
 // This widget allows the user to select the bubble's access method
 // This widget allows the user to select the bubble's access method
-  Widget _methodsSelector() {
+  Widget _keyTypeSelector() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: BubbleKeyType.values.map((BubbleKeyType type) {
@@ -237,15 +266,17 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   // This widget displays current data: location, wifi, and key type
   Widget dataDisplay() {
     return SizedBox(
-      width: _deviceWidth,
-      height: _deviceHeight * 0.1,
       child: DecoratedBox(
         decoration: const BoxDecoration(color: Colors.blue),
         child: Column(
           children: [
-            currentLocation(),
-            currentKey(),
-            currentWIFI(),
+            Image.network(
+              'https://img.freepik.com/free-vector/cyclist-delivering-food-customers-city-pin-route-town-flat-vector-illustration_74855-10878.jpg?w=2000&t=st=1684523384~exp=1684523984~hmac=5eb7b03fba2d6c529a196ff909b74682fa0d570dadc536b5a66377979ee81e8a',
+              width: 500,
+              height: 100,
+              fit: BoxFit.contain,
+            ),
+            currentLocation()
           ],
         ),
       ),
@@ -377,82 +408,12 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   }
 
 // Function to handle NFC selection
-  Future<String?> _handleNFC() async {
-    String? nfcKey = await showDialog<String>(
-      context: context,
-      builder: (BuildContext context) {
-        // Replace this with your NFC selection dialog
-        return AlertDialog(
-          title: Text("Select NFC Key"),
-          content: Column(
-            children: [
-              // NFC key selection options
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(null);
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                // Handle the selection and return the NFC key
-                // Example: String nfcKey = getSelectedNFCKey();
-                Navigator.of(context).pop(null);
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (nfcKey != null) {
-      setState(() {
-        _bubbleKeyType = BubbleKeyType.nfc;
-        bubbleKey = nfcKey;
-      });
-
-      // Perform further operations with the NFC key...
-    }
-
-    return nfcKey;
-  }
+  Future<String?> _handleNFC() async {}
 
 // Function to handle Bluetooth selection
   void _handleBluetooth() {
-    getConnectedDevices().then((List<BluetoothDevice> devices) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Select Bluetooth Device'),
-            content: ListView.builder(
-              shrinkWrap: true,
-              itemCount: devices.length,
-              itemBuilder: (BuildContext context, int index) {
-                BluetoothDevice device = devices[index];
-                return ListTile(
-                  title: Text(device.name),
-                  subtitle: Text(device.id.toString()),
-                  onTap: () {
-                    Navigator.pop(context, device);
-                  },
-                );
-              },
-            ),
-          );
-        },
-      ).then((selectedDevice) {
-        if (selectedDevice != null) {
-          setState(() {
-            _bubbleKeyType = BubbleKeyType.bluetooth;
-            // _selectedDevice = selectedDevice;
-          });
-        }
-      });
+    setState(() {
+      _bubbleKeyType = BubbleKeyType.bluetooth;
     });
   }
 }

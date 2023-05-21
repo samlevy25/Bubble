@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:async_button_builder/async_button_builder.dart';
-import '../providers/authentication_provider.dart';
-import '../services/cloud_storage_service.dart';
-import '../services/database_service.dart';
+import '../../providers/authentication_provider.dart';
+import '../../services/cloud_storage_service.dart';
+import '../../services/database_service.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
-import '../services/media_service.dart';
+import '../../services/media_service.dart';
 
-import '../widgets/rounded_image.dart';
+import '../../widgets/rounded_image.dart';
 
 import 'package:list_picker/list_picker.dart';
 

@@ -9,7 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 //Services
 
-import '../constants/enums.dart';
+import '../constants/bubble_key_types.dart';
 import '../services/database_service.dart';
 
 //Providers
@@ -75,20 +75,21 @@ class BubblesPageProvider extends ChangeNotifier {
             String? methodValue = bubbleData['key'];
             String location = bubbleData['geohash'];
             String admin = bubbleData['admin'];
+            String description = bubbleData['description']; // Added description
 
             //Return Bubble Instance
             return Bubble(
-              uid: d.id,
-              admin: admin,
-              name: name,
-              currentUserUid: _auth.appUser.uid,
-              members: members,
-              image: image,
-              messages: messages,
-              keyType: BubbleKeyType.getKeyTypeByIndex(methodType),
-              key: methodValue,
-              geohash: location,
-            );
+                uid: d.id,
+                admin: admin,
+                name: name,
+                currentUserUid: _auth.appUser.uid,
+                members: members,
+                image: image,
+                messages: messages,
+                keyType: BubbleKeyType.getKeyTypeByIndex(methodType),
+                key: methodValue,
+                geohash: location,
+                description: description);
           },
         ).toList());
 

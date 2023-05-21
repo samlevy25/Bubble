@@ -21,7 +21,6 @@ import '../../widgets/rounded_image.dart';
 //Services
 
 //constants
-import '../../constants/colors.dart';
 
 class BubblesPage extends StatefulWidget {
   const BubblesPage({super.key});
@@ -77,10 +76,7 @@ class _BubblesPageState extends State<BubblesPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _bubblesList(),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: _createBubble(),
-                ),
+                // _createBubble(),
               ],
             ),
           ),
@@ -132,11 +128,5 @@ class _BubblesPageState extends State<BubblesPage> {
       },
       child: const Icon(Icons.create),
     );
-  }
-
-  LinearGradient getGradientColorForBubble(String uid) {
-    final Random random = Random(uid.hashCode);
-    final int randomIndex = random.nextInt(gradientColors.length);
-    return gradientColors[randomIndex];
   }
 }

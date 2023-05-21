@@ -3,14 +3,12 @@ import 'package:bubbles_app/providers/bubble_page_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+//Widgets
 import '../../models/bubble.dart';
 import '../../models/message.dart';
 import '../../providers/authentication_provider.dart';
 import '../../widgets/custom_input_fields.dart';
 import '../../widgets/custom_list_view_tiles.dart';
-import '../../widgets/top_bar.dart';
-
-//Widgets
 
 class BubblePage extends StatefulWidget {
   final Bubble bubble;
@@ -61,46 +59,45 @@ class _BubblePageState extends State<BubblePage> {
       builder: (BuildContext context) {
         _pageProvider = context.watch<BubblePageProvider>();
         return Scaffold(
-          body: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: _deviceWidth * 0.03,
-                vertical: _deviceHeight * 0.02,
+          appBar: AppBar(
+            title: Text(widget.bubble.name),
+            actions: [
+              IconButton(
+                icon: const Icon(
+                  Icons.delete,
+                  color: Color.fromRGBO(0, 82, 218, 1.0),
+                ),
+                onPressed: () {
+                  _pageProvider.deleteBubble();
+                },
               ),
-              height: _deviceHeight,
-              width: _deviceWidth * 0.97,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TopBar(
-                    widget.bubble.getName(),
-                    fontSize: 10,
-                    primaryAction: IconButton(
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Color.fromRGBO(0, 82, 218, 1.0),
-                      ),
-                      onPressed: () {
-                        _pageProvider.deleteBubble();
-                      },
-                    ),
-                    secondaryAction: IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back,
-                        color: Color.fromRGBO(0, 82, 218, 1.0),
-                      ),
-                      onPressed: () {
-                        _pageProvider.goBack();
-                      },
-                    ),
+            ],
+          ),
+          body: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: _deviceWidth * 0.03,
+                    vertical: _deviceHeight * 0.02,
                   ),
-                  _messagesListView(),
-                  _sendMessageForm(),
-                ],
+                  height: _deviceHeight,
+                  width: _deviceWidth * 0.97,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _messagesListView(),
+                    ],
+                  ),
+                ),
               ),
-            ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: _sendMessageForm(),
+              ),
+            ],
           ),
         );
       },
@@ -148,7 +145,6 @@ class _BubblePageState extends State<BubblePage> {
     }
   }
 
-  // ignore: unused_element
   Widget _sendMessageForm() {
     return Container(
       height: _deviceHeight * 0.06,

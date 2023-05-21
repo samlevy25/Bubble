@@ -32,6 +32,20 @@ class CustomTextFieldWidget extends StatefulWidget {
 }
 
 class _CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = widget.controller ?? TextEditingController(text: widget.text);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   onSaved(String? value) {
     if (widget.onSaved != null) {
       widget.onSaved!(value);
@@ -42,7 +56,7 @@ class _CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
   Widget build(BuildContext context) {
     return TextFormField(
       onSaved: onSaved,
-      controller: TextEditingController(text: widget.text),
+      controller: _controller,
       onChanged: widget.onChanged,
       obscureText: widget.obscureText,
       cursorColor: widget.mediumBlue,

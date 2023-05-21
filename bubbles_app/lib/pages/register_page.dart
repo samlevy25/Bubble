@@ -14,7 +14,6 @@ import '../services/cloud_storage_service.dart';
 import '../services/navigation_service.dart';
 
 //w
-import '../widgets/custom_input_fields.dart';
 import '../widgets/rounded_button.dart';
 import '/widgets/CustomTextField_widget.dart';
 //pr
@@ -36,11 +35,11 @@ class _RegisterPageState extends State<RegisterPage> {
   late NavigationService navigation;
   late bool checkEmail;
   late bool checkUsername;
-  late String? _email;
-  late String? _username;
+  late String _email = '';
+  late String _username = '';
+  late String _password = '';
+  late String _confirmPassword = '';
 
-  String? _password;
-  String? _confirmPassword;
   PlatformFile? _profileImage;
   final _registerFormKey = GlobalKey<FormState>();
 
@@ -104,10 +103,10 @@ class _RegisterPageState extends State<RegisterPage> {
     if (!regExp.hasMatch(value)) {
       return 'Please enter a valid User name.';
     }
-    print(checkUsername);
-    if (checkUsername) {
-      return "The Username is already used.";
-    }
+    // print(checkUsername);
+    // if (checkUsername) {
+    //   return "The Username is already used.";
+    // }
 
     return null;
   }
@@ -122,8 +121,6 @@ class _RegisterPageState extends State<RegisterPage> {
     _deviceWidth = MediaQuery.of(context).size.width;
     checkEmail = false;
     checkUsername = false;
-    _email = "";
-    _username = "";
 
     return _buildUI();
   }
@@ -215,10 +212,9 @@ class _RegisterPageState extends State<RegisterPage> {
             CustomTextFieldWidget(
               onSaved: (value) {
                 setState(() {
-                  _username = value;
+                  _username = value!;
                 });
               },
-              onChanged: (value) => _username = value,
               regEx: r'.{8,}',
               hintText: 'Username',
               validator: validateUsername,
@@ -231,7 +227,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   _email = value!;
                 });
               },
-              onChanged: (value) => _email = value,
               regEx:
                   r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
               hintText: 'Email',
@@ -242,10 +237,9 @@ class _RegisterPageState extends State<RegisterPage> {
             CustomTextFieldWidget(
               onSaved: (value) {
                 setState(() {
-                  _password = value;
+                  _password = value!;
                 });
               },
-              onChanged: (value) => _password = value,
               regEx: r".{6,}",
               validator: validatePassword,
               hintText: 'Password',
@@ -255,10 +249,9 @@ class _RegisterPageState extends State<RegisterPage> {
             CustomTextFieldWidget(
               onSaved: (value) {
                 setState(() {
-                  _confirmPassword = value;
+                  _confirmPassword = value!;
                 });
               },
-              onChanged: (value) => _confirmPassword = value,
               regEx: r".{6,}",
               validator: validateConfirmPassword,
               hintText: 'Confirm Password',

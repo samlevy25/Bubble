@@ -1,37 +1,45 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+
 class CustomTextFormField extends StatelessWidget {
   final Function(String) onSaved;
   final String regEx;
   final String hintText;
   final bool obscureText;
 
-  const CustomTextFormField(
-      {super.key,
-      required this.onSaved,
-      required this.regEx,
-      required this.hintText,
-      required this.obscureText});
+  const CustomTextFormField({
+    Key? key,
+    required this.onSaved,
+    required this.regEx,
+    required this.hintText,
+    required this.obscureText,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       onSaved: (value) => onSaved(value!),
-      cursorColor: const Color.fromARGB(255, 108, 81, 81),
-      style: const TextStyle(color: Color.fromARGB(255, 141, 43, 43)),
+      style: const TextStyle(color: Colors.black),
       obscureText: obscureText,
       validator: (value) {
         return RegExp(regEx).hasMatch(value!) ? null : "Error";
       },
       decoration: InputDecoration(
-        fillColor: Color.fromARGB(255, 255, 255, 255),
         filled: true,
+        fillColor: Color.fromARGB(255, 255, 255, 255),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(100.0),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(color: Colors.black, width: 2.0),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(100.0),
+          borderSide: BorderSide(color: Colors.black, width: 2.0),
         ),
         hintText: hintText,
-        hintStyle: const TextStyle(color: Color.fromARGB(136, 88, 36, 36)),
+        hintStyle: const TextStyle(color: Colors.grey),
       ),
     );
   }

@@ -1,5 +1,5 @@
 //Packages
-import 'package:comment_tree/comment_tree.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,7 +10,6 @@ import '../../providers/authentication_provider.dart';
 import '../../providers/chat_page_provider.dart';
 import '../../widgets/custom_input_fields.dart';
 import '../../widgets/custom_list_view_tiles.dart';
-import '../../widgets/top_bar.dart';
 
 class ChatPage extends StatefulWidget {
   final Chat chat;
@@ -75,27 +74,28 @@ class _ChatPageState extends State<ChatPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  TopBar(
-                    widget.chat.title(),
-                    fontSize: 10,
-                    primaryAction: IconButton(
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Color.fromRGBO(0, 82, 218, 1.0),
+                  AppBar(
+                    title: Text('Chat'),
+                    actions: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Color.fromRGBO(0, 82, 218, 1.0),
+                        ),
+                        onPressed: () {
+                          _pageProvider.deleteChat();
+                        },
                       ),
-                      onPressed: () {
-                        _pageProvider.deleteChat();
-                      },
-                    ),
-                    secondaryAction: IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back,
-                        color: Color.fromRGBO(0, 82, 218, 1.0),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: Color.fromRGBO(0, 82, 218, 1.0),
+                        ),
+                        onPressed: () {
+                          _pageProvider.goBack();
+                        },
                       ),
-                      onPressed: () {
-                        _pageProvider.goBack();
-                      },
-                    ),
+                    ],
                   ),
                   _messagesListView(),
                   _sendMessageForm(),
