@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bubbles_app/constants/bubble_sizes.dart';
 import 'package:bubbles_app/models/bubble.dart';
 import 'package:bubbles_app/services/database_service.dart';
 import 'package:flutter/material.dart';
@@ -24,9 +25,8 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   late Timer _timer;
   final LatLng _currentLatLng = LatLng(31.808700, 34.654860);
-  Color _markerColor = Colors.red;
 
-  DatabaseService _db = GetIt.instance.get<DatabaseService>();
+  final DatabaseService _db = GetIt.instance.get<DatabaseService>();
 
   List<Map<String, dynamic>> _bubblesMarks = [];
 
@@ -34,7 +34,7 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     // Start the timer when the widget is initialized
-    _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       _fetchBubbles();
     });
   }
@@ -69,12 +69,8 @@ class _MapPageState extends State<MapPage> {
     var x = _currentLatLng.latitude;
     var y = _currentLatLng.longitude;
     return FlutterMap(
-      options: MapOptions(
-        zoom: 20,
-        center: LatLng(x, y),
-        bounds: LatLngBounds(LatLng(x, y), LatLng(x, y)),
-        maxZoom: 18,
-      ),
+      options:
+          MapOptions(zoom: 18, center: LatLng(x, y), maxZoom: 18, minZoom: 18),
       children: [
         _buildTileLayer(),
         _buildMarkerLayer(),
@@ -91,7 +87,6 @@ class _MapPageState extends State<MapPage> {
   MarkerLayer _buildMarkerLayer() {
     List<Marker> markers = [];
 
-    // Add bubble markers
     for (var bubble in _bubblesMarks) {
       // double latitude = bubble['location'].latitude;
       // double longitude = bubble['location'].longitude;
@@ -100,19 +95,26 @@ class _MapPageState extends State<MapPage> {
         Colors.lightBlue,
         Colors.purple,
         Colors.red,
-        Colors.blue,
+        Colors.blue
       ][bubble['keyType']];
+
+      double size =
+          BubbleSize.getSizeByIndex(bubble['location'].length)?.markSize ?? 0.0;
+
       markers.add(
         Marker(
-          width: 80.0,
-          height: 80.0,
+          width: size,
+          height: size,
           point: _currentLatLng,
           builder: (ctx) {
-            return Column(
+            return Stack(
+              alignment: Alignment.center,
               children: [
-                Icon(
-                  Icons.location_on,
-                  color: bubbleColor,
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: bubbleColor.withOpacity(0.25),
+                  ),
                 ),
                 Text(
                   bubble['name'],

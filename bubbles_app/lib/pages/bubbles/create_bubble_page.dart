@@ -1,4 +1,6 @@
 import 'package:bubbles_app/constants/bubble_key_types.dart';
+import 'package:bubbles_app/constants/bubble_sizes.dart';
+import 'package:bubbles_app/networks/nfc.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -46,6 +48,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   PlatformFile? _bubbleImage;
   String? _bubbleName;
   String? _bubbleDescription;
+  int? _bubbleSize = BubbleSize.medium.index;
   BubbleKeyType _bubbleKeyType = BubbleKeyType.gps;
   String? bubbleKey;
 
@@ -84,6 +87,10 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             Padding(
               padding: EdgeInsets.only(bottom: 10.0),
               child: _bubbleForms(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 30.0),
+              child: _sizeSelector(),
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 30.0),
@@ -173,7 +180,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
 
           String createrUid = _auth.appUser.uid;
           String bubbleUid = _db.generateBubbleUid();
-          String location = await getCurrentGeoHash(22);
+          String location = await getCurrentGeoHash(_bubbleSize!);
           String? imageURL = await _cloudStorage.saveBubbleImageToStorage(
             bubbleUid,
             _bubbleImage!,
@@ -258,6 +265,35 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
               textAlign: TextAlign.center,
             ),
           ],
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _sizeSelector() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: BubbleSize.values.map((BubbleSize size) {
+        final isSelected = _bubbleSize == size.index;
+        return Expanded(
+          child: Column(
+            children: [
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    _bubbleSize = size.index;
+                  });
+                },
+                child: Text(
+                  size.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: isSelected ? Colors.blue : Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       }).toList(),
     );
@@ -408,7 +444,13 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   }
 
 // Function to handle NFC selection
-  Future<String?> _handleNFC() async {}
+  Future<String?> _handleNFC() async {
+    setState(() {
+      _bubbleKeyType = BubbleKeyType.nfc;
+    });
+    NFCReader.readNfc();
+    return null;
+  }
 
 // Function to handle Bluetooth selection
   void _handleBluetooth() {

@@ -3,6 +3,7 @@ import 'dart:async';
 //Packages
 import 'package:bubbles_app/models/app_user.dart';
 import 'package:bubbles_app/networks/gps.dart';
+import 'package:bubbles_app/networks/wifi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -41,9 +42,8 @@ class BubblesPageProvider extends ChangeNotifier {
   void getBubble() async {
     try {
       String hash = await getCurrentGeoHash(22);
-      _bubblesStream = _db
-          .getBubblesForUser(_auth.appUser.uid, hash)
-          .listen((snapshot) async {
+      String? bssid = await getWifiBSSID();
+      _bubblesStream = _db.getBubblesForUser(hash, bssid).listen((snapshot) async {
         bubbles = await Future.wait(snapshot.docs.map(
           (d) async {
             Map<String, dynamic> bubbleData = d.data() as Map<String, dynamic>;

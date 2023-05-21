@@ -1,3 +1,4 @@
+import 'package:bubbles_app/constants/bubble_key_types.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
@@ -206,12 +207,27 @@ extension BubbleDatabaseService on DatabaseService {
     }).toList();
   }
 
-  Stream<QuerySnapshot> getBubblesForUser(String uid, String hash) {
-    return _db
-        .collection(bubblesCollection)
-        .where("geohash", isGreaterThanOrEqualTo: hash)
-        .where("geohash", isLessThan: "{$hash}z")
-        .snapshots();
+  Stream<QuerySnapshot> getBubblesForUser(String? hash, String? bssid) {
+    Stream<QuerySnapshot> bubbles =
+        _db.collection(bubblesCollection).snapshots();
+
+    if (hash != null) {
+      bubbles = bubbles.where((snapshot) {
+        return snapshot.docs.any((doc) {
+          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+          String bubbleGeohash = data['geohash'];
+          if (hash.startsWith(bubbleGeohash)) {
+            if (data['keyType'] == BubbleKeyType.wifi.index) {
+              String bubbleBssid = data['key'];
+              return bubbleBssid == bssid;
+            }
+          }
+          return false;
+        });
+      });
+    }
+
+    return bubbles;
   }
 
   Future<QuerySnapshot> getLastMessageForBubble(String bubbleID) {
