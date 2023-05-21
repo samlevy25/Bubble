@@ -193,6 +193,19 @@ class DatabaseService {
 }
 
 extension BubbleDatabaseService on DatabaseService {
+  Future<List<Map<String, dynamic>>> getBubblesFormarks() async {
+    final querySnapshot = await _db.collection(bubblesCollection).get();
+
+    return querySnapshot.docs.map((doc) {
+      final bubbleData = doc.data();
+      return {
+        "name": bubbleData['name'],
+        "location": bubbleData['geohash'],
+        "keyType": bubbleData['keyType'],
+      };
+    }).toList();
+  }
+
   Stream<QuerySnapshot> getBubblesForUser(String uid, String hash) {
     return _db
         .collection(bubblesCollection)
