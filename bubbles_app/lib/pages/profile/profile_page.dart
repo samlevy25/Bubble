@@ -19,13 +19,34 @@ class ProfilePage extends StatefulWidget {
   State<StatefulWidget> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage>
+    with SingleTickerProviderStateMixin {
   late double _deviceHeight;
   late double _deviceWidth;
-
   late AuthenticationProvider _auth;
   late NavigationService _navigation;
   late ChatsPageProvider _pageProvider;
+  int _selectedTabIndex = 0;
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(_handleTabSelection);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _handleTabSelection() {
+    setState(() {
+      _selectedTabIndex = _tabController.index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +68,37 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           _image(),
           _userDetails(),
-          Expanded(child: _activityList()),
+          TabBar(
+            controller: _tabController,
+            onTap: (index) {
+              setState(() {
+                _selectedTabIndex = index;
+              });
+            },
+            tabs: const [
+              Tab(
+                child: Text(
+                  'Activities',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              Tab(
+                child: Text(
+                  'Favorites',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                _activityList(),
+                _favoritesList(),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -99,5 +150,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _activityList() {
     return ActivityList(activities: _auth.appUser.activities);
+  }
+
+  Widget _favoritesList() {
+    return const Center(
+      child: Text('Favorites List'),
+    );
   }
 }
