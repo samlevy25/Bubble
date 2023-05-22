@@ -365,7 +365,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
               fit: BoxFit.contain,
             ),
             currentLocation(),
-            // currentWIFI(),
+            currentWIFI(),
           ],
         ),
       ),
