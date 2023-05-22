@@ -1,4 +1,5 @@
 import 'package:bubbles_app/pages/profile/activity_list.dart';
+import 'package:bubbles_app/pages/profile/favorits_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
@@ -164,8 +165,6 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   Widget _favoritesList() {
-    return const Center(
-      child: Text('Favorites List'),
-    );
+    return FavoritsList(favorits: []);
   }
 }

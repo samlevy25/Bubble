@@ -187,6 +187,7 @@ class _BubblesPageState extends State<BubblesPage> {
     if (_geohash.contains(bubble.geohash)) {
       if (bubble.keyType == BubbleKeyType.wifi) {
         print("Bubble is nearby and wifi");
+
         return bubble.key == _bssid;
       } else {
         print("Bubble is nearby but not wifi");
