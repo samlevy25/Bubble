@@ -86,10 +86,12 @@ class _BubblesPageState extends State<BubblesPage> {
   }
 
   Widget _bubblesList() {
+    print("Bubbles List");
     List<Bubble>? bubbles = _pageProvider.bubbles;
     return Expanded(
       child: (() {
         if (bubbles != null) {
+          print("not null");
           if (bubbles.isNotEmpty) {
             return ListView.builder(
               itemCount: bubbles.length,

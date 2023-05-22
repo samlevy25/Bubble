@@ -212,6 +212,7 @@ extension BubbleDatabaseService on DatabaseService {
         _db.collection(bubblesCollection).snapshots();
 
     if (hash != null) {
+      print("Hash: $hash");
       bubbles = bubbles.where((snapshot) {
         return snapshot.docs.any((doc) {
           Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -221,12 +222,14 @@ extension BubbleDatabaseService on DatabaseService {
               String bubbleBssid = data['key'];
               return bubbleBssid == bssid;
             }
+            return true;
           }
           return false;
         });
       });
     }
-
+    print("Bubbles: ");
+    print(bubbles);
     return bubbles;
   }
 

@@ -2,6 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>We need your location to provide relevant information.</string>
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>We need your location to provide relevant information even when the app is in the background.</string>
+<key>NSLocationAlwaysUsageDescription</key>
+<string>We need your location to provide relevant information even when the app is in the background.</string>
+
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -63,5 +70,16 @@
 		<string>SelectIdentifier1</string>
 		<string>SelectIdentifier2</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+<string>Your location is required to provide relevant services.</string>
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>	
+
+	<key>NSLocationWhenInUseUsageDescription</key>
+<string>Your description for requesting location when in use</string>
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>Your description for requesting location always</string>
+<key>NSLocationAlwaysUsageDescription</key>
+<string>Your description for requesting location always (deprecated in iOS 11+)</string>
+
 </dict>
 </plist>

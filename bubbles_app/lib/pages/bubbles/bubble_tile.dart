@@ -118,7 +118,7 @@ class _BubbleTileState extends State<BubbleTile> {
         } else {
           if (widget.bubble.keyType == BubbleKeyType.password) {
             final enteredPassword = passwordController.text.trim();
-            if (enteredPassword != '123') {
+            if (enteredPassword != widget.bubble.key) {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -139,7 +139,7 @@ class _BubbleTileState extends State<BubbleTile> {
               return;
             }
           }
-          
+
           // Navigate to bubble
           Navigator.push(
             context,

@@ -312,7 +312,8 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
               height: 100,
               fit: BoxFit.contain,
             ),
-            currentLocation()
+            currentLocation(),
+            currentWIFI(),
           ],
         ),
       ),
@@ -322,7 +323,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   // This widget fetches and displays the current location
   FutureBuilder<String> currentLocation() {
     return FutureBuilder<String>(
-      future: getCurrentLocationName(),
+      future: getCurrentGeoHash(22),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
