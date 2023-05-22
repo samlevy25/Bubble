@@ -80,7 +80,7 @@ class _BubbleTileState extends State<BubbleTile> {
   Widget buildBubbleTitle() {
     return Text(
       widget.bubble.name,
-      style: TextStyle(color: Colors.white),
+      style: const TextStyle(color: Colors.white),
     );
   }
 
