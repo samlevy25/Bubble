@@ -66,6 +66,14 @@ class _ExplorerPageState extends State<ExplorerPage> {
                 slivers: [
                   const SliverAppBar(
                     title: Center(child: Text('Explorer')),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
                     pinned: true,
                     floating: false,
                     snap: false,

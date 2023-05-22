@@ -98,6 +98,14 @@ class _BubblesPageState extends State<BubblesPage> {
         return Scaffold(
           appBar: AppBar(
             title: const Center(child: Text('Bubbles')),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
           ),
           body: Container(
             padding: EdgeInsets.symmetric(
