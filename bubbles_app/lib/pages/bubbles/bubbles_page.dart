@@ -61,7 +61,7 @@ class _BubblesPageState extends State<BubblesPage> {
         _pageProvider = context.watch<BubblesPageProvider>();
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Bubbles'),
+            title: const Center(child: Text('Bubbles')),
           ),
           body: Container(
             padding: EdgeInsets.symmetric(

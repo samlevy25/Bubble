@@ -65,7 +65,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
               CustomScrollView(
                 slivers: [
                   const SliverAppBar(
-                    title: Text('Explorer'),
+                    title: Center(child: Text('Explorer')),
                     pinned: true,
                     floating: false,
                     snap: false,
@@ -89,12 +89,12 @@ class _ExplorerPageState extends State<ExplorerPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CreatePostPage(),
+                  builder: (context) => const CreatePostPage(),
                 ),
               );
             },
-            icon: Icon(Icons.add),
-            label: Text("Create Post"),
+            icon: const Icon(Icons.add),
+            label: const Text("Create Post"),
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,

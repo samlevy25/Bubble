@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.explore),
-            label: 'Explore',
+            label: 'Discover',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),
