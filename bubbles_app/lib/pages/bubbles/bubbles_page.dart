@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:async_button_builder/async_button_builder.dart';
+import 'package:bubbles_app/constants/bubble_key_types.dart';
 import 'package:bubbles_app/pages/bubbles/bubble_tile.dart';
 
 import 'package:bubbles_app/pages/bubbles/create_bubble_page.dart';
@@ -17,6 +18,8 @@ import '../../providers/authentication_provider.dart';
 import '../../providers/bubbles_page_provider.dart';
 import '../../services/navigation_service.dart';
 import '../../widgets/rounded_image.dart';
+
+import '../../networks/wifi.dart';
 
 //Services
 
@@ -39,19 +42,52 @@ class _BubblesPageState extends State<BubblesPage> {
   late NavigationService _navigation;
   late BubblesPageProvider _pageProvider;
 
+  late String _geohash;
+  late String _bssid;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchLocationData();
+  }
+
+  Future<void> _fetchLocationData() async {
+    _geohash = await getCurrentGeoHash(22);
+    _bssid = (await getWifiBSSID())!;
+  }
+
   @override
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
     _auth = Provider.of<AuthenticationProvider>(context);
     _navigation = GetIt.instance.get<NavigationService>();
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<BubblesPageProvider>(
           create: (_) => BubblesPageProvider(_auth),
         ),
       ],
-      child: _buildUI(),
+      child: FutureBuilder<void>(
+        future: _fetchLocationData(),
+        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return _buildUI();
+          } else {
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text('Bubbles'),
+              ),
+              body: const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 
@@ -96,12 +132,19 @@ class _BubblesPageState extends State<BubblesPage> {
             return ListView.builder(
               itemCount: bubbles.length,
               itemBuilder: (BuildContext context, int index) {
-                return Column(
-                  children: [
-                    BubbleTile(bubble: bubbles[index]),
-                    const SizedBox(height: 10)
-                  ],
-                );
+                Bubble bubble = bubbles[index];
+
+                // Add a condition to filter or exclude specific bubbles
+                if (isBubbleNearby(bubble)) {
+                  return Column(
+                    children: [
+                      BubbleTile(bubble: bubble),
+                      const SizedBox(height: 10),
+                    ],
+                  );
+                } else {
+                  return const SizedBox.shrink(); // Skip rendering the bubble
+                }
               },
             );
           } else {
@@ -130,5 +173,20 @@ class _BubblesPageState extends State<BubblesPage> {
       },
       child: const Icon(Icons.create),
     );
+  }
+
+  bool isBubbleNearby(Bubble bubble) {
+    if (_geohash.contains(bubble.geohash)) {
+      if (bubble.keyType == BubbleKeyType.wifi) {
+        print("Bubble is nearby and wifi");
+        return bubble.key == _bssid;
+      } else {
+        print("Bubble is nearby but not wifi");
+        return true;
+      }
+    } else {
+      print("Bubble is not nearby");
+      return false;
+    }
   }
 }
