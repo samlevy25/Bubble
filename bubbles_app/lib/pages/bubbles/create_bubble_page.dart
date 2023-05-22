@@ -242,20 +242,25 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
 
             navigation.goBack();
 
-            navigation.navigateToPage(
-              BubblePage(
-                bubble: Bubble(
-                  currentUserUid: createrUid,
-                  admin: createrUid,
-                  uid: bubbleUid,
-                  name: _bubbleName!,
-                  members: [_auth.appUser],
-                  image: imageURL,
-                  messages: [],
-                  keyType: _bubbleKeyType,
-                  key: bubbleKey,
-                  geohash: location,
-                  description: description!,
+            // Navigate to the bubble page
+            navigation.goBack();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BubblePage(
+                  bubble: Bubble(
+                    currentUserUid: createrUid,            
+                    admin: createrUid,
+                    uid: bubbleUid,
+                    name: _bubbleName!,
+                    members: [_auth.appUser],
+                    image: imageURL,
+                    messages: [],
+                    keyType: _bubbleKeyType,
+                    key: bubbleKey,
+                    geohash: location,
+                    description: description!,
+                  ),
                 ),
               ),
             );
@@ -264,10 +269,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             print("Error creating bubble: $error");
             // TODO: Handle error state
           } finally {
-            setState(() {
-              isCreatingBubble = false; // Reset flag
-            });
-            Navigator.of(context).pop(); // Close the dialog
+            // ...
           }
         }
       },
