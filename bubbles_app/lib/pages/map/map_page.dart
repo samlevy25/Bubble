@@ -59,7 +59,7 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Map'),
+        title: const Center(child: Text('Map')),
       ),
       body: _buildMap(),
     );

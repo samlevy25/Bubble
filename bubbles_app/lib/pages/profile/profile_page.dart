@@ -61,7 +61,7 @@ class _ProfilePageState extends State<ProfilePage>
   Widget _buildUI() {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: const Center(child: Text('Profile')),
         actions: _actions(),
       ),
       body: Column(
