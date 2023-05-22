@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bubbles_app/constants/bubble_key_types.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -208,13 +210,15 @@ extension BubbleDatabaseService on DatabaseService {
   }
 
   Stream<QuerySnapshot> getBubblesForUser(String? hash, String? bssid) {
+    final bubblesController = StreamController<QuerySnapshot>();
+
     Stream<QuerySnapshot> bubbles =
         _db.collection(bubblesCollection).snapshots();
 
     if (hash != null) {
       print("Hash: $hash");
-      bubbles = bubbles.where((snapshot) {
-        return snapshot.docs.any((doc) {
+      bubbles = bubbles.takeWhile((snapshot) {
+        bool conditionMet = snapshot.docs.any((doc) {
           Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
           String bubbleGeohash = data['geohash'];
           if (hash.startsWith(bubbleGeohash)) {
@@ -226,11 +230,21 @@ extension BubbleDatabaseService on DatabaseService {
           }
           return false;
         });
+
+        // Close the stream if the condition is not met
+        if (!conditionMet) {
+          bubblesController.close();
+        }
+
+        return conditionMet;
       });
     }
-    print("Bubbles: ");
-    print(bubbles);
-    return bubbles;
+
+    bubbles.listen((snapshot) {
+      bubblesController.add(snapshot);
+    });
+
+    return bubblesController.stream;
   }
 
   Future<QuerySnapshot> getLastMessageForBubble(String bubbleID) {
