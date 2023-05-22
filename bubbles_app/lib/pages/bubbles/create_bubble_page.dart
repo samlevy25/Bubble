@@ -169,27 +169,65 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   }
 
   Widget _createButton() {
-    return RoundedButton(
-      name: "Create",
-      height: _deviceHeight * 0.065,
-      width: _deviceWidth * 0.65,
+    bool isCreatingBubble = false; // Flag to track creation process
+
+    return ElevatedButton(
+      child: const Text("Create"),
       onPressed: () async {
-        if (_registerFormKey.currentState!.validate() && _bubbleImage != null) {
+        if (_registerFormKey.currentState!.validate() &&
+            _bubbleImage != null &&
+            !isCreatingBubble) {
           _registerFormKey.currentState!.save();
+          print("condition met"); // Print statement added
           // Call a function to handle the selected key type.
 
-          String createrUid = _auth.appUser.uid;
-          String bubbleUid = _db.generateBubbleUid();
-          String location = await getCurrentGeoHash(_bubbleSize!);
-          String? imageURL = await _cloudStorage.saveBubbleImageToStorage(
-            bubbleUid,
-            _bubbleImage!,
+          setState(() {
+            isCreatingBubble = true; // Set flag to indicate creation process
+          });
+
+          print("Creating Bubble..."); // Print statement added
+
+          showDialog(
+            context: context,
+            barrierDismissible: false, // Prevent dismissal by tapping outside
+            builder: (BuildContext context) {
+              return WillPopScope(
+                onWillPop: () async => false, // Disable back button
+                child: Dialog(
+                  child: Container(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Text("Creating Bubble..."),
+                        SizedBox(height: 16.0),
+                        CircularProgressIndicator(),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
           );
 
-          // Get the description and topics from the respective form fields
-          String? description = _bubbleDescription;
+          try {
+            print("user uid: ${_auth.appUser.uid}"); // Print statement added
+            String createrUid = _auth.appUser.uid;
+            print("generating bubble uid..."); // Print statement added
+            String bubbleUid = _db.generateBubbleUid();
+            print("getting location..."); // Print statement added
+            String location = await getCurrentGeoHash(_bubbleSize!);
+            print("saving image to storage..."); // Print statement added
+            String? imageURL = await _cloudStorage.saveBubbleImageToStorage(
+              bubbleUid,
+              _bubbleImage!,
+            );
 
-          await _db.createBubble(
+            // Get the description and topics from the respective form fields
+            String? description = _bubbleDescription;
+
+            print("Creating Bubble..."); // Print statement added
+            await _db.createBubble(
               bubbleUid: bubbleUid,
               createrUid: createrUid,
               name: _bubbleName!,
@@ -197,13 +235,16 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
               keyType: _bubbleKeyType.index,
               key: bubbleKey,
               geohash: location,
-              description: description);
+              description: description,
+            );
 
-          navigation.goBack();
+            print("Bubble created successfully"); // Print statement added
 
-          navigation.navigateToPage(
-            BubblePage(
-              bubble: Bubble(
+            navigation.goBack();
+
+            navigation.navigateToPage(
+              BubblePage(
+                bubble: Bubble(
                   currentUserUid: createrUid,
                   admin: createrUid,
                   uid: bubbleUid,
@@ -214,9 +255,20 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                   keyType: _bubbleKeyType,
                   key: bubbleKey,
                   geohash: location,
-                  description: description!),
-            ),
-          );
+                  description: description!,
+                ),
+              ),
+            );
+          } catch (error) {
+            // Handle any errors that occur during bubble creation
+            print("Error creating bubble: $error");
+            // TODO: Handle error state
+          } finally {
+            setState(() {
+              isCreatingBubble = false; // Reset flag
+            });
+            Navigator.of(context).pop(); // Close the dialog
+          }
         }
       },
     );
@@ -313,7 +365,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
               fit: BoxFit.contain,
             ),
             currentLocation(),
-            currentWIFI(),
+            // currentWIFI(),
           ],
         ),
       ),

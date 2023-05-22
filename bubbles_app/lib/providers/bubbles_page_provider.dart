@@ -41,9 +41,7 @@ class BubblesPageProvider extends ChangeNotifier {
   // need some changes
   void getBubble() async {
     try {
-      String hash = await getCurrentGeoHash(22);
-      String? bssid = await getWifiBSSID();
-      _bubblesStream = _db.getBubblesForUser(hash, bssid).listen((snapshot) async {
+      _bubblesStream = _db.getBubblesForUser().listen((snapshot) async {
         bubbles = await Future.wait(snapshot.docs.map(
           (d) async {
             Map<String, dynamic> bubbleData = d.data() as Map<String, dynamic>;
@@ -78,6 +76,7 @@ class BubblesPageProvider extends ChangeNotifier {
             String description = bubbleData['description']; // Added description
 
             //Return Bubble Instance
+            print("Bubble: $name");
             return Bubble(
                 uid: d.id,
                 admin: admin,

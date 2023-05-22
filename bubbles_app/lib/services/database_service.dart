@@ -209,42 +209,8 @@ extension BubbleDatabaseService on DatabaseService {
     }).toList();
   }
 
-  Stream<QuerySnapshot> getBubblesForUser(String? hash, String? bssid) {
-    final bubblesController = StreamController<QuerySnapshot>();
-
-    Stream<QuerySnapshot> bubbles =
-        _db.collection(bubblesCollection).snapshots();
-
-    if (hash != null) {
-      print("Hash: $hash");
-      bubbles = bubbles.takeWhile((snapshot) {
-        bool conditionMet = snapshot.docs.any((doc) {
-          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-          String bubbleGeohash = data['geohash'];
-          if (hash.startsWith(bubbleGeohash)) {
-            if (data['keyType'] == BubbleKeyType.wifi.index) {
-              String bubbleBssid = data['key'];
-              return bubbleBssid == bssid;
-            }
-            return true;
-          }
-          return false;
-        });
-
-        // Close the stream if the condition is not met
-        if (!conditionMet) {
-          bubblesController.close();
-        }
-
-        return conditionMet;
-      });
-    }
-
-    bubbles.listen((snapshot) {
-      bubblesController.add(snapshot);
-    });
-
-    return bubblesController.stream;
+  Stream<QuerySnapshot> getBubblesForUser() {
+    return _db.collection(bubblesCollection).snapshots();
   }
 
   Future<QuerySnapshot> getLastMessageForBubble(String bubbleID) {
