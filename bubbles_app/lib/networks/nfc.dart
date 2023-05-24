@@ -6,20 +6,14 @@ class NFCReader {
     // Check availability
     bool isAvailable = await NfcManager.instance.isAvailable();
 
-    if (isAvailable) {
-      // Start Session
-      NfcManager.instance.startSession(
-        onDiscovered: (NfcTag tag) async {
-          var payload =
-              tag.data['ndef']['cachedMessage']['records'][0]['payload'];
-          print("Payload: $payload");
-        },
-      );
+// Start Session
+    NfcManager.instance.startSession(
+      onDiscovered: (NfcTag tag) async {
+        // Do something with an NfcTag instance.
+      },
+    );
 
-      // Stop Session
-      NfcManager.instance.stopSession();
-    } else {
-      print("NFC is not available.");
-    }
+// Stop Session
+    NfcManager.instance.stopSession();
   }
 }

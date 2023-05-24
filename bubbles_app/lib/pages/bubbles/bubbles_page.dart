@@ -42,8 +42,8 @@ class _BubblesPageState extends State<BubblesPage> {
   late NavigationService _navigation;
   late BubblesPageProvider _pageProvider;
 
-  late String _geohash;
-  late String _bssid;
+  String? _geohash;
+  String? _bssid;
 
   @override
   void initState() {
@@ -184,7 +184,10 @@ class _BubblesPageState extends State<BubblesPage> {
   }
 
   bool isBubbleNearby(Bubble bubble) {
-    if (_geohash.contains(bubble.geohash)) {
+    if (_geohash == null || _bssid == null) {
+      return false;
+    }
+    if (_geohash!.contains(bubble.geohash)) {
       if (bubble.keyType == BubbleKeyType.wifi) {
         print("Bubble is nearby and wifi");
 

@@ -3,12 +3,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter_geo_hash/geohash.dart';
 import 'package:geocoding/geocoding.dart';
 
-import 'package:flutter/foundation.dart';
-import 'package:geolocator/geolocator.dart';
-
-import 'package:flutter/foundation.dart';
-import 'package:geolocator/geolocator.dart';
-
 Future<GeoPoint> getCurrentGeoPoint(int range) async {
   bool serviceEnabled;
   LocationPermission permission;

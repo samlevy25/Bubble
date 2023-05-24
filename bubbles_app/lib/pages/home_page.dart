@@ -1,3 +1,4 @@
+import 'package:bubbles_app/networks/nfc.dart';
 import 'package:bubbles_app/pages/map/map_page.dart';
 import 'package:bubbles_app/pages/profile/profile_page.dart';
 import 'package:bubbles_app/pages/space/explorer_page.dart';

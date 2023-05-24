@@ -15,6 +15,8 @@ import './services/navigation_service.dart';
 import './providers/authentication_provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(
     SplashPage(
       key: UniqueKey(),

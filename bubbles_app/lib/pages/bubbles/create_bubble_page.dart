@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bubbles_app/constants/bubble_key_types.dart';
 import 'package:bubbles_app/constants/bubble_sizes.dart';
 import 'package:bubbles_app/networks/nfc.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
 import 'package:get_it/get_it.dart';
+import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
 
 import '../../networks/bluetooth.dart';
@@ -498,8 +501,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
     setState(() {
       _bubbleKeyType = BubbleKeyType.nfc;
     });
-    var x = NFCReader.readNfc();
-    print("nfc read: $x");
+    print("Starting NFC reader...");
   }
 
 // Function to handle Bluetooth selection
