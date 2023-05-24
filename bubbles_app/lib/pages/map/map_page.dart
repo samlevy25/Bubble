@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:bubbles_app/constants/bubble_key_types.dart';
 import 'package:bubbles_app/constants/bubble_sizes.dart';
 import 'package:bubbles_app/models/bubble.dart';
 import 'package:bubbles_app/services/database_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -45,30 +47,9 @@ class _MapPageState extends State<MapPage> {
     super.dispose();
   }
 
-  Color _getRandomColor() {
-    final random = Random();
-    return Color.fromARGB(
-      255,
-      random.nextInt(256),
-      random.nextInt(256),
-      random.nextInt(256),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(child: Text('Map')),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-        ),
-      ),
       body: _buildMap(),
     );
   }
@@ -96,24 +77,19 @@ class _MapPageState extends State<MapPage> {
     List<Marker> markers = [];
 
     for (var bubble in _bubblesMarks) {
-      // double latitude = bubble['location'].latitude;
-      // double longitude = bubble['location'].longitude;
-      final bubbleColor = [
-        Colors.green,
-        Colors.lightBlue,
-        Colors.purple,
-        Colors.red,
-        Colors.blue
-      ][bubble['keyType']];
+      GeoPoint geoPoint = bubble['geoPoint'];
+      int keyTypeindex = bubble['keyType'];
+      int size = bubble['size'];
 
-      double size =
-          BubbleSize.getSizeByIndex(bubble['location'].length)?.markSize ?? 0.0;
+      Color bubbleColor = BubbleKeyType.getColorByIndex(keyTypeindex)!;
+      double markSize = BubbleSize.getSizeMarkByIndex(size)!;
+      LatLng latLng = LatLng(geoPoint.latitude, geoPoint.longitude);
 
       markers.add(
         Marker(
-          width: size,
-          height: size,
-          point: _currentLatLng,
+          width: markSize,
+          height: markSize,
+          point: latLng,
           builder: (ctx) {
             return Stack(
               alignment: Alignment.center,

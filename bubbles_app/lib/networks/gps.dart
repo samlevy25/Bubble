@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart' as cf;
 import 'package:flutter/foundation.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:flutter_geo_hash/geohash.dart';
+import 'package:geolocator/geolocator.dart';
+
 import 'package:geocoding/geocoding.dart';
 
-Future<GeoPoint> getCurrentGeoPoint(int range) async {
+Future<cf.GeoPoint> getCurrentGeoPoint(int range) async {
   bool serviceEnabled;
   LocationPermission permission;
 
@@ -37,11 +39,11 @@ Future<GeoPoint> getCurrentGeoPoint(int range) async {
     return Future.error('Failed to retrieve the current location.');
   }
 
-  return GeoPoint(position.latitude, position.longitude);
+  return cf.GeoPoint(position.latitude, position.longitude);
 }
 
 Future<String> getCurrentGeoHash(int range) async {
-  GeoPoint p = await getCurrentGeoPoint(range);
+  cf.GeoPoint p = await getCurrentGeoPoint(range);
   return MyGeoHash().geoHashForLocation(
     GeoPoint(p.latitude, p.longitude),
     precision: range,
@@ -50,7 +52,7 @@ Future<String> getCurrentGeoHash(int range) async {
 
 Future<String> getCurrentLocationName() async {
   try {
-    GeoPoint g = await getCurrentGeoPoint(22);
+    cf.GeoPoint g = await getCurrentGeoPoint(22);
     List<Placemark> placemarks =
         await placemarkFromCoordinates(g.latitude, g.longitude);
 

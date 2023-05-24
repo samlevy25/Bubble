@@ -1,4 +1,5 @@
 //Packages
+import 'package:bubbles_app/constants/bubble_key_types.dart';
 import 'package:bubbles_app/models/activity.dart';
 import 'package:bubbles_app/providers/bubble_page_provider.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +68,29 @@ class _BubblePageState extends State<BubblePage> {
         _pageProvider = context.watch<BubblePageProvider>();
         return Scaffold(
           appBar: AppBar(
-            title: Text(widget.bubble.name),
+            backgroundColor:
+                BubbleKeyType.getColorByIndex(widget.bubble.keyType.index),
+            title: Center(
+              child: Row(
+                children: [
+                  CircleAvatar(
+                      backgroundColor: Colors.white,
+                      backgroundImage: NetworkImage(widget.bubble.image)),
+                  const SizedBox(width: 10),
+                  Column(
+                    children: [
+                      Text(
+                        widget.bubble.name,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      Text(widget.bubble.description,
+                          style: const TextStyle(
+                              fontSize: 12.0, fontStyle: FontStyle.italic))
+                    ],
+                  ),
+                ],
+              ),
+            ),
             actions: [
               IconButton(
                 icon: const Icon(
@@ -84,6 +107,9 @@ class _BubblePageState extends State<BubblePage> {
             children: [
               SingleChildScrollView(
                 child: Container(
+                  color:
+                      BubbleKeyType.getColorByIndex(widget.bubble.keyType.index)
+                          .withOpacity(0.05),
                   padding: EdgeInsets.symmetric(
                     horizontal: _deviceWidth * 0.03,
                     vertical: _deviceHeight * 0.02,

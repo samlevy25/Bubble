@@ -26,8 +26,6 @@ class _ProfilePageState extends State<ProfilePage>
   late double _deviceWidth;
   late AuthenticationProvider _auth;
   late NavigationService _navigation;
-  late ChatsPageProvider _pageProvider;
-  int _selectedTabIndex = 0;
   late TabController _tabController;
 
   @override
@@ -44,9 +42,7 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   void _handleTabSelection() {
-    setState(() {
-      _selectedTabIndex = _tabController.index;
-    });
+    setState(() {});
   }
 
   @override
@@ -61,21 +57,6 @@ class _ProfilePageState extends State<ProfilePage>
 
   Widget _buildUI() {
     return Scaffold(
-      appBar: AppBar(
-        title: const Align(
-          alignment: Alignment.center,
-          child: Text('Profile'),
-        ),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-        ),
-        actions: _actions(),
-      ),
       body: Column(
         children: [
           _image(),
@@ -83,9 +64,7 @@ class _ProfilePageState extends State<ProfilePage>
           TabBar(
             controller: _tabController,
             onTap: (index) {
-              setState(() {
-                _selectedTabIndex = index;
-              });
+              setState(() {});
             },
             tabs: const [
               Tab(

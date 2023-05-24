@@ -5,8 +5,10 @@ class BubbleKeyType {
   final IconData icon;
   final int index;
   final LinearGradient gradient;
+  final Color color; // New color field
 
-  const BubbleKeyType._(this.name, this.icon, this.index, this.gradient);
+  const BubbleKeyType._(
+      this.name, this.icon, this.index, this.gradient, this.color);
 
   static const BubbleKeyType gps = BubbleKeyType._(
     'GPS',
@@ -17,6 +19,7 @@ class BubbleKeyType {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
     ),
+    Colors.green, // Assign color for GPS
   );
   static const BubbleKeyType wifi = BubbleKeyType._(
     'WiFi',
@@ -27,6 +30,7 @@ class BubbleKeyType {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
     ),
+    Colors.lightBlue, // Assign color for WiFi
   );
   static const BubbleKeyType nfc = BubbleKeyType._(
     'NFC',
@@ -37,6 +41,7 @@ class BubbleKeyType {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
     ),
+    Colors.purple, // Assign color for NFC
   );
   static const BubbleKeyType password = BubbleKeyType._(
     'Password',
@@ -47,6 +52,7 @@ class BubbleKeyType {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
     ),
+    Colors.red, // Assign color for Password
   );
   static const BubbleKeyType bluetooth = BubbleKeyType._(
     'Bluetooth',
@@ -57,12 +63,13 @@ class BubbleKeyType {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
     ),
+    Colors.blue, // Assign color for Bluetooth
   );
 
   static List<BubbleKeyType> get values =>
       [gps, wifi, nfc, password, bluetooth];
 
-  static BubbleKeyType getKeyTypeByIndex(int index) {
+  static BubbleKeyType getKeyTypeByIndex({required index}) {
     for (BubbleKeyType keyType in BubbleKeyType.values) {
       if (keyType.index == index) {
         return keyType;
@@ -70,5 +77,10 @@ class BubbleKeyType {
     }
 
     throw Exception('Index does not correspond to a valid BubbleKeyType');
+  }
+
+  static Color getColorByIndex(int index) {
+    BubbleKeyType keyType = getKeyTypeByIndex(index: index);
+    return keyType.color;
   }
 }

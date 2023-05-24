@@ -1,4 +1,3 @@
-import 'package:bubbles_app/networks/nfc.dart';
 import 'package:bubbles_app/pages/map/map_page.dart';
 import 'package:bubbles_app/pages/profile/profile_page.dart';
 import 'package:bubbles_app/pages/space/explorer_page.dart';
@@ -15,53 +14,156 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int currentPage = 2;
+  int currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
-    return _buildUI();
-  }
-
-  Widget _buildUI() {
-    final List<Widget> pages = [
-      const BubblesPage(),
-      const ExplorerPage(),
-      const MapPage(), // place holder for chats
-      const ChatsPage(),
-      const ProfilePage(),
-    ];
     return Scaffold(
-      body: pages[currentPage],
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0, // Set the elevation to 0 to remove the line
+        title: Center(
+          child: Image.asset(
+            'assets/images/logo.png', // Replace 'assets/logo.png' with your image path
+            width: 40,
+            height: 40,
+          ),
+        ),
+      ),
+      body: _buildPage(currentPage),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
         currentIndex: currentPage,
-        onTap: (index) => setState(() {
-          currentPage = index;
-        }),
+        onTap: (index) {
+          setState(() {
+            currentPage = index;
+          });
+        },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.bubble_chart),
-            label: 'Bubbles',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.feed),
-            label: 'Explorer',
+            label: 'Local',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.explore),
             label: 'Discover',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Chats',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
         ],
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
       ),
     );
+  }
+
+  Widget _buildPage(int index) {
+    switch (index) {
+      case 0:
+        return DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0, // Set the elevation to 0 to remove the line
+              title: const TabBar(
+                indicatorSize:
+                    TabBarIndicatorSize.label, // Set indicator size to label
+                indicator: UnderlineTabIndicator(
+                  borderSide: BorderSide(
+                      width: 2.0,
+                      color: Colors.blue), // Set transparent border color
+                ),
+                labelColor: Colors.white, // Set the label (selected tab) color
+                unselectedLabelColor:
+                    Colors.grey, // Set the unselected tab label color
+                labelPadding: EdgeInsets.symmetric(
+                    horizontal: 16), // Adjust label padding to reduce tab size
+                tabs: [
+                  Tab(
+                    child: Text(
+                      'Bubbles',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14, // Adjust font size for smaller tabs
+                      ), // Set the text color for the tab
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      'Explorer',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14, // Adjust font size for smaller tabs
+                      ), // Set the text color for the tab
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            body: const TabBarView(
+              children: [
+                BubblesPage(),
+                ExplorerPage(),
+              ],
+            ),
+          ),
+        );
+      case 1:
+        return const MapPage();
+      case 2:
+        return DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            appBar: AppBar(
+              elevation: 0, // Set the elevation to 0 to remove the line
+              backgroundColor: Colors.white,
+              title: const TabBar(
+                indicatorSize:
+                    TabBarIndicatorSize.label, // Set indicator size to label
+                indicator: UnderlineTabIndicator(
+                  borderSide: BorderSide(
+                      width: 2.0,
+                      color: Colors.blue), // Set transparent border color
+                ),
+                labelColor: Colors.grey, // Set the label (selected tab) color
+                unselectedLabelColor:
+                    Colors.black, // Set the unselected tab label color
+                labelPadding: EdgeInsets.symmetric(
+                    horizontal: 16), // Adjust label padding to reduce tab size
+                tabs: [
+                  Tab(
+                    child: Text(
+                      'Profile',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14, // Adjust font size for smaller tabs
+                      ), // Set the text color for the tab
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      'Chats',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14, // Adjust font size for smaller tabs
+                      ), // Set the text color for the tab
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            body: const TabBarView(
+              children: [
+                ProfilePage(),
+                ChatsPage(),
+              ],
+            ),
+          ),
+        );
+
+      default:
+        return Container();
+    }
   }
 }

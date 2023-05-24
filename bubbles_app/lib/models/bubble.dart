@@ -1,5 +1,6 @@
 import 'package:bubbles_app/constants/bubble_key_types.dart';
 import 'package:bubbles_app/networks/gps.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
@@ -24,7 +25,11 @@ class Bubble {
 
   final BubbleKeyType keyType;
   final String? key;
+
+  final int size;
+
   final String geohash;
+  final GeoPoint geoPoint;
   final String admin;
 
   late final List<AppUser> _recepients;
@@ -43,6 +48,8 @@ class Bubble {
     required this.keyType,
     required this.key,
     required this.geohash,
+    required this.geoPoint,
+    required this.size,
   }) {
     _recepients = members.where((i) => i.uid != currentUserUid).toList();
   }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bubbles_app/constants/bubble_key_types.dart';
+import 'package:bubbles_app/constants/bubble_sizes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
@@ -205,6 +206,8 @@ extension BubbleDatabaseService on DatabaseService {
         "name": bubbleData['name'],
         "location": bubbleData['geohash'],
         "keyType": bubbleData['keyType'],
+        "geoPoint": bubbleData['geopoint'],
+        "size": bubbleData['size'],
       };
     }).toList();
   }
@@ -301,12 +304,15 @@ extension BubbleDatabaseService on DatabaseService {
     required int keyType,
     required String? key,
     required String geohash,
+    required GeoPoint geoPoint,
+    required int bubbleSize,
     String? description,
   }) async {
     try {
       await _db.collection(bubblesCollection).doc(bubbleUid).set(
         {
           "geohash": geohash,
+          "geopoint": geoPoint,
           "admin": createrUid,
           "image": imageURL,
           "name": name,
@@ -314,6 +320,7 @@ extension BubbleDatabaseService on DatabaseService {
           "members": [createrUid],
           "keyType": keyType,
           "key": key,
+          "size": bubbleSize,
         },
       );
     } catch (e) {

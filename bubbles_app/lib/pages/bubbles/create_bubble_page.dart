@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bubbles_app/constants/bubble_key_types.dart';
 import 'package:bubbles_app/constants/bubble_sizes.dart';
 import 'package:bubbles_app/networks/nfc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -199,9 +200,9 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                 child: Dialog(
                   child: Container(
                     padding: EdgeInsets.all(16.0),
-                    child: Column(
+                    child: const Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         Text("Creating Bubble..."),
                         SizedBox(height: 16.0),
                         CircularProgressIndicator(),
@@ -220,6 +221,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             String bubbleUid = _db.generateBubbleUid();
             print("getting location..."); // Print statement added
             String location = await getCurrentGeoHash(_bubbleSize!);
+            GeoPoint geoPoint = await getCurrentGeoPoint(22);
             print("saving image to storage..."); // Print statement added
             String? imageURL = await _cloudStorage.saveBubbleImageToStorage(
               bubbleUid,
@@ -238,7 +240,9 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
               keyType: _bubbleKeyType.index,
               key: bubbleKey,
               geohash: location,
+              geoPoint: geoPoint,
               description: description,
+              bubbleSize: _bubbleSize!,
             );
 
             print("Bubble created successfully"); // Print statement added
@@ -249,18 +253,19 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             navigation.goBack();
             BubblePage(
               bubble: Bubble(
-                currentUserUid: createrUid,
-                admin: createrUid,
-                uid: bubbleUid,
-                name: _bubbleName!,
-                members: [_auth.appUser],
-                image: imageURL,
-                messages: [],
-                keyType: _bubbleKeyType,
-                key: bubbleKey,
-                geohash: location,
-                description: description!,
-              ),
+                  currentUserUid: createrUid,
+                  admin: createrUid,
+                  uid: bubbleUid,
+                  name: _bubbleName!,
+                  members: [_auth.appUser],
+                  image: imageURL,
+                  messages: [],
+                  keyType: _bubbleKeyType,
+                  key: bubbleKey,
+                  geohash: location,
+                  description: description!,
+                  geoPoint: geoPoint,
+                  size: _bubbleSize!),
             );
           } catch (error) {
             // Handle any errors that occur during bubble creation

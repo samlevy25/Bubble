@@ -13,10 +13,10 @@ class BubbleSize {
 
   static List<BubbleSize> get values => [veryLarge, large, medium, small];
 
-  static BubbleSize? getSizeByIndex(int index) {
+  static double? getSizeMarkByIndex(int index) {
     for (var size in values) {
       if (size.index == index) {
-        return size;
+        return size.markSize;
       }
     }
     return null;

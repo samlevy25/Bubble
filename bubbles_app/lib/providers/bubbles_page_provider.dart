@@ -69,11 +69,13 @@ class BubblesPageProvider extends ChangeNotifier {
             }
             String name = bubbleData['name'];
             String image = bubbleData['image'];
-            int methodType = bubbleData['keyType'];
+            int keyTypeIndex = bubbleData['keyType'];
             String? methodValue = bubbleData['key'];
-            String location = bubbleData['geohash'];
+            String geohash = bubbleData['geohash'];
+            GeoPoint? geoPoint = bubbleData['geoPoint'];
             String admin = bubbleData['admin'];
-            String description = bubbleData['description']; // Added description
+            String description = bubbleData['description'];
+            int size = bubbleData["size"];
 
             //Return Bubble Instance
             print("Bubble: $name");
@@ -85,10 +87,12 @@ class BubblesPageProvider extends ChangeNotifier {
                 members: members,
                 image: image,
                 messages: messages,
-                keyType: BubbleKeyType.getKeyTypeByIndex(methodType),
+                keyType: BubbleKeyType.getKeyTypeByIndex(index: keyTypeIndex),
                 key: methodValue,
-                geohash: location,
-                description: description);
+                geohash: geohash,
+                geoPoint: geoPoint ?? GeoPoint(0, 0),
+                description: description,
+                size: size);
           },
         ).toList());
 

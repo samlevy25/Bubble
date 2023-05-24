@@ -75,11 +75,8 @@ class _BubblesPageState extends State<BubblesPage> {
           if (snapshot.connectionState == ConnectionState.done) {
             return _buildUI();
           } else {
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('Bubbles'),
-              ),
-              body: const Center(
+            return const Scaffold(
+              body: Center(
                 child: CircularProgressIndicator(
                   color: Colors.white,
                 ),
@@ -96,17 +93,6 @@ class _BubblesPageState extends State<BubblesPage> {
       builder: (BuildContext context) {
         _pageProvider = context.watch<BubblesPageProvider>();
         return Scaffold(
-          appBar: AppBar(
-            title: const Center(child: Text('Bubbles')),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
-            ),
-          ),
           body: Container(
             padding: EdgeInsets.symmetric(
               horizontal: _deviceWidth * 0.03,
