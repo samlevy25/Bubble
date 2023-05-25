@@ -35,7 +35,7 @@ class BubblePageProvider extends ChangeNotifier {
   List<Message>? messages;
   List<AppUser> memmbers = [];
   late StreamSubscription _messagesStream;
-  late StreamSubscription _participantsStream;
+
   String? _message;
 
   final translator = GoogleTranslator();
@@ -51,14 +51,13 @@ class BubblePageProvider extends ChangeNotifier {
     _media = GetIt.instance.get<MediaService>();
     _navigation = GetIt.instance.get<NavigationService>();
     listenToMessages();
-    listenToParticipants();
     listenToKeyboardChanges();
   }
 
   @override
   void dispose() {
     _messagesStream.cancel();
-    _participantsStream.cancel();
+
     super.dispose();
   }
 
@@ -67,62 +66,46 @@ class BubblePageProvider extends ChangeNotifier {
   }
 
   void listenToMessages() {
-    try {
-      _messagesStream = _db.streamMessagesForBubble(_bubbleId).listen(
-        (snapshot) async {
-          List<Message> snapMessages = snapshot.docs.map(
-            (m) {
-              Map<String, dynamic> messageData =
-                  m.data() as Map<String, dynamic>;
-              return Message.fromJSON(messageData);
-            },
-          ).toList();
+    _messagesStream = _db.streamMessagesForBubble(_bubbleId).listen(
+      (snapshot) async {
+        List<Message> snapMessages = await Future.wait(snapshot.docs.map(
+          (m) async {
+            Map<String, dynamic> messageData = m.data() as Map<String, dynamic>;
+            DocumentSnapshot userSnapshot =
+                await _db.getUser(messageData['sender_id']);
+            Map<String, dynamic> userData =
+                userSnapshot.data() as Map<String, dynamic>;
+            userData['uid'] = userSnapshot.id;
+            AppUser sender = AppUser.fromJSON(userData);
+            messageData['sender'] = sender;
+            return Message.fromJSON(messageData);
+          },
+        ).toList());
 
-          messages = snapMessages;
+        messages = snapMessages;
 
-          messages?.forEach((message) async {
-            if (message.type == MessageType.text) {
-              message.content = await translateMsg(message.content);
-            }
-          });
+        for (Message message in messages!) {
+          if (message.type == MessageType.text) {
+            message.content = await translateMsg(message.content);
+          }
+        }
 
-          notifyListeners();
-          WidgetsBinding.instance.addPostFrameCallback(
-            (_) {
-              if (_messagesListViewController.hasClients) {
-                _messagesListViewController.jumpTo(
-                    _messagesListViewController.position.maxScrollExtent);
-              }
-            },
-          );
-        },
-      );
-    } catch (e) {
-      if (kDebugMode) {
-        print("Error getting messages.");
-        print(e);
-      }
-    }
-  }
+        notifyListeners();
 
-  void listenToParticipants() {
-    _participantsStream = _db
-        .streamParticipantsForBubble(_bubbleId)
-        .listen((newParticipants) async {
-      List<AppUser> members = [];
-      for (var mUid in newParticipants) {
-        DocumentSnapshot userSnapshot = await _db.getUser(mUid);
-        Map<String, dynamic> userData =
-            userSnapshot.data() as Map<String, dynamic>;
-        userData["uid"] = userSnapshot.id;
-        members.add(
-          AppUser.fromJSON(userData),
-        );
-      }
-
-      memmbers = members;
-      notifyListeners();
-    });
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          if (_messagesListViewController.hasClients) {
+            _messagesListViewController
+                .jumpTo(_messagesListViewController.position.maxScrollExtent);
+          }
+        });
+      },
+      onError: (error) {
+        if (kDebugMode) {
+          print("Error getting messages.");
+          print(error);
+        }
+      },
+    );
   }
 
   void listenToKeyboardChanges() {}
@@ -132,7 +115,7 @@ class BubblePageProvider extends ChangeNotifier {
       Message messageToSend = Message(
         content: _message!,
         type: MessageType.text,
-        senderID: _auth.appUser.uid,
+        sender: _auth.appUser,
         sentTime: DateTime.now(),
       );
       _db.addMessageToBubble(_bubbleId, messageToSend);
@@ -148,7 +131,7 @@ class BubblePageProvider extends ChangeNotifier {
         Message messageToSend = Message(
           content: downloadURL!,
           type: MessageType.image,
-          senderID: _auth.appUser.uid,
+          sender: _auth.appUser,
           sentTime: DateTime.now(),
         );
         _db.addMessageToBubble(_bubbleId, messageToSend);

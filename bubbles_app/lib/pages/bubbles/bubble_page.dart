@@ -147,15 +147,13 @@ class _BubblePageState extends State<BubblePage> {
             itemCount: _pageProvider.messages!.length,
             itemBuilder: (BuildContext context, int index) {
               Message message = _pageProvider.messages![index];
-              bool isOwnMessage = message.senderID == _auth.appUser.uid;
+              bool isOwnMessage = message.sender.uid == _auth.appUser.uid;
               return CustomChatListViewTile(
                 deviceHeight: _deviceHeight,
                 width: _deviceWidth * 0.80,
                 message: message,
                 isOwnMessage: isOwnMessage,
-                sender: widget.bubble.members
-                    .where((m) => m.uid == message.senderID)
-                    .first,
+                sender: message.sender,
               );
             },
           ),

@@ -257,7 +257,6 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                   admin: createrUid,
                   uid: bubbleUid,
                   name: _bubbleName!,
-                  members: [_auth.appUser],
                   image: imageURL,
                   messages: [],
                   keyType: _bubbleKeyType,

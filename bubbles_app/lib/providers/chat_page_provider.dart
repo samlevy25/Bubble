@@ -1,12 +1,14 @@
 import 'dart:async';
 
 //Packages
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 //Services
+import '../models/app_user.dart';
 import '../services/database_service.dart';
 import '../services/cloud_storage_service.dart';
 import '../services/media_service.dart';
@@ -54,34 +56,38 @@ class ChatPageProvider extends ChangeNotifier {
   }
 
   void listenToMessages() {
-    try {
-      _messagesStream = _db.streamMessagesForChat(_chatId).listen(
-        (snapshot) {
-          List<Message> snapMessages = snapshot.docs.map(
-            (m) {
-              Map<String, dynamic> messageData =
-                  m.data() as Map<String, dynamic>;
-              return Message.fromJSON(messageData);
-            },
-          ).toList();
-          messages = snapMessages;
-          notifyListeners();
-          WidgetsBinding.instance.addPostFrameCallback(
-            (_) {
-              if (_messagesListViewController.hasClients) {
-                _messagesListViewController.jumpTo(
-                    _messagesListViewController.position.maxScrollExtent);
-              }
-            },
-          );
+    _messagesStream =
+        _db.streamMessagesForChat(_chatId).listen((snapshot) async {
+      List<Message> snapshotMessages = await Future.wait(snapshot.docs.map(
+        (m) async {
+          Map<String, dynamic> messageData = m.data() as Map<String, dynamic>;
+          DocumentSnapshot userSnapshot =
+              await _db.getUser(messageData['senderId']);
+          Map<String, dynamic> userData =
+              userSnapshot.data() as Map<String, dynamic>;
+          userData["uid"] = userSnapshot.id;
+
+          messageData['sender'] = AppUser.fromJSON(userData);
+
+          return Message.fromJSON(messageData);
         },
-      );
-    } catch (e) {
+      ).toList());
+
+      messages = snapshotMessages;
+      notifyListeners();
+
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        if (_messagesListViewController.hasClients) {
+          _messagesListViewController
+              .jumpTo(_messagesListViewController.position.maxScrollExtent);
+        }
+      });
+    }, onError: (error) {
       if (kDebugMode) {
         print("Error getting messages.");
-        print(e);
+        print(error);
       }
-    }
+    });
   }
 
   void listenToKeyboardChanges() {}
@@ -91,7 +97,7 @@ class ChatPageProvider extends ChangeNotifier {
       Message messageToSend = Message(
         content: _message!,
         type: MessageType.text,
-        senderID: _auth.appUser.uid,
+        sender: _auth.appUser,
         sentTime: DateTime.now(),
       );
       _db.addMessageToChat(_chatId, messageToSend);
@@ -107,7 +113,7 @@ class ChatPageProvider extends ChangeNotifier {
         Message messageToSend = Message(
           content: downloadURL!,
           type: MessageType.image,
-          senderID: _auth.appUser.uid,
+          sender: _auth.appUser,
           sentTime: DateTime.now(),
         );
         _db.addMessageToChat(_chatId, messageToSend);

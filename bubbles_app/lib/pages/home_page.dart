@@ -1,8 +1,11 @@
 import 'package:bubbles_app/pages/map/map_page.dart';
 import 'package:bubbles_app/pages/profile/profile_page.dart';
+import 'package:bubbles_app/pages/profile/settings_page.dart';
 import 'package:bubbles_app/pages/space/explorer_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
+import '../services/navigation_service.dart';
 import 'bubbles/bubbles_page.dart';
 import 'chats/chats_page.dart';
 
@@ -16,12 +19,31 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int currentPage = 0;
 
+  late NavigationService _navigation;
+
   @override
   Widget build(BuildContext context) {
+    _navigation = GetIt.instance.get<NavigationService>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0, // Set the elevation to 0 to remove the line
+        leading: IconButton(
+          icon: Icon(Icons.notifications),
+          color: Colors.lightBlue,
+          onPressed: () {
+            // Handle notification icon press
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            color: Colors.lightBlue,
+            onPressed: () {
+              _navigation.navigateToPage(const SettingsPage());
+            },
+          ),
+        ],
         title: Center(
           child: Image.asset(
             'assets/images/logo.png', // Replace 'assets/logo.png' with your image path

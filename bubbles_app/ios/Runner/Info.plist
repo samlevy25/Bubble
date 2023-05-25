@@ -8,7 +8,11 @@
 	<string>We need your location to provide relevant information even when the app is in the background.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>We need your location to provide relevant information even when the app is in the background.</string>
-	
+
+	<!-- Add the following key for Wi-Fi functionality -->
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Your description for local network usage</string>
+
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

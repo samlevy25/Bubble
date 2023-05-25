@@ -19,7 +19,7 @@ class Bubble {
   final String uid;
   final String name;
   final String description; // Added description property
-  final List<AppUser> members;
+
   final String image;
   final List<Message> messages;
 
@@ -32,8 +32,6 @@ class Bubble {
   final GeoPoint geoPoint;
   final String admin;
 
-  late final List<AppUser> _recepients;
-
   final DatabaseService _db = GetIt.instance.get<DatabaseService>();
 
   Bubble({
@@ -42,7 +40,7 @@ class Bubble {
     required this.uid,
     required this.name,
     required this.description, // Added description parameter
-    required this.members,
+
     required this.image,
     required this.messages,
     required this.keyType,
@@ -50,14 +48,9 @@ class Bubble {
     required this.geohash,
     required this.geoPoint,
     required this.size,
-  }) {
-    _recepients = members.where((i) => i.uid != currentUserUid).toList();
-  }
+  }) {}
 
   // Returns the list of recipients excluding the current user
-  List<AppUser> recepients() {
-    return _recepients;
-  }
 
   // Returns the name of the bubble
   String getName() {
@@ -70,9 +63,6 @@ class Bubble {
   }
 
   // Returns the number of members in the bubble
-  int getLenght() {
-    return members.length;
-  }
 
   // Returns the geohash of the bubble
   String getGeohash() {
@@ -87,31 +77,6 @@ class Bubble {
   // Returns the join method value of the bubble
   String? getMethodValue() {
     return key;
-  }
-
-  Future<bool> joinMemmber(AppUser user) async {
-    String userLocation = await getCurrentGeoHash(10);
-    if (members.contains(user)) {
-      if (kDebugMode) {
-        print("Already In");
-      }
-      return true;
-    }
-
-    if (geohash.startsWith(userLocation)) {
-      members.add(user);
-      _db.addMembertoBubble(uid, user.uid);
-
-      if (kDebugMode) {
-        print("Joined");
-      }
-      return true;
-    } else {
-      if (kDebugMode) {
-        print("not allowed to join");
-      }
-      return false;
-    }
   }
 
   String getDescription() {

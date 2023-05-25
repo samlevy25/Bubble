@@ -235,34 +235,10 @@ extension BubbleDatabaseService on DatabaseService {
         .snapshots();
   }
 
-  Stream<List<String>> streamParticipantsForBubble(String bubbleId) {
-    return _db.collection('bubbles').doc(bubbleId).snapshots().map((snapshot) {
-      List<String> participants = snapshot.data()!['memmbers'].cast<String>();
-      return participants;
-    });
-  }
-
   Future<void> updateBubbleData(
       String bubbleID, Map<String, dynamic> data) async {
     try {
       await _db.collection(bubblesCollection).doc(bubbleID).update(data);
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-  }
-
-  Future<void> addMembertoBubble(String bubbleID, String memberUid) async {
-    try {
-      await _db
-          .collection(bubblesCollection)
-          .doc(bubbleID)
-          .update({
-            'members': FieldValue.arrayUnion([memberUid])
-          })
-          .then((_) => print('Added'))
-          .catchError((error) => print('Add failed: $error'));
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -317,7 +293,6 @@ extension BubbleDatabaseService on DatabaseService {
           "image": imageURL,
           "name": name,
           "description": description,
-          "members": [createrUid],
           "keyType": keyType,
           "key": key,
           "size": bubbleSize,

@@ -47,16 +47,7 @@ class BubblesPageProvider extends ChangeNotifier {
             Map<String, dynamic> bubbleData = d.data() as Map<String, dynamic>;
 
             //Get Users In Bubble
-            List<AppUser> members = [];
-            for (var mUid in bubbleData["members"]) {
-              DocumentSnapshot userSnapshot = await _db.getUser(mUid);
-              Map<String, dynamic> userData =
-                  userSnapshot.data() as Map<String, dynamic>;
-              userData["uid"] = userSnapshot.id;
-              members.add(
-                AppUser.fromJSON(userData),
-              );
-            }
+
             //Get Last Message For Bubble
             List<Message> messages = [];
             QuerySnapshot bubbleMessage =
@@ -84,7 +75,6 @@ class BubblesPageProvider extends ChangeNotifier {
                 admin: admin,
                 name: name,
                 currentUserUid: _auth.appUser.uid,
-                members: members,
                 image: image,
                 messages: messages,
                 keyType: BubbleKeyType.getKeyTypeByIndex(index: keyTypeIndex),

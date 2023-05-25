@@ -1,7 +1,7 @@
 import 'package:network_info_plus/network_info_plus.dart';
 
 Future<String?> getWifiName() async {
-  final info = NetworkInfo();
+  final info =  NetworkInfo();
   final wifiName = await info.getWifiName(); // "FooNetwork"
   return wifiName;
 }

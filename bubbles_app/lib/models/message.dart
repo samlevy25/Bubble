@@ -1,3 +1,4 @@
+import 'package:bubbles_app/models/app_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum MessageType {
@@ -7,7 +8,7 @@ enum MessageType {
 }
 
 class Message {
-  final String senderID;
+  final AppUser sender;
   final MessageType type;
   String content;
   final DateTime sentTime;
@@ -15,7 +16,7 @@ class Message {
   Message(
       {required this.content,
       required this.type,
-      required this.senderID,
+      required this.sender,
       required this.sentTime});
 
   factory Message.fromJSON(Map<String, dynamic> json) {
@@ -33,7 +34,7 @@ class Message {
     return Message(
       content: json["content"],
       type: messageType,
-      senderID: json["sender_id"],
+      sender: json["sender"],
       sentTime: json["sent_time"].toDate(),
     );
   }
@@ -52,7 +53,7 @@ class Message {
     return {
       "content": content,
       "type": messageType,
-      "sender_id": senderID,
+      "sender_id": sender.uid,
       "sent_time": Timestamp.fromDate(sentTime),
     };
   }
