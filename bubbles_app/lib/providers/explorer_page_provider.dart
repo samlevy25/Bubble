@@ -98,7 +98,8 @@ class ExplorerPageProvider extends ChangeNotifier {
           type: PostType.text,
           senderID: _auth.appUser.uid,
           sentTime: DateTime.now(),
-          comments: []);
+          comments: [],
+          geoPoint: const GeoPoint(0, 0));
       _db.addPostToExplorer(postToSend);
     }
   }
@@ -114,7 +115,8 @@ class ExplorerPageProvider extends ChangeNotifier {
             type: PostType.image,
             senderID: _auth.appUser.uid,
             sentTime: DateTime.now(),
-            comments: []);
+            comments: [],
+            geoPoint: const GeoPoint(0, 0));
         _db.addPostToExplorer(postToSend);
       }
     } catch (e) {

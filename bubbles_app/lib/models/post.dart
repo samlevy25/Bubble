@@ -12,6 +12,7 @@ class Post {
   final PostType type;
   final String content;
   final DateTime sentTime;
+  final GeoPoint geoPoint;
   List<Comment> comments;
 
   Post(
@@ -19,7 +20,8 @@ class Post {
       required this.type,
       required this.senderID,
       required this.sentTime,
-      required this.comments});
+      required this.comments,
+      required this.geoPoint});
 
   factory Post.fromJSON(Map<String, dynamic> jsonPost) {
     PostType postType;
@@ -39,7 +41,8 @@ class Post {
         type: postType,
         senderID: jsonPost["sender_id"],
         sentTime: jsonPost["sent_time"].toDate(),
-        comments: jsonPost["comments"]);
+        comments: jsonPost["comments"],
+        geoPoint: jsonPost["geopoint"]);
   }
   Map<String, dynamic> toJson() {
     String postType;
