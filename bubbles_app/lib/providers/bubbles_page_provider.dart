@@ -55,6 +55,14 @@ class BubblesPageProvider extends ChangeNotifier {
             if (bubbleMessage.docs.isNotEmpty) {
               Map<String, dynamic> messageData =
                   bubbleMessage.docs.first.data()! as Map<String, dynamic>;
+
+              DocumentSnapshot userSnapshot =
+                  await _db.getUser(messageData['sender_id']);
+              Map<String, dynamic> userData =
+                  userSnapshot.data() as Map<String, dynamic>;
+              userData['uid'] = userSnapshot.id;
+              AppUser sender = AppUser.fromJSON(userData);
+              messageData['sender'] = sender;
               Message message = Message.fromJSON(messageData);
               messages.add(message);
             }

@@ -6,11 +6,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 
 //Services
 import '../models/app_user.dart';
 import '../services/database_service.dart';
 import '../services/cloud_storage_service.dart';
+import '../services/loger.dart';
 import '../services/media_service.dart';
 import '../services/navigation_service.dart';
 
@@ -27,6 +29,7 @@ class BubblePageProvider extends ChangeNotifier {
   late CloudStorageService _storage;
   late MediaService _media;
   late NavigationService _navigation;
+  late Logger _logger;
 
   final AuthenticationProvider _auth;
   final ScrollController _messagesListViewController;
@@ -50,6 +53,8 @@ class BubblePageProvider extends ChangeNotifier {
     _storage = GetIt.instance.get<CloudStorageService>();
     _media = GetIt.instance.get<MediaService>();
     _navigation = GetIt.instance.get<NavigationService>();
+    _logger = GetIt.instance.get<LoggerService>().logger;
+
     listenToMessages();
     listenToKeyboardChanges();
   }
@@ -68,6 +73,7 @@ class BubblePageProvider extends ChangeNotifier {
   void listenToMessages() {
     _messagesStream = _db.streamMessagesForBubble(_bubbleId).listen(
       (snapshot) async {
+        _logger.i("Messages stream updated.");
         List<Message> snapMessages = await Future.wait(snapshot.docs.map(
           (m) async {
             Map<String, dynamic> messageData = m.data() as Map<String, dynamic>;
