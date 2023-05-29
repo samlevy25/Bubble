@@ -1,21 +1,16 @@
-//Packages
-import 'package:bubbles_app/models/post.dart';
-
-import 'package:bubbles_app/pages/space/create_post_page.dart';
-import 'package:bubbles_app/pages/space/post_page.dart';
-
-import 'package:bubbles_app/widgets/custom_list_view_tiles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/authentication_provider.dart';
 import '../../providers/explorer_page_provider.dart';
 import '../../widgets/post_text_form_fied.dart';
-
-//Widgets
+import '../../models/post.dart';
+import '../../pages/space/post_page.dart';
+import '../../widgets/custom_list_view_tiles.dart';
+import 'create_post.dart';
 
 class ExplorerPage extends StatefulWidget {
-  const ExplorerPage({super.key});
+  const ExplorerPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -33,11 +28,22 @@ class _ExplorerPageState extends State<ExplorerPage> {
   late GlobalKey<FormState> _postFormState;
   late ScrollController _postsListViewController;
 
+  String postContent = ''; // Variable to hold the post content
+
   @override
   void initState() {
     super.initState();
     _postFormState = GlobalKey<FormState>();
     _postsListViewController = ScrollController();
+  }
+
+  void createPost(String content) {
+    setState(() {
+      postContent = content; // Update the post content in the state
+    });
+    _pageProvider.post = postContent; // Update the post content in the provider
+    _pageProvider.sendTextPost(); // Send the post to the database
+    print('Created Post: $postContent');
   }
 
   @override
@@ -78,14 +84,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
             ],
           ),
           floatingActionButton: FloatingActionButton.extended(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CreatePostPage(),
-                ),
-              );
-            },
+            onPressed: _openCreatePostDialog,
             icon: const Icon(Icons.add),
             label: const Text("Create Post"),
           ),
@@ -105,7 +104,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
             itemCount: _pageProvider.posts!.length,
             itemBuilder: (BuildContext context, int index) {
               Post post = _pageProvider.posts![index];
-              bool isOwnMessage = post.senderID == _auth.appUser.uid;
+              bool isOwnMessage = post.sender == _auth.appUser;
               return GestureDetector(
                 child: CustomExplorerListViewTile(
                   deviceHeight: _deviceHeight,
@@ -141,5 +140,16 @@ class _ExplorerPageState extends State<ExplorerPage> {
         ),
       );
     }
+  }
+
+  void _openCreatePostDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CreatePostDialog(
+          onPostCreated: createPost,
+        );
+      },
+    );
   }
 }

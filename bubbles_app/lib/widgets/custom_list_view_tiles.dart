@@ -242,8 +242,6 @@ class CustomExplorerListViewTile extends StatelessWidget {
   final bool isOwnMessage;
   final Post post;
 
-  late NavigationService _navigation;
-
   CustomExplorerListViewTile({
     super.key,
     required this.width,
@@ -253,7 +251,6 @@ class CustomExplorerListViewTile extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    _navigation = GetIt.instance.get<NavigationService>();
     return _buildUI();
   }
 
@@ -266,7 +263,7 @@ class CustomExplorerListViewTile extends StatelessWidget {
             RoundedImageNetwork(
               key: UniqueKey(),
               imagePath:
-                  "https://fastly.picsum.photos/id/361/200/300.jpg?hmac=unS_7uvpA3Q-hJTvI1xNCnlhta-oC6XnWZ4Y11UpjAo",
+                  post.sender.imageURL, // Add this line to display the image
               size: width * 0.08,
             ),
             Expanded(

@@ -38,6 +38,7 @@ class Message {
       sentTime: json["sent_time"].toDate(),
     );
   }
+
   Map<String, dynamic> toJson() {
     String messageType;
     switch (type) {
@@ -53,7 +54,7 @@ class Message {
     return {
       "content": content,
       "type": messageType,
-      "sender_id": sender.uid,
+      "sender": sender.uid,
       "sent_time": Timestamp.fromDate(sentTime),
     };
   }

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 //Services
+import '../models/app_user.dart';
 import '../models/post.dart';
 import '../services/database_service.dart';
 import '../services/cloud_storage_service.dart';
@@ -33,7 +34,7 @@ class ExplorerPageProvider extends ChangeNotifier {
 
   late StreamSubscription _postsStream;
 
-  String? post;
+  String? _post;
 
   ExplorerPageProvider(this._auth, this._postsListViewController) {
     _db = GetIt.instance.get<DatabaseService>();
@@ -50,12 +51,25 @@ class ExplorerPageProvider extends ChangeNotifier {
     super.dispose();
   }
 
+  set post(String value) {
+    _post = value;
+  }
+
   void listenToPosts() {
     try {
       _postsStream = _db.streamPostsForExplorer().listen(
         (snapshot) async {
           List<Post> snapPosts = await Future.wait(snapshot.docs.map((m) async {
             Map<String, dynamic> postData = m.data() as Map<String, dynamic>;
+
+            DocumentSnapshot userSnapshot =
+                await _db.getUser(postData['sender']);
+            Map<String, dynamic> userData =
+                userSnapshot.data() as Map<String, dynamic>;
+            userData["uid"] = userSnapshot.id;
+
+            postData['sender'] = AppUser.fromJSON(userData);
+
             // Construct a reference to the `comment` sub-collection of the post document
             CollectionReference commentsRef =
                 m.reference.collection('Comments');
@@ -92,11 +106,11 @@ class ExplorerPageProvider extends ChangeNotifier {
   void listenToKeyboardChanges() {}
 
   void sendTextPost() {
-    if (post != null) {
+    if (_post != null) {
       Post postToSend = Post(
-          content: post!,
+          content: _post!,
           type: PostType.text,
-          senderID: _auth.appUser.uid,
+          sender: _auth.appUser,
           sentTime: DateTime.now(),
           comments: [],
           geoPoint: const GeoPoint(0, 0));
@@ -113,7 +127,7 @@ class ExplorerPageProvider extends ChangeNotifier {
         Post postToSend = Post(
             content: downloadURL!,
             type: PostType.image,
-            senderID: _auth.appUser.uid,
+            sender: _auth.appUser,
             sentTime: DateTime.now(),
             comments: [],
             geoPoint: const GeoPoint(0, 0));

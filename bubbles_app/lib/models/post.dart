@@ -1,3 +1,4 @@
+import 'package:bubbles_app/models/app_user.dart';
 import 'package:bubbles_app/models/comment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -8,7 +9,7 @@ enum PostType {
 }
 
 class Post {
-  final String senderID;
+  final AppUser sender;
   final PostType type;
   final String content;
   final DateTime sentTime;
@@ -18,7 +19,7 @@ class Post {
   Post(
       {required this.content,
       required this.type,
-      required this.senderID,
+      required this.sender,
       required this.sentTime,
       required this.comments,
       required this.geoPoint});
@@ -39,11 +40,12 @@ class Post {
     return Post(
         content: jsonPost["content"],
         type: postType,
-        senderID: jsonPost["sender_id"],
+        sender: jsonPost["sender"],
         sentTime: jsonPost["sent_time"].toDate(),
         comments: jsonPost["comments"],
         geoPoint: jsonPost["geopoint"]);
   }
+
   Map<String, dynamic> toJson() {
     String postType;
     switch (type) {
@@ -59,8 +61,10 @@ class Post {
     return {
       "content": content,
       "type": postType,
-      "sender_id": senderID,
+      "sender": sender.uid,
       "sent_time": Timestamp.fromDate(sentTime),
+      "comments": comments,
+      "geopoint": geoPoint,
     };
   }
 }
