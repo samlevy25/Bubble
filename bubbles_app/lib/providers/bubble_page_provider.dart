@@ -73,7 +73,6 @@ class BubblePageProvider extends ChangeNotifier {
   void listenToMessages() {
     _messagesStream = _db.streamMessagesForBubble(_bubbleId).listen(
       (snapshot) async {
-        _logger.i("Messages stream updated.");
         List<Message> snapMessages = await Future.wait(snapshot.docs.map(
           (m) async {
             Map<String, dynamic> messageData = m.data() as Map<String, dynamic>;

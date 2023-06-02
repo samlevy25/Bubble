@@ -1,39 +1,44 @@
+//Packages
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+//Providers
 import '../../providers/authentication_provider.dart';
 import '../../providers/explorer_page_provider.dart';
-import '../../widgets/post_text_form_fied.dart';
+//Models
 import '../../models/post.dart';
-import '../../pages/space/post_page.dart';
+//Pages
+import '../../pages/posts/post_page.dart';
+//Widgets
 import '../../widgets/custom_list_view_tiles.dart';
-import 'create_post.dart';
+//Dialogs
+import '../../pages/posts/create_post.dart';
 
-class ExplorerPage extends StatefulWidget {
-  const ExplorerPage({Key? key}) : super(key: key);
+class PostsPage extends StatefulWidget {
+  const PostsPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _ExplorerPageState();
+    return _PostsPageState();
   }
 }
 
-class _ExplorerPageState extends State<ExplorerPage> {
+class _PostsPageState extends State<PostsPage> {
   late double _deviceHeight;
   late double _deviceWidth;
 
   late AuthenticationProvider _auth;
   late ExplorerPageProvider _pageProvider;
 
-  late GlobalKey<FormState> _postFormState;
   late ScrollController _postsListViewController;
 
   String postContent = ''; // Variable to hold the post content
+  String selectedSort =
+      'Newest'; // Variable to hold the selected sorting option
 
   @override
   void initState() {
     super.initState();
-    _postFormState = GlobalKey<FormState>();
+
     _postsListViewController = ScrollController();
   }
 
@@ -76,7 +81,20 @@ class _ExplorerPageState extends State<ExplorerPage> {
                         horizontal: _deviceWidth * 0.03,
                         vertical: _deviceHeight * 0.02,
                       ),
-                      child: _postsListView(),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              _buildSortButton('Newest'),
+                              const SizedBox(width: 10),
+                              _buildSortButton('Oldest'),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          _postsListView(),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -95,15 +113,51 @@ class _ExplorerPageState extends State<ExplorerPage> {
     );
   }
 
+  Widget _buildSortButton(String sortOption) {
+    final isSelected = selectedSort == sortOption;
+
+    return ElevatedButton(
+      onPressed: () {
+        setState(() {
+          selectedSort = sortOption;
+        });
+      },
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<OutlinedBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            if (isSelected) {
+              return Colors.blue;
+            }
+            return Colors.white;
+          },
+        ),
+      ),
+      child: Text(
+        sortOption,
+        style: TextStyle(
+          color: isSelected ? Colors.white : Colors.black,
+        ),
+      ),
+    );
+  }
+
   Widget _postsListView() {
     if (_pageProvider.posts != null) {
       if (_pageProvider.posts!.isNotEmpty) {
+        List<Post> sortedPosts = _sortPosts(_pageProvider.posts!,
+            selectedSort); // Sort the posts based on the selected sort option
+
         return SizedBox(
           height: _deviceHeight * 0.74,
           child: ListView.builder(
-            itemCount: _pageProvider.posts!.length,
+            itemCount: sortedPosts.length,
             itemBuilder: (BuildContext context, int index) {
-              Post post = _pageProvider.posts![index];
+              Post post = sortedPosts[index];
               bool isOwnMessage = post.sender == _auth.appUser;
               return GestureDetector(
                 child: CustomExplorerListViewTile(
@@ -139,6 +193,15 @@ class _ExplorerPageState extends State<ExplorerPage> {
           color: Colors.white,
         ),
       );
+    }
+  }
+
+  List<Post> _sortPosts(List<Post> posts, String sortOption) {
+    if (sortOption == 'Newest') {
+      return posts.reversed
+          .toList(); // Sort by the newest posts (reverse order)
+    } else {
+      return posts; // No need to modify the order, as the posts are already in chronological order
     }
   }
 

@@ -77,20 +77,11 @@ class _PostPageState extends State<PostPage> {
             children: [
               Padding(
                 padding: EdgeInsets.only(left: _deviceWidth * 0.05),
-                child: DropdownButton<SortBy>(
-                  value: _sortBy,
-                  items: const [
-                    DropdownMenuItem(
-                      value: SortBy.newest,
-                      child: Text('Newest'),
-                    ),
-                    DropdownMenuItem(
-                      value: SortBy.oldest,
-                      child: Text('Oldest'),
-                    ),
-                  ],
-                  onChanged: (value) => _sortComments(value!),
-                ),
+                child: _buildSortButton(SortBy.newest),
+              ),
+              Padding(
+                padding: EdgeInsets.only(right: _deviceWidth * 0.05),
+                child: _buildSortButton(SortBy.oldest),
               ),
             ],
           ),
@@ -130,6 +121,38 @@ class _PostPageState extends State<PostPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSortButton(SortBy sortOption) {
+    final isSelected = _sortBy == sortOption;
+
+    return ElevatedButton(
+      onPressed: () => _sortComments(sortOption),
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<OutlinedBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            if (isSelected) {
+              return Colors.blue; // Selected button color
+            } else {
+              return Colors.white; // Default button color
+            }
+          },
+        ),
+      ),
+      child: Text(
+        sortOption == SortBy.newest ? 'Newest' : 'Oldest',
+        style: TextStyle(
+          color: isSelected
+              ? Colors.white
+              : Colors.black, // Text color based on selection
+        ),
       ),
     );
   }
