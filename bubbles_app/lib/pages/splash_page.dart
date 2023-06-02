@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-
 //Packegs
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter/material.dart';
 
 //Services
 import '../services/loger.dart';
