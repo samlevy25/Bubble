@@ -167,6 +167,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                 return null;
               },
               decoration: InputDecoration(
+                prefixIcon: Icon(Icons.chat_bubble_outline),
                 labelStyle: const TextStyle(
                   color: Colors.lightBlue,
                 ),
@@ -200,6 +201,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                 return null;
               },
               decoration: InputDecoration(
+                prefixIcon: Icon(Icons.description_outlined),
                 labelStyle: const TextStyle(
                   color: Colors.lightBlue,
                 ),
