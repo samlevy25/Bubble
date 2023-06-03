@@ -20,29 +20,20 @@ class ProfilePage extends StatefulWidget {
   State<StatefulWidget> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage>
-    with SingleTickerProviderStateMixin {
+class _ProfilePageState extends State<ProfilePage> {
   late double _deviceHeight;
   late double _deviceWidth;
   late AuthenticationProvider _auth;
   late NavigationService _navigation;
-  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    _tabController.addListener(_handleTabSelection);
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
     super.dispose();
-  }
-
-  void _handleTabSelection() {
-    setState(() {});
   }
 
   @override
@@ -61,34 +52,8 @@ class _ProfilePageState extends State<ProfilePage>
         children: [
           _image(),
           _userDetails(),
-          TabBar(
-            controller: _tabController,
-            onTap: (index) {
-              setState(() {});
-            },
-            tabs: const [
-              Tab(
-                child: Text(
-                  'Activities',
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-              Tab(
-                child: Text(
-                  'Favorites',
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-            ],
-          ),
           Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _activityList(),
-                _favoritesList(),
-              ],
-            ),
+            child: _activityList(),
           ),
         ],
       ),
@@ -124,26 +89,7 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
-  List<Widget> _actions() {
-    return [
-      IconButton(
-        onPressed: () {},
-        icon: const Icon(Icons.notifications),
-      ),
-      IconButton(
-        onPressed: () {
-          _navigation.navigateToPage(const SettingsPage());
-        },
-        icon: const Icon(Icons.settings),
-      ),
-    ];
-  }
-
   Widget _activityList() {
     return ActivityList(activities: _auth.appUser.activities);
-  }
-
-  Widget _favoritesList() {
-    return FavoritsList(favorits: []);
   }
 }

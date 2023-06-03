@@ -378,11 +378,10 @@ extension ExplorerDatabaseService on DatabaseService {
         .snapshots();
   }
 
-  // Add a post to the Explorer feature
   Future<void> addPostToExplorer(Post message) async {
     try {
       await _db.collection(postsCollection).add(
-            message.toJson(),
+            post.toJson(),
           );
     } catch (e) {
       if (kDebugMode) {

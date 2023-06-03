@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:bubbles_app/constants/bubble_key_types.dart';
 import 'package:bubbles_app/constants/bubble_sizes.dart';
 import 'package:bubbles_app/models/bubble.dart';
+import 'package:bubbles_app/networks/gps.dart';
 import 'package:bubbles_app/services/database_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +26,9 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  late Timer _timer;
-  final LatLng _currentLatLng = LatLng(31.808700, 34.654860);
+  Timer? _timer;
+  late LatLng _currentLatLng;
+  bool _isLoading = false;
 
   final DatabaseService _db = GetIt.instance.get<DatabaseService>();
 
@@ -35,31 +37,41 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    // Start the timer when the widget is initialized
-    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      _fetchBubbles();
+    _updateLocationAndFetchBubbles();
+
+    _timer = Timer.periodic(const Duration(seconds: 60), (_) {
+      _updateLocationAndFetchBubbles();
     });
   }
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("MapPage build called");
     return Scaffold(
-      body: _buildMap(),
+      body: _isLoading ? _buildLoadingIndicator() : _buildMap(),
+    );
+  }
+
+  Widget _buildLoadingIndicator() {
+    return const Center(
+      child: CircularProgressIndicator(),
     );
   }
 
   Widget _buildMap() {
-    var x = _currentLatLng.latitude;
-    var y = _currentLatLng.longitude;
     return FlutterMap(
-      options:
-          MapOptions(zoom: 18, center: LatLng(x, y), maxZoom: 18, minZoom: 18),
+      options: MapOptions(
+        zoom: 18,
+        center: _currentLatLng,
+        maxZoom: 18,
+        minZoom: 18,
+      ),
       children: [
         _buildTileLayer(),
         _buildMarkerLayer(),
@@ -130,10 +142,30 @@ class _MapPageState extends State<MapPage> {
     return MarkerLayer(markers: markers);
   }
 
-  Future<void> _fetchBubbles() async {
-    List<Map<String, dynamic>> bubbles = await _db.getBubblesFormarks();
+  Future<void> _updateLocationAndFetchBubbles() async {
+    if (_isLoading) return;
+
     setState(() {
-      _bubblesMarks = bubbles;
+      _isLoading = true;
     });
+
+    try {
+      GeoPoint geoPoint = await getCurrentGeoPoint(22);
+      print("Latitude: ${geoPoint.latitude}, Longitude: ${geoPoint.longitude}");
+
+      List<Map<String, dynamic>> bubbles = await _db.getBubblesFormarks();
+      print("Fetched bubbles");
+
+      setState(() {
+        _currentLatLng = LatLng(geoPoint.latitude, geoPoint.longitude);
+        _bubblesMarks = bubbles;
+        _isLoading = false;
+      });
+    } catch (error) {
+      print("Error: $error");
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }

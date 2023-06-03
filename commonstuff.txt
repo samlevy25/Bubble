@@ -1,0 +1,17 @@
+  late double _deviceHeight;
+  late double _deviceWidth;
+  late AuthenticationProvider _auth;
+  late NavigationService _navigation;
+  late DatabaseService _db;
+  late CloudStorageService _cloudStorage;
+
+
+    _deviceHeight = MediaQuery.of(context).size.height;
+    _deviceWidth = MediaQuery.of(context).size.width;
+    _auth = Provider.of<AuthenticationProvider>(context);
+    _navigation = GetIt.instance.get<NavigationService>();
+    _db = GetIt.instance.get<DatabaseService>();
+    _cloudStorage = GetIt.instance.get<CloudStorageService>();
+
+
+

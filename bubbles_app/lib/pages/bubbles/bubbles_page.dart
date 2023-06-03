@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:async_button_builder/async_button_builder.dart';
 import 'package:bubbles_app/constants/bubble_key_types.dart';
+import 'package:bubbles_app/pages/bubbles/bubble_page.dart';
 import 'package:bubbles_app/pages/bubbles/bubble_tile.dart';
 
 import 'package:bubbles_app/pages/bubbles/create_bubble_page.dart';
@@ -35,6 +36,9 @@ class BubblesPage extends StatefulWidget {
 }
 
 class _BubblesPageState extends State<BubblesPage> {
+  bool showPasswordInput = false;
+  TextEditingController passwordController = TextEditingController();
+
   late double _deviceHeight;
   late double _deviceWidth;
 
@@ -123,23 +127,69 @@ class _BubblesPageState extends State<BubblesPage> {
         if (bubbles != null) {
           print("not null");
           if (bubbles.isNotEmpty) {
-            return ListView.builder(
-              itemCount: bubbles.length,
-              itemBuilder: (BuildContext context, int index) {
-                Bubble bubble = bubbles[index];
-
+            return ListView(
+              children: bubbles.map((bubble) {
                 // Add a condition to filter or exclude specific bubbles
                 if (isBubbleNearby(bubble)) {
-                  return Column(
-                    children: [
-                      BubbleTile(bubble: bubble),
-                      const SizedBox(height: 10),
-                    ],
+                  return GestureDetector(
+                    onTap: () {
+                      _showBubbleDetailsBottomSheet(bubble);
+                    },
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: _deviceWidth * 0.8,
+                          height: _deviceHeight * 0.1,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: bubble.keyType.gradient,
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            padding: const EdgeInsets.all(16.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: RoundedImageNetwork(
+                                    key: UniqueKey(),
+                                    imagePath: bubble.image,
+                                    size: _deviceHeight * 0.05,
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      bubble.name,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: Icon(
+                                    bubble.keyType.icon,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
                   );
                 } else {
                   return const SizedBox.shrink(); // Skip rendering the bubble
                 }
-              },
+              }).toList(),
             );
           } else {
             return const Center(
@@ -160,6 +210,88 @@ class _BubblesPageState extends State<BubblesPage> {
     );
   }
 
+  void _showBubbleDetailsBottomSheet(Bubble bubble) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: bubble.keyType.gradient,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    RoundedImageNetwork(
+                      key: UniqueKey(),
+                      imagePath: bubble.image,
+                      size: _deviceHeight * 0.1,
+                    ),
+                    Text(
+                      bubble.name,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      bubble.description,
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    const Text(
+                      "Bubble Location",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    const Text(
+                      "Bubble Length",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: TextButton(
+                  onPressed: () {
+                    if (bubble.keyType == BubbleKeyType.password) {
+                      print("Password");
+                    } else if (bubble.keyType == BubbleKeyType.nfc) {
+                      print("NFC");
+                    } else {
+                      _navigation.navigateToPage(BubblePage(bubble: bubble));
+                    }
+                  },
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  ),
+                  child: const Text(
+                    'Join',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Widget _createBubble() {
     return FloatingActionButton(
       onPressed: () {
@@ -170,21 +302,25 @@ class _BubblesPageState extends State<BubblesPage> {
   }
 
   bool isBubbleNearby(Bubble bubble) {
-    if (_geohash == null || _bssid == null) {
+    if (_geohash == null) {
+      // Location data not available
       return false;
     }
-    if (_geohash!.contains(bubble.geohash)) {
-      if (bubble.keyType == BubbleKeyType.wifi) {
-        print("Bubble is nearby and wifi");
 
-        return bubble.key == _bssid;
-      } else {
-        print("Bubble is nearby but not wifi");
-        return true;
-      }
-    } else {
-      print("Bubble is not nearby");
+    if (!_geohash!.contains(bubble.geohash)) {
+      // Bubble is not nearby
       return false;
+    }
+    if (bubble.keyType == BubbleKeyType.wifi) {
+      // Bubble requires Wi-Fi connection
+      return bubble.key == _bssid;
+    }
+    if (bubble.keyType == BubbleKeyType.bluetooth) {
+      // Bubble requires Bluetooth connection
+      return bubble.key == "bt";
+    } else {
+      // Bubble doesn't require Wi-Fi or Bluetooth
+      return true;
     }
   }
 }

@@ -1,0 +1,338 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.bubbles_app"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="33" />
+10    <!--
+11         The INTERNET permission is required for development. Specifically,
+12         the Flutter tool needs it to communicate with the running application
+13         to allow setting breakpoints, to provide hot reload, etc.
+14    -->
+15    <uses-permission android:name="android.permission.INTERNET" />
+15-->/Users/adaneadgo/Documents/SE-16/App/bubbles_app/android/app/src/debug/AndroidManifest.xml:7:5-66
+15-->/Users/adaneadgo/Documents/SE-16/App/bubbles_app/android/app/src/debug/AndroidManifest.xml:7:22-64
+16    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+16-->/Users/adaneadgo/Documents/SE-16/App/bubbles_app/android/app/src/main/AndroidManifest.xml:3:5-79
+16-->/Users/adaneadgo/Documents/SE-16/App/bubbles_app/android/app/src/main/AndroidManifest.xml:3:22-76
+17    <uses-permission android:name="android.permission.NFC" />
+17-->/Users/adaneadgo/Documents/SE-16/App/bubbles_app/android/app/src/main/AndroidManifest.xml:4:5-62
+17-->/Users/adaneadgo/Documents/SE-16/App/bubbles_app/android/app/src/main/AndroidManifest.xml:4:22-59
+18    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+18-->[:firebase_analytics] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/firebase_analytics/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-79
+18-->[:firebase_analytics] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/firebase_analytics/intermediates/merged_manifest/debug/AndroidManifest.xml:9:22-76
+19    <uses-permission android:name="android.permission.WAKE_LOCK" />
+19-->[:firebase_analytics] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/firebase_analytics/intermediates/merged_manifest/debug/AndroidManifest.xml:11:5-68
+19-->[:firebase_analytics] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/firebase_analytics/intermediates/merged_manifest/debug/AndroidManifest.xml:11:22-65
+20    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+20-->[:file_picker] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/file_picker/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-80
+20-->[:file_picker] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/file_picker/intermediates/merged_manifest/debug/AndroidManifest.xml:9:22-77
+21
+22    <queries>
+22-->[:file_picker] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/file_picker/intermediates/merged_manifest/debug/AndroidManifest.xml:11:5-17:15
+23        <intent>
+23-->[:file_picker] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/file_picker/intermediates/merged_manifest/debug/AndroidManifest.xml:12:9-16:18
+24            <action android:name="android.intent.action.GET_CONTENT" />
+24-->[:file_picker] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/file_picker/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-72
+24-->[:file_picker] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/file_picker/intermediates/merged_manifest/debug/AndroidManifest.xml:13:21-69
+25
+26            <data android:mimeType="*/*" />
+26-->[:file_picker] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/file_picker/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-44
+26-->[:file_picker] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/file_picker/intermediates/merged_manifest/debug/AndroidManifest.xml:15:19-41
+27        </intent>
+28    </queries>
+29
+30    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+30-->[:network_info_plus] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/network_info_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-76
+30-->[:network_info_plus] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/network_info_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:10:22-73
+31    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+31-->[:geolocator_android] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-77
+31-->[:geolocator_android] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:9:22-74
+32    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+32-->[com.google.android.gms:play-services-measurement-api:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/f97cda6474699bd28063298bac756552/transformed/jetified-play-services-measurement-api-21.2.0/AndroidManifest.xml:25:5-79
+32-->[com.google.android.gms:play-services-measurement-api:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/f97cda6474699bd28063298bac756552/transformed/jetified-play-services-measurement-api-21.2.0/AndroidManifest.xml:25:22-76
+33    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
+33-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/ffd6f4c1b567d1f39f9eaf9ce053185a/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:26:5-110
+33-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/ffd6f4c1b567d1f39f9eaf9ce053185a/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:26:22-107
+34
+35    <permission
+35-->[androidx.core:core:1.9.0] /Users/adaneadgo/.gradle/caches/transforms-3/58d509eaaa98f55599c4c95a9ea5f07d/transformed/core-1.9.0/AndroidManifest.xml:22:5-24:47
+36        android:name="com.example.bubbles_app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+36-->[androidx.core:core:1.9.0] /Users/adaneadgo/.gradle/caches/transforms-3/58d509eaaa98f55599c4c95a9ea5f07d/transformed/core-1.9.0/AndroidManifest.xml:23:9-81
+37        android:protectionLevel="signature" />
+37-->[androidx.core:core:1.9.0] /Users/adaneadgo/.gradle/caches/transforms-3/58d509eaaa98f55599c4c95a9ea5f07d/transformed/core-1.9.0/AndroidManifest.xml:24:9-44
+38
+39    <uses-permission android:name="com.example.bubbles_app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+39-->[androidx.core:core:1.9.0] /Users/adaneadgo/.gradle/caches/transforms-3/58d509eaaa98f55599c4c95a9ea5f07d/transformed/core-1.9.0/AndroidManifest.xml:26:5-97
+39-->[androidx.core:core:1.9.0] /Users/adaneadgo/.gradle/caches/transforms-3/58d509eaaa98f55599c4c95a9ea5f07d/transformed/core-1.9.0/AndroidManifest.xml:26:22-94
+40
+41    <application
+42        android:name="android.app.Application"
+43        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+43-->[androidx.core:core:1.9.0] /Users/adaneadgo/.gradle/caches/transforms-3/58d509eaaa98f55599c4c95a9ea5f07d/transformed/core-1.9.0/AndroidManifest.xml:28:18-86
+44        android:debuggable="true"
+45        android:icon="@mipmap/ic_launcher"
+46        android:label="bubbles_app" >
+47        <activity
+48            android:name="com.example.bubbles_app.MainActivity"
+49            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+50            android:exported="true"
+51            android:hardwareAccelerated="true"
+52            android:launchMode="singleTop"
+53            android:theme="@style/LaunchTheme"
+54            android:windowSoftInputMode="adjustResize" >
+55
+56            <!--
+57                 Specifies an Android theme to apply to this Activity as soon as
+58                 the Android process has started. This theme is visible to the user
+59                 while the Flutter UI initializes. After that, this theme continues
+60                 to determine the Window background behind the Flutter UI.
+61            -->
+62            <meta-data
+63                android:name="io.flutter.embedding.android.NormalTheme"
+64                android:resource="@style/NormalTheme" />
+65
+66            <intent-filter>
+67                <action android:name="android.intent.action.MAIN" />
+68
+69                <category android:name="android.intent.category.LAUNCHER" />
+70            </intent-filter>
+71        </activity>
+72        <!--
+73             Don't delete the meta-data below.
+74             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+75        -->
+76        <meta-data
+77            android:name="flutterEmbedding"
+78            android:value="2" />
+79
+80        <service
+80-->[:cloud_firestore] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/cloud_firestore/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-14:19
+81            android:name="com.google.firebase.components.ComponentDiscoveryService"
+81-->[:cloud_firestore] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/cloud_firestore/intermediates/merged_manifest/debug/AndroidManifest.xml:10:18-89
+82            android:directBootAware="true"
+82-->[com.google.firebase:firebase-common:20.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/7429dcaf7cde8b99baf2576887da0676/transformed/jetified-firebase-common-20.2.0/AndroidManifest.xml:34:13-43
+83            android:exported="false" >
+83-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:66:13-37
+84            <meta-data
+84-->[:cloud_firestore] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/cloud_firestore/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-13:85
+85                android:name="com.google.firebase.components:io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestoreRegistrar"
+85-->[:cloud_firestore] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/cloud_firestore/intermediates/merged_manifest/debug/AndroidManifest.xml:12:17-134
+86                android:value="com.google.firebase.components.ComponentRegistrar" />
+86-->[:cloud_firestore] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/cloud_firestore/intermediates/merged_manifest/debug/AndroidManifest.xml:13:17-82
+87            <meta-data
+87-->[:firebase_analytics] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/firebase_analytics/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:85
+88                android:name="com.google.firebase.components:io.flutter.plugins.firebase.analytics.FlutterFirebaseAppRegistrar"
+88-->[:firebase_analytics] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/firebase_analytics/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-128
+89                android:value="com.google.firebase.components.ComponentRegistrar" />
+89-->[:firebase_analytics] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/firebase_analytics/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-82
+90            <meta-data
+90-->[:firebase_auth] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/firebase_auth/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-13:85
+91                android:name="com.google.firebase.components:io.flutter.plugins.firebase.auth.FlutterFirebaseAuthRegistrar"
+91-->[:firebase_auth] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/firebase_auth/intermediates/merged_manifest/debug/AndroidManifest.xml:12:17-124
+92                android:value="com.google.firebase.components.ComponentRegistrar" />
+92-->[:firebase_auth] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/firebase_auth/intermediates/merged_manifest/debug/AndroidManifest.xml:13:17-82
+93            <meta-data
+93-->[:firebase_storage] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/firebase_storage/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-13:85
+94                android:name="com.google.firebase.components:io.flutter.plugins.firebase.storage.FlutterFirebaseAppRegistrar"
+94-->[:firebase_storage] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/firebase_storage/intermediates/merged_manifest/debug/AndroidManifest.xml:12:17-126
+95                android:value="com.google.firebase.components.ComponentRegistrar" />
+95-->[:firebase_storage] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/firebase_storage/intermediates/merged_manifest/debug/AndroidManifest.xml:13:17-82
+96            <meta-data
+96-->[:firebase_core] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/firebase_core/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-13:85
+97                android:name="com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseCoreRegistrar"
+97-->[:firebase_core] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/firebase_core/intermediates/merged_manifest/debug/AndroidManifest.xml:12:17-124
+98                android:value="com.google.firebase.components.ComponentRegistrar" />
+98-->[:firebase_core] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/firebase_core/intermediates/merged_manifest/debug/AndroidManifest.xml:13:17-82
+99            <meta-data
+99-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:67:13-69:85
+100                android:name="com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar"
+100-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:68:17-109
+101                android:value="com.google.firebase.components.ComponentRegistrar" />
+101-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:69:17-82
+102            <meta-data
+102-->[com.google.firebase:firebase-firestore:24.4.0] /Users/adaneadgo/.gradle/caches/transforms-3/fe9a86daa9e58a327020ffb3f2dd8add/transformed/jetified-firebase-firestore-24.4.0/AndroidManifest.xml:19:13-21:85
+103                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
+103-->[com.google.firebase:firebase-firestore:24.4.0] /Users/adaneadgo/.gradle/caches/transforms-3/fe9a86daa9e58a327020ffb3f2dd8add/transformed/jetified-firebase-firestore-24.4.0/AndroidManifest.xml:20:17-111
+104                android:value="com.google.firebase.components.ComponentRegistrar" />
+104-->[com.google.firebase:firebase-firestore:24.4.0] /Users/adaneadgo/.gradle/caches/transforms-3/fe9a86daa9e58a327020ffb3f2dd8add/transformed/jetified-firebase-firestore-24.4.0/AndroidManifest.xml:21:17-82
+105            <meta-data
+105-->[com.google.firebase:firebase-storage:20.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/cb4bc88173804c03d6d3512d9b111485/transformed/jetified-firebase-storage-20.1.0/AndroidManifest.xml:32:13-34:85
+106                android:name="com.google.firebase.components:com.google.firebase.storage.StorageRegistrar"
+106-->[com.google.firebase:firebase-storage:20.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/cb4bc88173804c03d6d3512d9b111485/transformed/jetified-firebase-storage-20.1.0/AndroidManifest.xml:33:17-107
+107                android:value="com.google.firebase.components.ComponentRegistrar" />
+107-->[com.google.firebase:firebase-storage:20.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/cb4bc88173804c03d6d3512d9b111485/transformed/jetified-firebase-storage-20.1.0/AndroidManifest.xml:34:17-82
+108            <meta-data
+108-->[com.google.android.gms:play-services-measurement-api:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/f97cda6474699bd28063298bac756552/transformed/jetified-play-services-measurement-api-21.2.0/AndroidManifest.xml:31:13-33:85
+109                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
+109-->[com.google.android.gms:play-services-measurement-api:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/f97cda6474699bd28063298bac756552/transformed/jetified-play-services-measurement-api-21.2.0/AndroidManifest.xml:32:17-139
+110                android:value="com.google.firebase.components.ComponentRegistrar" />
+110-->[com.google.android.gms:play-services-measurement-api:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/f97cda6474699bd28063298bac756552/transformed/jetified-play-services-measurement-api-21.2.0/AndroidManifest.xml:33:17-82
+111            <meta-data
+111-->[com.google.firebase:firebase-installations:17.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/5b6d662ad3141fa6c0fd5e761a9a3832/transformed/jetified-firebase-installations-17.1.0/AndroidManifest.xml:17:13-19:85
+112                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+112-->[com.google.firebase:firebase-installations:17.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/5b6d662ad3141fa6c0fd5e761a9a3832/transformed/jetified-firebase-installations-17.1.0/AndroidManifest.xml:18:17-127
+113                android:value="com.google.firebase.components.ComponentRegistrar" />
+113-->[com.google.firebase:firebase-installations:17.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/5b6d662ad3141fa6c0fd5e761a9a3832/transformed/jetified-firebase-installations-17.1.0/AndroidManifest.xml:19:17-82
+114        </service>
+115        <service
+115-->[:geolocator_android] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:9-16:56
+116            android:name="com.baseflow.geolocator.GeolocatorLocationService"
+116-->[:geolocator_android] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-77
+117            android:enabled="true"
+117-->[:geolocator_android] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-35
+118            android:exported="false"
+118-->[:geolocator_android] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-37
+119            android:foregroundServiceType="location" />
+119-->[:geolocator_android] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:16:13-53
+120
+121        <activity
+121-->[:url_launcher_android] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-13:74
+122            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+122-->[:url_launcher_android] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-74
+123            android:exported="false"
+123-->[:url_launcher_android] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-37
+124            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+124-->[:url_launcher_android] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-71
+125
+126        <uses-library
+126-->[androidx.window:window:1.0.0-beta04] /Users/adaneadgo/.gradle/caches/transforms-3/b026adae1c5e2fbcf573c05f76a21503/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
+127            android:name="androidx.window.extensions"
+127-->[androidx.window:window:1.0.0-beta04] /Users/adaneadgo/.gradle/caches/transforms-3/b026adae1c5e2fbcf573c05f76a21503/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
+128            android:required="false" />
+128-->[androidx.window:window:1.0.0-beta04] /Users/adaneadgo/.gradle/caches/transforms-3/b026adae1c5e2fbcf573c05f76a21503/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
+129        <uses-library
+129-->[androidx.window:window:1.0.0-beta04] /Users/adaneadgo/.gradle/caches/transforms-3/b026adae1c5e2fbcf573c05f76a21503/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
+130            android:name="androidx.window.sidecar"
+130-->[androidx.window:window:1.0.0-beta04] /Users/adaneadgo/.gradle/caches/transforms-3/b026adae1c5e2fbcf573c05f76a21503/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
+131            android:required="false" />
+131-->[androidx.window:window:1.0.0-beta04] /Users/adaneadgo/.gradle/caches/transforms-3/b026adae1c5e2fbcf573c05f76a21503/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
+132
+133        <activity
+133-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:27:9-44:20
+134            android:name="com.google.firebase.auth.internal.GenericIdpActivity"
+134-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:28:13-80
+135            android:excludeFromRecents="true"
+135-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:29:13-46
+136            android:exported="true"
+136-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:30:13-36
+137            android:launchMode="singleTask"
+137-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:31:13-44
+138            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+138-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:32:13-72
+139            <intent-filter>
+139-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:33:13-43:29
+140                <action android:name="android.intent.action.VIEW" />
+140-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:34:17-69
+140-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:34:25-66
+141
+142                <category android:name="android.intent.category.DEFAULT" />
+142-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:36:17-76
+142-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:36:27-73
+143                <category android:name="android.intent.category.BROWSABLE" />
+143-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:37:17-78
+143-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:37:27-75
+144
+145                <data
+145-->[:file_picker] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/file_picker/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-44
+146                    android:host="firebase.auth"
+147                    android:path="/"
+148                    android:scheme="genericidp" />
+149            </intent-filter>
+150        </activity>
+151        <activity
+151-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:45:9-62:20
+152            android:name="com.google.firebase.auth.internal.RecaptchaActivity"
+152-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:46:13-79
+153            android:excludeFromRecents="true"
+153-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:47:13-46
+154            android:exported="true"
+154-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:48:13-36
+155            android:launchMode="singleTask"
+155-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:49:13-44
+156            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+156-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:50:13-72
+157            <intent-filter>
+157-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:51:13-61:29
+158                <action android:name="android.intent.action.VIEW" />
+158-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:34:17-69
+158-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:34:25-66
+159
+160                <category android:name="android.intent.category.DEFAULT" />
+160-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:36:17-76
+160-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:36:27-73
+161                <category android:name="android.intent.category.BROWSABLE" />
+161-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:37:17-78
+161-->[com.google.firebase:firebase-auth:21.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/58dc8f637aa59c939c56fdb044d14fb7/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:37:27-75
+162
+163                <data
+163-->[:file_picker] /Users/adaneadgo/Documents/SE-16/App/bubbles_app/build/file_picker/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-44
+164                    android:host="firebase.auth"
+165                    android:path="/"
+166                    android:scheme="recaptcha" />
+167            </intent-filter>
+168        </activity>
+169
+170        <provider
+170-->[com.google.firebase:firebase-common:20.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/7429dcaf7cde8b99baf2576887da0676/transformed/jetified-firebase-common-20.2.0/AndroidManifest.xml:25:9-30:39
+171            android:name="com.google.firebase.provider.FirebaseInitProvider"
+171-->[com.google.firebase:firebase-common:20.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/7429dcaf7cde8b99baf2576887da0676/transformed/jetified-firebase-common-20.2.0/AndroidManifest.xml:26:13-77
+172            android:authorities="com.example.bubbles_app.firebaseinitprovider"
+172-->[com.google.firebase:firebase-common:20.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/7429dcaf7cde8b99baf2576887da0676/transformed/jetified-firebase-common-20.2.0/AndroidManifest.xml:27:13-72
+173            android:directBootAware="true"
+173-->[com.google.firebase:firebase-common:20.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/7429dcaf7cde8b99baf2576887da0676/transformed/jetified-firebase-common-20.2.0/AndroidManifest.xml:28:13-43
+174            android:exported="false"
+174-->[com.google.firebase:firebase-common:20.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/7429dcaf7cde8b99baf2576887da0676/transformed/jetified-firebase-common-20.2.0/AndroidManifest.xml:29:13-37
+175            android:initOrder="100" />
+175-->[com.google.firebase:firebase-common:20.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/7429dcaf7cde8b99baf2576887da0676/transformed/jetified-firebase-common-20.2.0/AndroidManifest.xml:30:13-36
+176
+177        <activity
+177-->[com.google.android.gms:play-services-base:18.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/654791ca071617dfc72ae8fc2ca3fcc1/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:9-22:45
+178            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+178-->[com.google.android.gms:play-services-base:18.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/654791ca071617dfc72ae8fc2ca3fcc1/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:19-85
+179            android:exported="false"
+179-->[com.google.android.gms:play-services-base:18.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/654791ca071617dfc72ae8fc2ca3fcc1/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:22:19-43
+180            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+180-->[com.google.android.gms:play-services-base:18.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/654791ca071617dfc72ae8fc2ca3fcc1/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:21:19-78
+181
+182        <receiver
+182-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/ffd6f4c1b567d1f39f9eaf9ce053185a/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:29:9-33:20
+183            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+183-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/ffd6f4c1b567d1f39f9eaf9ce053185a/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:30:13-85
+184            android:enabled="true"
+184-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/ffd6f4c1b567d1f39f9eaf9ce053185a/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:31:13-35
+185            android:exported="false" >
+185-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/ffd6f4c1b567d1f39f9eaf9ce053185a/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:32:13-37
+186        </receiver>
+187
+188        <service
+188-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/ffd6f4c1b567d1f39f9eaf9ce053185a/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:35:9-38:40
+189            android:name="com.google.android.gms.measurement.AppMeasurementService"
+189-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/ffd6f4c1b567d1f39f9eaf9ce053185a/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:36:13-84
+190            android:enabled="true"
+190-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/ffd6f4c1b567d1f39f9eaf9ce053185a/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:37:13-35
+191            android:exported="false" />
+191-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/ffd6f4c1b567d1f39f9eaf9ce053185a/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:38:13-37
+192        <service
+192-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/ffd6f4c1b567d1f39f9eaf9ce053185a/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:39:9-43:72
+193            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
+193-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/ffd6f4c1b567d1f39f9eaf9ce053185a/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:40:13-87
+194            android:enabled="true"
+194-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/ffd6f4c1b567d1f39f9eaf9ce053185a/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:41:13-35
+195            android:exported="false"
+195-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/ffd6f4c1b567d1f39f9eaf9ce053185a/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:42:13-37
+196            android:permission="android.permission.BIND_JOB_SERVICE" />
+196-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/adaneadgo/.gradle/caches/transforms-3/ffd6f4c1b567d1f39f9eaf9ce053185a/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:43:13-69
+197
+198        <meta-data
+198-->[com.google.android.gms:play-services-basement:18.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/f7c3e36c2a6a4bcdbc33d5063fd09b6e/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:21:9-23:69
+199            android:name="com.google.android.gms.version"
+199-->[com.google.android.gms:play-services-basement:18.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/f7c3e36c2a6a4bcdbc33d5063fd09b6e/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:22:13-58
+200            android:value="@integer/google_play_services_version" />
+200-->[com.google.android.gms:play-services-basement:18.1.0] /Users/adaneadgo/.gradle/caches/transforms-3/f7c3e36c2a6a4bcdbc33d5063fd09b6e/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
+201    </application>
+202
+203</manifest>

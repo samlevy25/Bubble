@@ -62,7 +62,7 @@ class ChatPageProvider extends ChangeNotifier {
         (m) async {
           Map<String, dynamic> messageData = m.data() as Map<String, dynamic>;
           DocumentSnapshot userSnapshot =
-              await _db.getUser(messageData['senderId']);
+              await _db.getUser(messageData['sender']);
           Map<String, dynamic> userData =
               userSnapshot.data() as Map<String, dynamic>;
           userData["uid"] = userSnapshot.id;
