@@ -378,7 +378,7 @@ extension ExplorerDatabaseService on DatabaseService {
         .snapshots();
   }
 
-  Future<void> addPostToExplorer(Post message) async {
+  Future<void> addPostToExplorer(Post post) async {
     try {
       await _db.collection(postsCollection).add(
             post.toJson(),
