@@ -103,10 +103,10 @@ class _RegisterPageState extends State<RegisterPage> {
     if (!regExp.hasMatch(value)) {
       return 'Please enter a valid User name.';
     }
-    // print(checkUsername);
-    // if (checkUsername) {
-    //   return "The Username is already used.";
-    // }
+    print(checkUsername);
+    if (checkUsername) {
+      return "The Username is already used.";
+    }
 
     return null;
   }
