@@ -115,8 +115,8 @@ class _SignIn extends State<LoginPage> {
                   ));
                 },
                 style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all<Color>(
-                      const Color.fromARGB(255, 21, 0, 255)),
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.lightBlue),
                 ),
                 child: const Text('Forgot password ?'),
               ),

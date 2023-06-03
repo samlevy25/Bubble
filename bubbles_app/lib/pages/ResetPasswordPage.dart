@@ -59,8 +59,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Reset Password'),
-        backgroundColor: const Color.fromARGB(255, 21, 0, 255),
+        backgroundColor: Colors.lightBlue,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
@@ -105,9 +106,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
-                            labelStyle: const TextStyle(
-                                color: Color.fromARGB(255, 21, 0, 255)),
-                            focusColor: const Color.fromARGB(255, 21, 0, 255),
+                            labelStyle:
+                                const TextStyle(color: Colors.lightBlue),
+                            focusColor: Colors.lightBlue,
                             filled: true,
                             enabledBorder: UnderlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -115,14 +116,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                  color: Color.fromARGB(255, 21, 0, 255)),
+                              borderSide:
+                                  const BorderSide(color: Colors.lightBlue),
                             ),
                             labelText: "Email",
                             prefixIcon: const Icon(
                               Icons.mail_outline,
                               size: 18,
-                              color: Color.fromARGB(255, 21, 0, 255),
+                              color: Colors.lightBlue,
                             ),
                           ),
                           validator: (value) {
@@ -145,7 +146,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   child: ElevatedButton(
                     onPressed: _resetPassword,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 21, 0, 255),
+                      backgroundColor: Colors.lightBlue,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),

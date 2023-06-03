@@ -74,7 +74,26 @@ class _SettingsPageState extends State<SettingsPage> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text("Settings"),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+          ),
+          backgroundColor: Colors.lightBlue,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          title: const Text(
+            "Settings",
+            textAlign: TextAlign.center,
+          ),
+          centerTitle: true,
         ),
         body: ListView(
           children: <Widget>[

@@ -73,6 +73,28 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
 
   Widget _buildUI() {
     return Scaffold(
+      appBar: AppBar(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        backgroundColor: Colors.lightBlue,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: Text(
+          "Create Bubble",
+          textAlign: TextAlign.center,
+        ),
+        centerTitle: true,
+      ),
       resizeToAvoidBottomInset: false,
       body: Container(
         padding: EdgeInsets.symmetric(
@@ -81,38 +103,36 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
         ),
         height: _deviceHeight * 0.98,
         width: _deviceWidth * 0.97,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(bottom: 10.0),
-                child: _bubbleImageField(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10.0),
-                child: _bubbleForms(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 30.0),
-                child: _sizeSelector(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 30.0),
-                child: _keyTypeSelector(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 50.0),
-                child: bubbleInfoWidget(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10.0),
-                child: _createButton(),
-              ),
-            ],
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: _bubbleImageField(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: _bubbleForms(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 30.0),
+              child: _sizeSelector(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 30.0),
+              child: _keyTypeSelector(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 50.0),
+              child: bubbleInfoWidget(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: _createButton(),
+            ),
+          ],
         ),
       ),
     );
@@ -167,10 +187,11 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                 return null;
               },
               decoration: InputDecoration(
+                prefixIcon: Icon(Icons.chat_bubble_outline),
                 labelStyle: const TextStyle(
-                  color: Color.fromARGB(255, 21, 0, 255),
+                  color: Colors.lightBlue,
                 ),
-                focusColor: const Color.fromARGB(255, 21, 0, 255),
+                focusColor: Colors.lightBlue,
                 filled: true,
                 enabledBorder: UnderlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -179,7 +200,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 21, 0, 255),
+                    color: Colors.lightBlue,
                   ),
                 ),
                 labelText: "Name",
@@ -200,10 +221,11 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                 return null;
               },
               decoration: InputDecoration(
+                prefixIcon: Icon(Icons.description_outlined),
                 labelStyle: const TextStyle(
-                  color: Color.fromARGB(255, 21, 0, 255),
+                  color: Colors.lightBlue,
                 ),
-                focusColor: const Color.fromARGB(255, 21, 0, 255),
+                focusColor: Colors.lightBlue,
                 filled: true,
                 enabledBorder: UnderlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -212,7 +234,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 21, 0, 255),
+                    color: Colors.lightBlue,
                   ),
                 ),
                 labelText: "Description",
@@ -228,7 +250,31 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
     bool isCreatingBubble = false; // Flag to track creation process
 
     return ElevatedButton(
-      child: const Text("Create"),
+      style: ButtonStyle(
+        minimumSize: MaterialStateProperty.all<Size>(Size(350, 50)),
+        backgroundColor: MaterialStateProperty.all<Color>(
+            Colors.white), // Background color of the button
+        foregroundColor: MaterialStateProperty.all<Color>(
+            Colors.lightBlue), // Text color of the button
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(10.0), // Rounded border of the button
+            side: BorderSide(
+              color: Colors.lightBlue, // Border color of the button
+              width: 1.5, // Adjust the width as needed
+            ), // Border color of the button
+          ),
+        ),
+      ),
+      child: Text(
+        "Create",
+        style: TextStyle(
+          fontSize: 30.0, // Text size of the button
+          fontWeight: FontWeight.normal, // Text weight of the button
+          // You can adjust the text scale factor here
+        ),
+      ),
       onPressed: () async {
         if (_registerFormKey.currentState!.validate() &&
             _bubbleImage != null &&
@@ -409,31 +455,147 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
-        color: Colors.grey[200],
+        color: Colors.white,
+        border: Border.all(
+          color: Colors.lightBlue,
+          width: 1.0,
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
-            'GPS: Bubble located within the same perimeter.',
-            style: TextStyle(fontSize: 16.0),
-          ),
-          SizedBox(height: 8.0),
-          Text(
-            'WIFI: Only users with the same WIFI connection.',
-            style: TextStyle(fontSize: 16.0),
-          ),
-          SizedBox(height: 8.0),
-          Text(
-            'NFC: Allows you to access the Bubble using the corresponding NFC card.',
-            style: TextStyle(fontSize: 16.0),
-          ),
-          SizedBox(height: 8.0),
-          Text(
-            'Password: The password for the Bubble is required for entry.',
-            style: TextStyle(fontSize: 16.0),
-          ),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Text(
+                'Your information',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(height: 10.0),
+            dataDisplay(),
+            SizedBox(height: 10.0),
+            Center(
+              child: Text(
+                'Technologies access bubble',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(height: 10.0),
+            RichText(
+              text: TextSpan(
+                style: TextStyle(fontSize: 16.0),
+                children: const [
+                  TextSpan(
+                    text: 'GPS',
+                    style: TextStyle(
+                      color: Colors.greenAccent,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  WidgetSpan(
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Bubble located within the same perimeter.',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 10.0),
+            RichText(
+              text: TextSpan(
+                style: TextStyle(fontSize: 17.0),
+                children: const [
+                  TextSpan(
+                    text: 'WIFI',
+                    style: TextStyle(
+                      color: Colors.lightBlueAccent,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  WidgetSpan(
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Only users with the same WIFI connection.',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 10.0),
+            RichText(
+              text: TextSpan(
+                style: TextStyle(fontSize: 17.0),
+                children: const [
+                  TextSpan(
+                    text: 'NFC',
+                    style: TextStyle(
+                      color: Colors.purpleAccent,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  WidgetSpan(
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Allows you to access the Bubble using the corresponding NFC card.',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 10.0),
+            RichText(
+              text: TextSpan(
+                style: TextStyle(fontSize: 17.0),
+                children: const [
+                  TextSpan(
+                    text: 'Password',
+                    style: TextStyle(
+                      color: Colors.redAccent,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  WidgetSpan(
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'The password for the Bubble is required for entry.',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -441,20 +603,12 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   // This widget displays current data: location, wifi, and key type
   Widget dataDisplay() {
     return SizedBox(
-      child: DecoratedBox(
-        decoration: const BoxDecoration(color: Colors.blue),
-        child: Column(
-          children: [
-            Image.network(
-              'https://img.freepik.com/free-vector/cyclist-delivering-food-customers-city-pin-route-town-flat-vector-illustration_74855-10878.jpg?w=2000&t=st=1684523384~exp=1684523984~hmac=5eb7b03fba2d6c529a196ff909b74682fa0d570dadc536b5a66377979ee81e8a',
-              width: 500,
-              height: 100,
-              fit: BoxFit.contain,
-            ),
-            currentLocation(),
-            currentWIFI(),
-          ],
-        ),
+      child: Column(
+        children: [
+          Center(child: currentLocation()),
+          SizedBox(height: 10.0),
+          Center(child: currentWIFI()),
+        ],
       ),
     );
   }
@@ -467,7 +621,13 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
-          return Text('Location: ${snapshot.data}');
+          return Text(
+            'Location: ${snapshot.data}',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 17.0,
+            ),
+          );
         }
       },
     );
@@ -481,7 +641,13 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
-          return Text('WIFI: ${snapshot.data}');
+          return Text(
+            'WIFI: ${snapshot.data}',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 17.0,
+            ),
+          );
         }
       },
     );
