@@ -129,8 +129,9 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Sign up'),
-        backgroundColor: const Color.fromARGB(255, 21, 0, 255),
+        backgroundColor: Colors.lightBlue,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
