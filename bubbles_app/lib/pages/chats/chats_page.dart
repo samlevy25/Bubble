@@ -93,10 +93,19 @@ class _ChatsPageState extends State<ChatsPage> {
               },
             );
           } else {
-            return const Center(
-              child: Text(
-                "No Chats Found.",
-                style: TextStyle(color: Colors.blue),
+            return Center(
+              child: Column(
+                children: [
+                  const Text(
+                    "No Chats Found.",
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                  Image.asset(
+                    'assets/images/no_chats.png',
+                    alignment: Alignment.topCenter,
+                    height: 200,
+                  ),
+                ],
               ),
             );
           }

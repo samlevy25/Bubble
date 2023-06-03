@@ -98,6 +98,12 @@ class _BubblesPageState extends State<BubblesPage> {
         _pageProvider = context.watch<BubblesPageProvider>();
         return Scaffold(
           body: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                    'assets/images/undraw_Group_selfie_re_h8gb.png'), // Replace with your image path
+              ),
+            ),
             padding: EdgeInsets.symmetric(
               horizontal: _deviceWidth * 0.03,
               vertical: _deviceHeight * 0.02,

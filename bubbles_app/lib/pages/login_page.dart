@@ -29,6 +29,7 @@ class _SignIn extends State<LoginPage> {
   late AuthenticationProvider _auth;
   late NavigationService _navigation;
   late bool keyboardOpen;
+  bool isPasswordVisible = true;
 
   late final _loginFormKey = GlobalKey<FormState>();
 
@@ -144,7 +145,6 @@ class _SignIn extends State<LoginPage> {
   }
 
   Widget _loginForm() {
-    bool isPasswordVisible = true;
     return SizedBox(
       child: Form(
         key: _loginFormKey,
