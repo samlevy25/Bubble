@@ -57,7 +57,7 @@ class BubblesPageProvider extends ChangeNotifier {
                   bubbleMessage.docs.first.data()! as Map<String, dynamic>;
 
               DocumentSnapshot userSnapshot =
-                  await _db.getUser(messageData['sender_id']);
+                  await _db.getUser(messageData['sender']);
               Map<String, dynamic> userData =
                   userSnapshot.data() as Map<String, dynamic>;
               userData['uid'] = userSnapshot.id;
@@ -88,7 +88,7 @@ class BubblesPageProvider extends ChangeNotifier {
                 keyType: BubbleKeyType.getKeyTypeByIndex(index: keyTypeIndex),
                 key: methodValue,
                 geohash: geohash,
-                geoPoint: geoPoint ?? GeoPoint(0, 0),
+                geoPoint: geoPoint ?? const GeoPoint(0, 0),
                 description: description,
                 size: size);
           },

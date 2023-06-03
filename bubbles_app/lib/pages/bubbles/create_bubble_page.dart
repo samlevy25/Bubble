@@ -81,36 +81,38 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
         ),
         height: _deviceHeight * 0.98,
         width: _deviceWidth * 0.97,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(bottom: 10.0),
-              child: _bubbleImageField(),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 10.0),
-              child: _bubbleForms(),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 30.0),
-              child: _sizeSelector(),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 30.0),
-              child: _keyTypeSelector(),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 50.0),
-              child: bubbleInfoWidget(),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 10.0),
-              child: _createButton(),
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(bottom: 10.0),
+                child: _bubbleImageField(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 10.0),
+                child: _bubbleForms(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 30.0),
+                child: _sizeSelector(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 30.0),
+                child: _keyTypeSelector(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 50.0),
+                child: bubbleInfoWidget(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 10.0),
+                child: _createButton(),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -349,9 +351,6 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
     }
   }
 
-  // This widget allows the user to select the bubble's access method
-// This widget allows the user to select the bubble's access method
-// This widget allows the user to select the bubble's access method
   Widget _keyTypeSelector() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -579,8 +578,6 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
         _bubbleKeyType = BubbleKeyType.password;
         bubbleKey = password;
       });
-
-      // Perform further operations with the password...
     }
   }
 

@@ -77,7 +77,7 @@ class BubblePageProvider extends ChangeNotifier {
           (m) async {
             Map<String, dynamic> messageData = m.data() as Map<String, dynamic>;
             DocumentSnapshot userSnapshot =
-                await _db.getUser(messageData['sender_id']);
+                await _db.getUser(messageData['sender']);
             Map<String, dynamic> userData =
                 userSnapshot.data() as Map<String, dynamic>;
             userData['uid'] = userSnapshot.id;
