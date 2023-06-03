@@ -104,7 +104,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                 child: _keyTypeSelector(),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 50.0),
+                padding: EdgeInsets.only(bottom: 25.0),
                 child: bubbleInfoWidget(),
               ),
               Padding(
@@ -230,7 +230,31 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
     bool isCreatingBubble = false; // Flag to track creation process
 
     return ElevatedButton(
-      child: const Text("Create"),
+      style: ButtonStyle(
+        minimumSize: MaterialStateProperty.all<Size>(Size(350, 50)),
+        backgroundColor: MaterialStateProperty.all<Color>(
+            Colors.white), // Background color of the button
+        foregroundColor: MaterialStateProperty.all<Color>(
+            Colors.lightBlue), // Text color of the button
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(10.0), // Rounded border of the button
+            side: BorderSide(
+              color: Colors.lightBlue, // Border color of the button
+              width: 1.5, // Adjust the width as needed
+            ), // Border color of the button
+          ),
+        ),
+      ),
+      child: Text(
+        "Create",
+        style: TextStyle(
+          fontSize: 30.0, // Text size of the button
+          fontWeight: FontWeight.normal, // Text weight of the button
+          // You can adjust the text scale factor here
+        ),
+      ),
       onPressed: () async {
         if (_registerFormKey.currentState!.validate() &&
             _bubbleImage != null &&
