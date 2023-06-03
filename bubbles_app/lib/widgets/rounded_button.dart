@@ -24,12 +24,10 @@ class RoundedButton extends StatelessWidget {
       width: width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(height * 0.25),
-        color: empty
-            ? const Color(0xffffffff)
-            : const Color.fromARGB(255, 21, 0, 255),
+        color: empty ? const Color(0xffffffff) : Colors.lightBlue,
         border: empty
             ? Border.all(
-                color: const Color.fromARGB(255, 21, 0, 255),
+                color: Colors.lightBlue,
                 width: 1.0,
               )
             : const Border.fromBorderSide(BorderSide.none),
@@ -40,9 +38,7 @@ class RoundedButton extends StatelessWidget {
           name,
           style: TextStyle(
             fontSize: 22,
-            color: empty
-                ? const Color.fromARGB(255, 21, 0, 255)
-                : const Color(0xffffffff),
+            color: empty ? Colors.lightBlue : const Color(0xffffffff),
             height: 1.5,
           ),
         ),

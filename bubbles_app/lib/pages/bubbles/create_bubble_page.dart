@@ -73,6 +73,28 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
 
   Widget _buildUI() {
     return Scaffold(
+      appBar: AppBar(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        backgroundColor: Colors.lightBlue,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: Text(
+          "Create Bubble",
+          textAlign: TextAlign.center,
+        ),
+        centerTitle: true,
+      ),
       resizeToAvoidBottomInset: false,
       body: Container(
         padding: EdgeInsets.symmetric(

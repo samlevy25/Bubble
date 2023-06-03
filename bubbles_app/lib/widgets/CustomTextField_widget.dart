@@ -6,7 +6,7 @@ class CustomTextFieldWidget extends StatefulWidget {
   final IconData? suffixIconData;
   final Function(String)? onChanged;
   final void Function(String?)? onSaved;
-  final Color mediumBlue = const Color.fromARGB(255, 21, 0, 255);
+  final Color lightBlue = Colors.lightBlue;
   final String? text;
   final String regEx;
   final bool obscureText;
@@ -59,15 +59,15 @@ class _CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
       controller: _controller,
       onChanged: widget.onChanged,
       obscureText: widget.obscureText,
-      cursorColor: widget.mediumBlue,
+      cursorColor: widget.lightBlue,
       validator: widget.validator,
       style: const TextStyle(
         color: Color.fromARGB(255, 0, 0, 0),
         fontSize: 14.0,
       ),
       decoration: InputDecoration(
-        labelStyle: TextStyle(color: widget.mediumBlue),
-        focusColor: widget.mediumBlue,
+        labelStyle: TextStyle(color: widget.lightBlue),
+        focusColor: widget.lightBlue,
         filled: true,
         enabledBorder: UnderlineInputBorder(
           borderRadius: BorderRadius.circular(10),
@@ -75,20 +75,20 @@ class _CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: widget.mediumBlue),
+          borderSide: BorderSide(color: widget.lightBlue),
         ),
         labelText: widget.hintText,
         prefixIcon: Icon(
           widget.prefixIconData,
           size: 18,
-          color: widget.mediumBlue,
+          color: widget.lightBlue,
         ),
         suffixIcon: GestureDetector(
           onTap: () {},
           child: Icon(
             widget.suffixIconData,
             size: 18,
-            color: widget.mediumBlue,
+            color: widget.lightBlue,
           ),
         ),
       ),
