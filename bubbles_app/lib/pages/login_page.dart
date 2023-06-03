@@ -80,65 +80,71 @@ class _SignIn extends State<LoginPage> {
   Widget _buildUI() {
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
-      body: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: _deviceWidth * 0.03,
-          vertical: _deviceHeight * 0.02,
-        ),
-        height: _deviceHeight * 0.98,
-        width: _deviceWidth * 0.97,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 10.0,
-            ),
-            Image.asset(
-              'assets/images/logo.png',
-              alignment: Alignment.topCenter,
-              height: _deviceHeight * 0.3,
-            ),
-            const SizedBox(
-              height: 35.0,
-            ),
-            _loginForm(),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) {
-                      return const ResetPasswordPage();
-                    },
-                  ));
-                },
-                style: ButtonStyle(
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.lightBlue),
-                ),
-                child: const Text('Forgot password ?'),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: _deviceWidth * 0.03,
+            vertical: _deviceHeight * 0.02,
+          ),
+          height: _deviceHeight * 0.98,
+          width: _deviceWidth * 0.97,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 10.0,
               ),
-            ),
-            const SizedBox(
-              height: 20.0,
-            ),
-            _loginBottun(),
-            const SizedBox(
-              height: 10.0,
-            ),
-            _SignUpBottun(e: true),
-            const SizedBox(
-              height: 20.0,
-            ),
-          ],
+              Image.asset(
+                'assets/images/logo.png',
+                alignment: Alignment.topCenter,
+                height: _deviceHeight * 0.3,
+              ),
+              const SizedBox(
+                height: 35.0,
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+              _loginForm(),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) {
+                        return const ResetPasswordPage();
+                      },
+                    ));
+                  },
+                  style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.lightBlue),
+                  ),
+                  child: const Text('Forgot password ?'),
+                ),
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
+              _loginBottun(),
+              const SizedBox(
+                height: 10.0,
+              ),
+              _SignUpBottun(e: true),
+              const SizedBox(
+                height: 20.0,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _loginForm() {
+    bool isPasswordVisible = true;
     return SizedBox(
       child: Form(
         key: _loginFormKey,
@@ -147,34 +153,80 @@ class _SignIn extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CustomTextFieldWidget(
+            TextFormField(
               onSaved: (value) {
                 setState(() {
                   _email = value;
                 });
               },
-              regEx:
-                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
               validator: validateEmail,
-              hintText: 'Email',
-              obscureText: false,
-              prefixIconData: Icons.mail_outline,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(
+                  Icons.mail_outline,
+                  color: Colors.lightBlue,
+                ),
+                labelStyle: const TextStyle(
+                  color: Colors.lightBlue,
+                ),
+                focusColor: Colors.lightBlue,
+                filled: true,
+                enabledBorder: UnderlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Colors.lightBlue,
+                  ),
+                ),
+                labelText: "Email",
+              ),
             ),
             const SizedBox(
               height: 10.0,
             ),
-            CustomTextFieldWidget(
+            TextFormField(
               onSaved: (value) {
                 setState(() {
                   _password = value;
                 });
               },
-              regEx: r".{6,}",
+              obscureText: isPasswordVisible,
               validator: validatePassword,
-              hintText: 'Password',
-              obscureText: false,
-              prefixIconData: Icons.lock_outline,
-              suffixIconData: null,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(
+                  Icons.lock_outline,
+                  color: Colors.lightBlue,
+                ),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.lightBlue,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isPasswordVisible = !isPasswordVisible;
+                    });
+                  },
+                ),
+                labelStyle: const TextStyle(
+                  color: Colors.lightBlue,
+                ),
+                focusColor: Colors.lightBlue,
+                filled: true,
+                enabledBorder: UnderlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Colors.lightBlue,
+                  ),
+                ),
+                labelText: "Password",
+              ),
             ),
           ],
         ),
