@@ -11,6 +11,7 @@ import '../../models/message.dart';
 import '../../providers/authentication_provider.dart';
 import '../../widgets/custom_input_fields.dart';
 import '../../widgets/custom_list_view_tiles.dart';
+import 'bubble_details.dart';
 
 class BubblePage extends StatefulWidget {
   final Bubble bubble;
@@ -32,6 +33,24 @@ class _BubblePageState extends State<BubblePage> {
 
   late GlobalKey<FormState> _messageFormState;
   late ScrollController _messagesListViewController;
+
+  void _openBubbleDetailsPage() {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 550),
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0.0, -1.0),
+              end: Offset.zero,
+            ).animate(animation),
+            child: BubbleDetailsPage(bubble: widget.bubble),
+          );
+        },
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -77,16 +96,23 @@ class _BubblePageState extends State<BubblePage> {
                       backgroundColor: Colors.white,
                       backgroundImage: NetworkImage(widget.bubble.image)),
                   const SizedBox(width: 10),
-                  Column(
-                    children: [
-                      Text(
-                        widget.bubble.name,
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                      Text(widget.bubble.description,
+                  GestureDetector(
+                    onTap: () {
+                      _openBubbleDetailsPage();
+                    },
+                    child: Column(
+                      children: [
+                        Text(
+                          widget.bubble.name,
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        Text(
+                          widget.bubble.description,
                           style: const TextStyle(
-                              fontSize: 12.0, fontStyle: FontStyle.italic))
-                    ],
+                              fontSize: 12.0, fontStyle: FontStyle.italic),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -95,7 +121,7 @@ class _BubblePageState extends State<BubblePage> {
               IconButton(
                 icon: const Icon(
                   Icons.delete,
-                  color: Color.fromRGBO(0, 82, 218, 1.0),
+                  color: Color.fromRGBO(255, 255, 255, 1),
                 ),
                 onPressed: () {
                   _pageProvider.deleteBubble();

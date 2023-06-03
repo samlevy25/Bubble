@@ -20,6 +20,7 @@ class DatabaseService {
 
   DatabaseService();
 
+  // Create a user document in the Users collection
   Future<void> createUser(
       String uid, String email, String username, String imageURL) async {
     try {
@@ -39,6 +40,7 @@ class DatabaseService {
     }
   }
 
+  // Update the username of a user document
   Future<void> updateUsername(
     String uid,
     newUsername,
@@ -55,6 +57,7 @@ class DatabaseService {
     }
   }
 
+  // Update the image URL of a user document
   Future<void> updateImageURL(
     String uid,
     imgUrl,
@@ -68,6 +71,7 @@ class DatabaseService {
     }
   }
 
+  // Update the activities of a user document
   Future<void> updateUserActivities(
       String uid, List<Activity> activities) async {
     try {
@@ -87,6 +91,7 @@ class DatabaseService {
     }
   }
 
+  // Retrieve chats for a specific user
   Stream<QuerySnapshot> getChatsForUser(String uid) {
     return _db
         .collection(chatsCollection)
@@ -94,6 +99,7 @@ class DatabaseService {
         .snapshots();
   }
 
+  // Get the last message for a chat
   Future<QuerySnapshot> getLastMessageForChat(String chatID) {
     return _db
         .collection(chatsCollection)
@@ -104,6 +110,7 @@ class DatabaseService {
         .get();
   }
 
+  // Stream chat messages for a specific chat
   Stream<QuerySnapshot> streamMessagesForChat(String chatID) {
     return _db
         .collection(chatsCollection)
@@ -113,6 +120,7 @@ class DatabaseService {
         .snapshots();
   }
 
+  // Update chat data for a specific chat
   Future<void> updateChatData(String chatID, Map<String, dynamic> data) async {
     try {
       await _db.collection(chatsCollection).doc(chatID).update(data);
@@ -123,6 +131,7 @@ class DatabaseService {
     }
   }
 
+  // Add a message to a chat
   Future<void> addMessageToChat(String chatID, Message message) async {
     try {
       await _db
@@ -139,6 +148,7 @@ class DatabaseService {
     }
   }
 
+  // Get user document for a specific user ID
   Future<DocumentSnapshot> getUser(String uid) async {
     try {
       final userDoc = await _db.collection(userCollection).doc(uid).get();
@@ -149,6 +159,7 @@ class DatabaseService {
     }
   }
 
+  // Get users with optional filtering by username
   Future<QuerySnapshot> getUsers({String? username}) {
     Query query = _db.collection(userCollection);
     if (username != null) {
@@ -159,6 +170,7 @@ class DatabaseService {
     return query.get();
   }
 
+  // Update the last seen time of a user
   Future<void> updateUserLastSeenTime(String uid) async {
     try {
       await _db.collection(userCollection).doc(uid).update(
@@ -173,6 +185,7 @@ class DatabaseService {
     }
   }
 
+  // Delete a chat
   Future<void> deleteChat(String chatID) async {
     try {
       await _db.collection(chatsCollection).doc(chatID).delete();
@@ -183,6 +196,7 @@ class DatabaseService {
     }
   }
 
+  // Create a chat document
   Future<DocumentReference?> createChat(Map<String, dynamic> data) async {
     try {
       DocumentReference chat = await _db.collection(chatsCollection).add(data);
@@ -196,7 +210,9 @@ class DatabaseService {
   }
 }
 
+// Extension methods for Bubble-related database operations
 extension BubbleDatabaseService on DatabaseService {
+  // Get bubbles for marks
   Future<List<Map<String, dynamic>>> getBubblesFormarks() async {
     final querySnapshot = await _db.collection(bubblesCollection).get();
 
@@ -212,10 +228,12 @@ extension BubbleDatabaseService on DatabaseService {
     }).toList();
   }
 
+  // Stream bubbles for a user
   Stream<QuerySnapshot> getBubblesForUser() {
     return _db.collection(bubblesCollection).snapshots();
   }
 
+  // Get the last message for a bubble
   Future<QuerySnapshot> getLastMessageForBubble(String bubbleID) {
     return _db
         .collection(bubblesCollection)
@@ -226,6 +244,7 @@ extension BubbleDatabaseService on DatabaseService {
         .get();
   }
 
+  // Stream messages for a specific bubble
   Stream<QuerySnapshot> streamMessagesForBubble(String bubbleID) {
     return _db
         .collection(bubblesCollection)
@@ -235,6 +254,7 @@ extension BubbleDatabaseService on DatabaseService {
         .snapshots();
   }
 
+  // Update bubble data
   Future<void> updateBubbleData(
       String bubbleID, Map<String, dynamic> data) async {
     try {
@@ -246,6 +266,7 @@ extension BubbleDatabaseService on DatabaseService {
     }
   }
 
+  // Add a message to a bubble
   Future<void> addMessageToBubble(String bubbleID, Message message) async {
     try {
       await _db
@@ -262,6 +283,7 @@ extension BubbleDatabaseService on DatabaseService {
     }
   }
 
+  // Delete a bubble document
   Future<void> deleteBubble(String bubbleID) async {
     try {
       await _db.collection(bubblesCollection).doc(bubbleID).delete();
@@ -272,6 +294,7 @@ extension BubbleDatabaseService on DatabaseService {
     }
   }
 
+  // Create a new bubble
   Future<void> createBubble({
     required String bubbleUid,
     required String createrUid,
@@ -305,12 +328,49 @@ extension BubbleDatabaseService on DatabaseService {
     }
   }
 
+  // Generate a unique identifier for a new bubble
   String generateBubbleUid() {
     return _db.collection(bubblesCollection).doc().id;
   }
+
+  // Update the name of a bubble document
+  Future<void> updateBubblename(
+    String uid,
+    String newNameBubble,
+  ) async {
+    try {
+      await _db
+          .collection(bubblesCollection)
+          .doc(uid)
+          .update({"name": newNameBubble});
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  // Update the description of a bubble document
+  Future<void> updateBubbleDescription(
+    String uid,
+    String newDescriptionBubble,
+  ) async {
+    try {
+      await _db
+          .collection(bubblesCollection)
+          .doc(uid)
+          .update({"name": newDescriptionBubble});
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
 }
 
+// Extension for Explorer-related database operations
 extension ExplorerDatabaseService on DatabaseService {
+  // Stream posts for the Explorer feature
   Stream<QuerySnapshot> streamPostsForExplorer() {
     return _db
         .collection(postsCollection)
@@ -318,6 +378,7 @@ extension ExplorerDatabaseService on DatabaseService {
         .snapshots();
   }
 
+  // Add a post to the Explorer feature
   Future<void> addPostToExplorer(Post message) async {
     try {
       await _db.collection(postsCollection).add(

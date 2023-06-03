@@ -185,10 +185,10 @@ class _BubbleTileState extends State<BubbleTile> {
             ),
           ],
         ),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
-          children: [
+          children: const [
             Icon(Icons.people, color: Colors.white),
             SizedBox(width: 5.0),
             Text(

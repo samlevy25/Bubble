@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 
 import 'package:bubbles_app/constants/bubble_key_types.dart';
@@ -102,7 +104,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 50.0),
-              child: dataDisplay(),
+              child: bubbleInfoWidget(),
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 10.0),
@@ -151,20 +153,68 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CustomTextFormField(
+            TextFormField(
               onSaved: (value) => setState(() => _bubbleName = value),
-              regEx: r'.{8,}',
-              hintText: "Bubble's Name",
-              obscureText: false,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Please enter the bubble's name.";
+                }
+                if (!RegExp(r'.{8,}').hasMatch(value)) {
+                  return "The bubble's name must have at least 8 characters.";
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelStyle: const TextStyle(
+                  color: Color.fromARGB(255, 21, 0, 255),
+                ),
+                focusColor: const Color.fromARGB(255, 21, 0, 255),
+                filled: true,
+                enabledBorder: UnderlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Color.fromARGB(255, 21, 0, 255),
+                  ),
+                ),
+                labelText: "Name",
+              ),
             ),
             SizedBox(
               height: _deviceHeight * 0.01,
             ),
-            CustomTextFormField(
+            TextFormField(
               onSaved: (value) => setState(() => _bubbleDescription = value),
-              regEx: r'.{8,}',
-              hintText: "Bubble's Description",
-              obscureText: false,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Please enter the bubble's description.";
+                }
+                if (!RegExp(r'.{8,}').hasMatch(value)) {
+                  return "The bubble's description must have at least 8 characters.";
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelStyle: const TextStyle(
+                  color: Color.fromARGB(255, 21, 0, 255),
+                ),
+                focusColor: const Color.fromARGB(255, 21, 0, 255),
+                filled: true,
+                enabledBorder: UnderlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Color.fromARGB(255, 21, 0, 255),
+                  ),
+                ),
+                labelText: "Description",
+              ),
             ),
           ],
         ),
@@ -200,9 +250,9 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                 child: Dialog(
                   child: Container(
                     padding: EdgeInsets.all(16.0),
-                    child: const Column(
+                    child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
+                      children: const [
                         Text("Creating Bubble..."),
                         SizedBox(height: 16.0),
                         CircularProgressIndicator(),
@@ -352,6 +402,40 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
           ),
         );
       }).toList(),
+    );
+  }
+
+  Widget bubbleInfoWidget() {
+    return Container(
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.grey[200],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          Text(
+            'GPS: Bubble located within the same perimeter.',
+            style: TextStyle(fontSize: 16.0),
+          ),
+          SizedBox(height: 8.0),
+          Text(
+            'WIFI: Only users with the same WIFI connection.',
+            style: TextStyle(fontSize: 16.0),
+          ),
+          SizedBox(height: 8.0),
+          Text(
+            'NFC: Allows you to access the Bubble using the corresponding NFC card.',
+            style: TextStyle(fontSize: 16.0),
+          ),
+          SizedBox(height: 8.0),
+          Text(
+            'Password: The password for the Bubble is required for entry.',
+            style: TextStyle(fontSize: 16.0),
+          ),
+        ],
+      ),
     );
   }
 

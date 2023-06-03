@@ -17,7 +17,7 @@ enum JoinMethod {
 class Bubble {
   final String currentUserUid;
   final String uid;
-  final String name;
+  String name;
   final String description; // Added description property
 
   final String image;
@@ -81,5 +81,17 @@ class Bubble {
 
   String getDescription() {
     return description;
+  }
+
+  void deleteBubble() {
+    _db.deleteBubble(uid);
+  }
+
+  void updateBubbleName(String newName) {
+    _db.updateBubblename(uid, newName);
+  }
+
+  void updateBubbleDescription(String newDescription) {
+    _db.updateBubbleDescription(uid, newDescription);
   }
 }
