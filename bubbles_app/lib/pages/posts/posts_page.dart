@@ -84,11 +84,16 @@ class _PostsPageState extends State<PostsPage> {
                       child: Column(
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               _buildSortButton('Newest'),
                               const SizedBox(width: 10),
                               _buildSortButton('Oldest'),
+                              Expanded(
+                                child: TextButton(
+                                    onPressed: _openCreatePostDialog,
+                                    child: Text('Create Post')),
+                              ),
                             ],
                           ),
                           const SizedBox(height: 10),
@@ -101,13 +106,6 @@ class _PostsPageState extends State<PostsPage> {
               ),
             ],
           ),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: _openCreatePostDialog,
-            icon: const Icon(Icons.add),
-            label: const Text("Create Post"),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
         );
       },
     );

@@ -73,66 +73,48 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
 
   Widget _buildUI() {
     return Scaffold(
-      appBar: AppBar(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-        ),
-        backgroundColor: Colors.lightBlue,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        title: Text(
-          "Create Bubble",
-          textAlign: TextAlign.center,
-        ),
-        centerTitle: true,
-      ),
       resizeToAvoidBottomInset: false,
-      body: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: _deviceHeight * 0.03,
-          vertical: _deviceHeight * 0.02,
-        ),
-        height: _deviceHeight * 0.98,
-        width: _deviceWidth * 0.97,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(bottom: 10.0),
-              child: _bubbleImageField(),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: _deviceHeight * 0.03,
+            vertical: _deviceHeight * 0.02,
+          ),
+          height: _deviceHeight * 0.98,
+          width: _deviceWidth * 0.97,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10.0),
+                  child: _bubbleImageField(),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10.0),
+                  child: _bubbleForms(),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 30.0),
+                  child: _sizeSelector(),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 30.0),
+                  child: _keyTypeSelector(),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 50.0),
+                  child: bubbleInfoWidget(),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10.0),
+                  child: _createButton(),
+                ),
+              ],
             ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 10.0),
-              child: _bubbleForms(),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 30.0),
-              child: _sizeSelector(),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 30.0),
-              child: _keyTypeSelector(),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 50.0),
-              child: bubbleInfoWidget(),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 10.0),
-              child: _createButton(),
-            ),
-          ],
+          ),
         ),
       ),
     );

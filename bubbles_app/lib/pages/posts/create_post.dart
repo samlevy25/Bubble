@@ -28,37 +28,42 @@ class _CreatePostDialogState extends State<CreatePostDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(
+            20.0), // Adjust the radius as per your preference
       ),
-      content: SizedBox(
-        width: double.infinity,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: _textEditingController,
-              maxLines: 8,
-              decoration: const InputDecoration(
-                labelText: 'Post Content',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          color: Colors.white,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _textEditingController,
+                maxLines: 8,
+                decoration: const InputDecoration(
+                  labelText: 'What\'s on your mind?',
+                  contentPadding: EdgeInsets.all(8.0),
+                ),
+                maxLength: maxCharacterLimit,
               ),
-              maxLength: maxCharacterLimit,
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              child: const Text('Post'),
-              onPressed: () {
-                final postContent = _textEditingController.text.trim();
-                if (postContent.isNotEmpty) {
-                  widget.onPostCreated(postContent);
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-          ],
+              ElevatedButton(
+                child: const Text('Post'),
+                onPressed: () {
+                  final postContent = _textEditingController.text.trim();
+                  if (postContent.isNotEmpty) {
+                    widget.onPostCreated(postContent);
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

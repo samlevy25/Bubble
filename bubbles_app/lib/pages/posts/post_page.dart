@@ -73,15 +73,14 @@ class _PostPageState extends State<PostPage> {
           ),
           const Divider(),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsets.only(left: _deviceWidth * 0.05),
-                child: _buildSortButton(SortBy.newest),
-              ),
-              Padding(
-                padding: EdgeInsets.only(right: _deviceWidth * 0.05),
-                child: _buildSortButton(SortBy.oldest),
+              _buildSortButton(SortBy.newest),
+              const SizedBox(width: 10),
+              _buildSortButton(SortBy.oldest),
+              Expanded(
+                child:
+                    TextButton(onPressed: () {}, child: const Text('Comment')),
               ),
             ],
           ),
