@@ -1,4 +1,5 @@
 //Packages
+import 'package:bubbles_app/widgets/pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 //Providers
@@ -163,7 +164,11 @@ class _PostsPageState extends State<PostsPage> {
                   width: _deviceWidth * 0.80,
                   post: post,
                   isOwnMessage: isOwnMessage,
+                  actions: false,
                 ),
+                onLongPress: () {
+                  PopupMenu.showUserDetails(context,_auth.appUser, post.sender);
+                },
                 onTap: () {
                   Navigator.push(
                     context,

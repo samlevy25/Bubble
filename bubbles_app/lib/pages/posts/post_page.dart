@@ -70,6 +70,7 @@ class _PostPageState extends State<PostPage> {
             width: _deviceWidth * 0.80,
             post: widget.post,
             isOwnMessage: true,
+            actions: true,
           ),
           const Divider(),
           Row(

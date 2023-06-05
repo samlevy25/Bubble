@@ -99,6 +99,25 @@ class DatabaseService {
         .snapshots();
   }
 
+// Get a single chat document that includes uid1 and uid2
+  Future<QueryDocumentSnapshot<Map<String, dynamic>>?> getChatForUser(
+      String uid1, String uid2) async {
+    final querySnapshot = await _db
+        .collection(chatsCollection)
+        .where('members', whereIn: [
+          [uid1, uid2],
+          [uid2, uid1]
+        ])
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      return querySnapshot.docs.first;
+    }
+
+    return null;
+  }
+
   // Get the last message for a chat
   Future<QuerySnapshot> getLastMessageForChat(String chatID) {
     return _db
@@ -196,6 +215,19 @@ class DatabaseService {
     }
   }
 
+  Future<bool> doesChatExistForUsers(String uid1, String uid2) async {
+    final querySnapshot = await _db
+        .collection(chatsCollection)
+        .where('members', whereIn: [
+          [uid1, uid2],
+          [uid2, uid1]
+        ])
+        .limit(1)
+        .get();
+
+    return querySnapshot.docs.isNotEmpty;
+  }
+
   // Create a chat document
   Future<DocumentReference?> createChat(Map<String, dynamic> data) async {
     try {
@@ -203,7 +235,7 @@ class DatabaseService {
       return chat;
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        print("Error: $e");
       }
     }
     return null;

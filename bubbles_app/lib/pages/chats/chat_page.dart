@@ -61,49 +61,34 @@ class _ChatPageState extends State<ChatPage> {
       builder: (BuildContext context) {
         _pageProvider = context.watch<ChatPageProvider>();
         return Scaffold(
-          body: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: _deviceWidth * 0.03,
-                vertical: _deviceHeight * 0.02,
-              ),
-              height: _deviceHeight,
-              width: _deviceWidth * 0.97,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  AppBar(
-                    title: Text('Chat'),
-                    actions: [
-                      IconButton(
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Color.fromRGBO(0, 82, 218, 1.0),
-                        ),
-                        onPressed: () {
-                          _pageProvider.deleteChat();
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.arrow_back,
-                          color: Color.fromRGBO(0, 82, 218, 1.0),
-                        ),
-                        onPressed: () {
-                          _pageProvider.goBack();
-                        },
-                      ),
-                    ],
+            appBar: AppBar(title: const Text('Private Chat')),
+            body: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Container(
+                    color: Colors.white,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: _deviceWidth * 0.03,
+                      vertical: _deviceHeight * 0.02,
+                    ),
+                    height: _deviceHeight,
+                    width: _deviceWidth * 0.97,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _messagesListView(),
+                      ],
+                    ),
                   ),
-                  _messagesListView(),
-                  _sendMessageForm(),
-                ],
-              ),
-            ),
-          ),
-        );
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: _sendMessageForm(),
+                ),
+              ],
+            ));
       },
     );
   }
@@ -118,15 +103,13 @@ class _ChatPageState extends State<ChatPage> {
             itemCount: _pageProvider.messages!.length,
             itemBuilder: (BuildContext context, int index) {
               Message message = _pageProvider.messages![index];
-              bool isOwnMessage = message.sender == _auth.appUser.uid;
+              bool isOwnMessage = message.sender == _auth.appUser;
               return CustomChatListViewTile(
                 deviceHeight: _deviceHeight,
                 width: _deviceWidth * 0.80,
                 message: message,
                 isOwnMessage: isOwnMessage,
-                sender: widget.chat.members
-                    .where((m) => m.uid == message.sender)
-                    .first,
+                sender: message.sender,
               );
             },
           ),

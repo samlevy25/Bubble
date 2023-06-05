@@ -59,11 +59,19 @@ class ChatsPageProvider extends ChangeNotifier {
                 }
                 //Get Last Message For Chat
                 List<Message> messages = [];
-                QuerySnapshot chatMessage =
-                    await _db.getLastMessageForChat(d.id);
-                if (chatMessage.docs.isNotEmpty) {
+                QuerySnapshot bubbleMessage =
+                    await _db.getLastMessageForBubble(d.id);
+                if (bubbleMessage.docs.isNotEmpty) {
                   Map<String, dynamic> messageData =
-                      chatMessage.docs.first.data()! as Map<String, dynamic>;
+                      bubbleMessage.docs.first.data()! as Map<String, dynamic>;
+
+                  DocumentSnapshot userSnapshot =
+                      await _db.getUser(messageData['sender']);
+                  Map<String, dynamic> userData =
+                      userSnapshot.data() as Map<String, dynamic>;
+                  userData['uid'] = userSnapshot.id;
+                  AppUser sender = AppUser.fromJSON(userData);
+                  messageData['sender'] = sender;
                   Message message = Message.fromJSON(messageData);
                   messages.add(message);
                 }
@@ -74,7 +82,6 @@ class ChatsPageProvider extends ChangeNotifier {
                   members: members,
                   messages: messages,
                   activity: chatData["is_activity"],
-                  group: chatData["is_group"],
                 );
               },
             ).toList(),

@@ -141,13 +141,14 @@ class TextPostBubble extends StatelessWidget {
   final Post post;
   final double height;
   final double width;
+  final bool actions;
 
-  const TextPostBubble({
-    this.key,
-    required this.post,
-    required this.height,
-    required this.width,
-  });
+  const TextPostBubble(
+      {this.key,
+      required this.post,
+      required this.height,
+      required this.width,
+      required this.actions});
 
   @override
   Widget build(BuildContext context) {
@@ -180,44 +181,45 @@ class TextPostBubble extends StatelessWidget {
               color: Colors.white70,
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start, // Add this line
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.bar_chart),
-                    color: Colors.white,
-                    iconSize: 15,
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.comment),
-                    color: Colors.white,
-                    iconSize: 15,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.thumb_up),
-                    color: Colors.white,
-                    iconSize: 15,
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.thumb_down),
-                    color: Colors.white,
-                    iconSize: 15,
-                  ),
-                ],
-              ),
-            ],
-          )
+          if (actions)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start, // Add this line
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.bar_chart),
+                      color: Colors.white,
+                      iconSize: 15,
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.comment),
+                      color: Colors.white,
+                      iconSize: 15,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.thumb_up),
+                      color: Colors.white,
+                      iconSize: 15,
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.thumb_down),
+                      color: Colors.white,
+                      iconSize: 15,
+                    ),
+                  ],
+                ),
+              ],
+            )
         ],
       ),
     );

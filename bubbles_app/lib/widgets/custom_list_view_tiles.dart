@@ -184,8 +184,7 @@ class CustomChatListViewTile extends StatelessWidget {
                       _navigation.navigateToPage(ChatPage(
                           chat: Chat(
                               activity: false,
-                              currentUserUid: "x",
-                              group: false,
+                              currentUserUid: sender.uid,
                               members: [],
                               messages: [],
                               uid: 'x')));
@@ -241,13 +240,15 @@ class CustomExplorerListViewTile extends StatelessWidget {
   final double deviceHeight;
   final bool isOwnMessage;
   final Post post;
+  final bool actions;
 
-  CustomExplorerListViewTile({
+  const CustomExplorerListViewTile({
     super.key,
     required this.width,
     required this.deviceHeight,
     required this.isOwnMessage,
     required this.post,
+    required this.actions,
   });
   @override
   Widget build(BuildContext context) {
@@ -272,6 +273,7 @@ class CustomExplorerListViewTile extends StatelessWidget {
                       post: post,
                       height: deviceHeight * 0.06,
                       width: width,
+                      actions: actions,
                     )
                   : ImagePostBubble(
                       post: post,
