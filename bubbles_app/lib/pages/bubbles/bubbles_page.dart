@@ -101,7 +101,7 @@ class _BubblesPageState extends State<BubblesPage> {
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
-                    'assets/images/undraw_Group_selfie_re_h8gb.png'), // Replace with your image path
+                    'assets/images/undraw_Having_fun_re_vj4h.png'), // Replace with your image path
               ),
             ),
             padding: EdgeInsets.symmetric(
