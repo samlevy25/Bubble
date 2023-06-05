@@ -1,12 +1,14 @@
 //p
 
 import 'package:bubbles_app/models/app_user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:get_it/get_it.dart';
 
 //services
+import '../models/activity.dart';
 import '../services/database_service.dart';
 import '../services/navigation_service.dart';
 
@@ -25,28 +27,46 @@ class AuthenticationProvider extends ChangeNotifier {
     _auth.authStateChanges().listen((user) {
       if (user != null) {
         _databaseService.updateUserLastSeenTime(user.uid);
-        _databaseService.getUser(user.uid).then(
-          (snapshot) {
-            Map<String, dynamic> userData =
-                snapshot.data()! as Map<String, dynamic>;
+        _databaseService.getUser(user.uid).then((snapshot) {
+          Map<String, dynamic> userData =
+              snapshot.data()! as Map<String, dynamic>;
 
-            // Ensure activities is always a list
-            List<dynamic> activities =
-                userData["activities"] is List ? userData["activities"] : [];
+          List<Activity> activityList = [];
 
-            appUser = AppUser.fromJSON(
-              {
+          if (snapshot.exists) {
+            // Get the reference to the activities collection
+            CollectionReference activitiesRef =
+                snapshot.reference.collection('activities');
+
+            activitiesRef.get().then((querySnapshot) {
+              querySnapshot.docs.forEach((activityDoc) {
+                // Get the data from each activity document
+                Map<String, dynamic> activityData =
+                    activityDoc.data() as Map<String, dynamic>;
+
+                // Create an Activity object using the retrieved data
+                Activity activity = Activity(
+                  activityData['description'],
+                  activityData['date'].toDate(),
+                );
+
+                activityList.add(activity);
+              });
+
+              // Set the updated activityList in the AppUser object
+              appUser = AppUser.fromJSON({
                 "uid": user.uid,
                 "username": userData["username"],
                 "email": userData["email"],
                 "last_active": userData["last_active"],
                 "image": userData["image"],
-                "activities": activities,
-              },
-            );
-            _navigationService.removeAndNavigateToRoute('/home');
-          },
-        );
+                "activities": activityList,
+              });
+
+              _navigationService.removeAndNavigateToRoute('/home');
+            });
+          }
+        });
       } else {
         _navigationService.removeAndNavigateToRoute('/login');
       }

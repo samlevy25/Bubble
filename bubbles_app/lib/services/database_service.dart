@@ -20,19 +20,28 @@ class DatabaseService {
 
   DatabaseService();
 
-  // Create a user document in the Users collection
   Future<void> createUser(
       String uid, String email, String username, String imageURL) async {
     try {
-      await _db.collection(userCollection).doc(uid).set(
-        {
-          "email": email,
-          "image": imageURL,
-          "last_active": DateTime.now().toUtc(),
-          "username": username,
-          "activities": [],
-        },
-      );
+      DocumentReference userRef = _db.collection(userCollection).doc(uid);
+
+      await userRef.set({
+        "email": email,
+        "image": imageURL,
+        "last_active": DateTime.now().toUtc(),
+        "username": username,
+      });
+
+      CollectionReference activitiesRef = userRef.collection('activities');
+
+      // Create sample activities
+      List<Activity> activities = [
+        Activity('Account created', DateTime.now()),
+      ];
+
+      for (Activity activity in activities) {
+        await activitiesRef.add(activity.toJson());
+      }
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -71,23 +80,17 @@ class DatabaseService {
     }
   }
 
-  // Update the activities of a user document
-  Future<void> updateUserActivities(
-      String uid, List<Activity> activities) async {
+  Future<void> addUserActivity(String uid, Activity activity) async {
     try {
-      final userDoc = _db.collection(userCollection).doc(uid);
+      DocumentReference userRef = _db.collection('users').doc(uid);
+      CollectionReference activitiesRef = userRef.collection('activities');
 
-      // Convert the activities list to a JSON-compatible format
-      final activitiesJson =
-          activities.map((activity) => activity.toJson()).toList();
-
-      await userDoc.update({
-        'activities': FieldValue.arrayUnion(activitiesJson),
+      await activitiesRef.add({
+        "description": activity.description,
+        "date": activity.date,
       });
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      print(e);
     }
   }
 

@@ -580,7 +580,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
     setState(() {
       _bubbleKeyType = BubbleKeyType.nfc;
     });
-    print("Starting NFC reader...");
+    NFCReader.readNfc();
   }
 
 // Function to handle Bluetooth selection

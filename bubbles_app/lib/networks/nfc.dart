@@ -7,11 +7,13 @@ class NFCReader {
     bool isAvailable = await NfcManager.instance.isAvailable();
 
 // Start Session
-    NfcManager.instance.startSession(
-      onDiscovered: (NfcTag tag) async {
-        // Do something with an NfcTag instance.
-      },
-    );
+    if (isAvailable) {
+      NfcManager.instance.startSession(
+        onDiscovered: (NfcTag tag) async {
+          print(tag.data);
+        },
+      );
+    }
 
 // Stop Session
     NfcManager.instance.stopSession();
