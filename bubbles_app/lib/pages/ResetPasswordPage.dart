@@ -71,97 +71,114 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 16.0),
-                const Text(
-                  'Enter your Email and we will send you a password reset link',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20),
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: _isMailSent
-                      ? const Center(
-                          child: Text(
-                            'Mail Sended !',
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 16.0),
+            Image.asset('assets/images/resetPassword.png'),
+            const SizedBox(height: 16.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: const TextSpan(
+                        style: TextStyle(fontSize: 20, color: Colors.black87),
+                        children: [
+                          TextSpan(text: 'Enter your '),
+                          TextSpan(
+                            text: 'Email',
                             style: TextStyle(
-                              color: Colors.green,
                               fontWeight: FontWeight.bold,
-                            ),
-                            key: Key('MailSent'),
-                          ),
-                        )
-                      : TextFormField(
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                            labelStyle:
-                                const TextStyle(color: Colors.lightBlue),
-                            focusColor: Colors.lightBlue,
-                            filled: true,
-                            enabledBorder: UnderlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide.none,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  const BorderSide(color: Colors.lightBlue),
-                            ),
-                            labelText: "Email",
-                            prefixIcon: const Icon(
-                              Icons.mail_outline,
-                              size: 18,
                               color: Colors.lightBlue,
                             ),
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your email';
-                            } else if (!value.contains('@')) {
-                              return 'Please enter a valid email';
-                            }
-                            return null;
-                          },
-                        ),
-                ),
-                const SizedBox(height: 16.0),
-                Text(
-                  _errorMessage,
-                  style: const TextStyle(color: Colors.red),
-                ),
-                const SizedBox(height: 16.0),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: _resetPassword,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.lightBlue,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                          TextSpan(
+                              text:
+                                  ' and we will send you a password reset link'),
+                        ],
                       ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 50, vertical: 20),
                     ),
-                    child: const Text(
-                      'Reset Password',
-                      style: TextStyle(fontSize: 16),
+                    const SizedBox(height: 50),
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: _isMailSent
+                          ? const Center(
+                              child: Text(
+                                'Mail Sent!',
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                key: Key('MailSent'),
+                              ),
+                            )
+                          : TextFormField(
+                              controller: _emailController,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration(
+                                labelStyle:
+                                    const TextStyle(color: Colors.lightBlue),
+                                focusColor: Colors.lightBlue,
+                                filled: true,
+                                enabledBorder: UnderlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide.none,
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide:
+                                      const BorderSide(color: Colors.lightBlue),
+                                ),
+                                labelText: "Email",
+                                prefixIcon: const Icon(
+                                  Icons.mail_outline,
+                                  size: 18,
+                                  color: Colors.lightBlue,
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your email';
+                                } else if (!value.contains('@')) {
+                                  return 'Please enter a valid email';
+                                }
+                                return null;
+                              },
+                            ),
                     ),
-                  ),
+                    const SizedBox(height: 16.0),
+                    Text(
+                      _errorMessage,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                    const SizedBox(height: 16.0),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: _resetPassword,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.lightBlue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 20),
+                        ),
+                        child: const Text(
+                          'Reset Password',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

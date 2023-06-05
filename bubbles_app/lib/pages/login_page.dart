@@ -98,7 +98,7 @@ class _SignIn extends State<LoginPage> {
                 height: 10.0,
               ),
               Image.asset(
-                'assets/images/logo.png',
+                'assets/images/login.png',
                 alignment: Alignment.topCenter,
                 height: _deviceHeight * 0.3,
               ),
