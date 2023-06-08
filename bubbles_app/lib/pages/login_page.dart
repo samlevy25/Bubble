@@ -80,7 +80,7 @@ class _SignIn extends State<LoginPage> {
 
   Widget _buildUI() {
     return Scaffold(
-      backgroundColor: const Color(0xffffffff),
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.symmetric(
@@ -88,27 +88,46 @@ class _SignIn extends State<LoginPage> {
             vertical: _deviceHeight * 0.02,
           ),
           height: _deviceHeight * 0.98,
-          width: _deviceWidth * 0.97,
+          width: _deviceWidth,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 10.0,
-              ),
               Image.asset(
                 'assets/images/login.png',
                 alignment: Alignment.topCenter,
-                height: _deviceHeight * 0.3,
+                height: _deviceHeight * 0.35,
               ),
-              const SizedBox(
-                height: 35.0,
+              const Align(
+                alignment: Alignment.center,
+                child: Text(
+                  "Welcome,",
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 40,
+                  ),
+                ),
               ),
-              const SizedBox(
-                height: 20.0,
+              const Align(
+                alignment: Alignment.center,
+                child: Text(
+                  "Sign in to continue !",
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: _deviceHeight * 0.03,
               ),
               _loginForm(),
+              SizedBox(
+                height: _deviceHeight * 0.01,
+              ),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
@@ -126,17 +145,41 @@ class _SignIn extends State<LoginPage> {
                   child: const Text('Forgot password ?'),
                 ),
               ),
-              const SizedBox(
-                height: 10.0,
+              SizedBox(
+                height: _deviceHeight * 0.01,
               ),
               _loginBottun(),
-              const SizedBox(
-                height: 10.0,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Expanded(
+                      child: Divider(
+                        color: Colors.black54,
+                        thickness: 1,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        "or",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        color: Colors.black54,
+                        thickness: 1,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               _SignUpBottun(e: true),
-              const SizedBox(
-                height: 20.0,
-              ),
             ],
           ),
         ),
@@ -183,8 +226,8 @@ class _SignIn extends State<LoginPage> {
                 labelText: "Email",
               ),
             ),
-            const SizedBox(
-              height: 10.0,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
             ),
             TextFormField(
               onSaved: (value) {
@@ -239,7 +282,7 @@ class _SignIn extends State<LoginPage> {
       empty: e ?? false,
       name: "Login",
       height: _deviceHeight * 0.065,
-      width: _deviceWidth * 0.65,
+      width: _deviceWidth,
       onPressed: () async {
         checkEmail = false;
 
@@ -257,7 +300,7 @@ class _SignIn extends State<LoginPage> {
       empty: e ?? false,
       name: "Sign Up",
       height: _deviceHeight * 0.065,
-      width: _deviceWidth * 0.65,
+      width: _deviceWidth * 1,
       onPressed: () {
         _navigation.navigateToRoute('/register');
       },
