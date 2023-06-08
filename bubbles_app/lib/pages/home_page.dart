@@ -18,7 +18,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int currentPage = 0;
-
+  late double _deviceHeight = MediaQuery.of(context).size.height;
+  late double _deviceWidt = MediaQuery.of(context).size.width;
   late NavigationService _navigation;
 
   @override
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         elevation: 0, // Set the elevation to 0 to remove the line
         leading: IconButton(
-          icon: Icon(Icons.notifications),
+          icon: const Icon(Icons.notifications),
           color: Colors.lightBlue,
           onPressed: () {
             // Handle notification icon press
@@ -37,7 +38,7 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
             color: Colors.lightBlue,
             onPressed: () {
               _navigation.navigateToPage(const SettingsPage());

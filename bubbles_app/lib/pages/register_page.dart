@@ -103,7 +103,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (!regExp.hasMatch(value)) {
       return 'Please enter a valid User name.';
     }
-    print(checkUsername);
+
     if (checkUsername) {
       return "The Username is already used.";
     }
@@ -276,7 +276,7 @@ class _RegisterPageState extends State<RegisterPage> {
         try {
           // Fetch the sign-in methods associated with the email address
           final list =
-              await FirebaseAuth.instance.fetchSignInMethodsForEmail(_email!);
+              await FirebaseAuth.instance.fetchSignInMethodsForEmail(_email);
 
           // In case list is not empty
           if (list.isNotEmpty) {
@@ -305,21 +305,21 @@ class _RegisterPageState extends State<RegisterPage> {
           _registerFormKey.currentState!.save();
 
           // Register the user using email and password
-          String? uid = await _auth.registerUserUsingEmailAndPassword(
-              _email!, _password!);
+          String? uid =
+              await _auth.registerUserUsingEmailAndPassword(_email, _password);
 
           // Save user image to storage and get the image URL
           String? imageURL =
               await _cloudStorage.saveUserImageToStorage(uid!, _profileImage!);
 
           // Create user in the Firestore database
-          await _db.createUser(uid, _email!, _username!, imageURL!);
+          await _db.createUser(uid, _email, _username, imageURL!);
 
           // Logout the user
           _auth.logout();
 
           // Login the user using email and password
-          _auth.loginUsingEmailAndPassword(_email!, _password!);
+          _auth.loginUsingEmailAndPassword(_email, _password);
         }
       },
     );

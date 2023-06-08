@@ -11,7 +11,6 @@ import '/pages/ResetPasswordPage.dart';
 
 //s
 import '../services/navigation_service.dart';
-import '../widgets/CustomTextField_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -80,7 +79,7 @@ class _SignIn extends State<LoginPage> {
 
   Widget _buildUI() {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.symmetric(
