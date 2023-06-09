@@ -577,11 +577,11 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   }
 
 // Function to handle NFC selection
-  Future<String?> _handleNFC() async {
+  Future<void> _handleNFC() async {
+    bubbleKey = await NFCReader.readNfc(context);
     setState(() {
       _bubbleKeyType = BubbleKeyType.nfc;
     });
-    NFCReader.readNfc(context);
   }
 
 // Function to handle Bluetooth selection
