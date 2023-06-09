@@ -33,6 +33,7 @@ import '../../providers/authentication_provider.dart';
 import 'bubble_page.dart';
 
 import '../../constants/bubble_key_types.dart';
+import "../../pages/bubbles/password_for_bubble.dart";
 
 class CreateBubblePage extends StatefulWidget {
   const CreateBubblePage({Key? key}) : super(key: key);
@@ -504,69 +505,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   }
 
   Future<void> _handlePassword() async {
-    TextEditingController passwordController = TextEditingController();
-    TextEditingController confirmPasswordController = TextEditingController();
-    String? passwordError;
-
-    String? password = await showDialog<String>(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: const Text("Enter Password"),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      hintText: "Password",
-                      errorText: passwordError,
-                    ),
-                  ),
-                  TextFormField(
-                    controller: confirmPasswordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      hintText: "Confirm Password",
-                    ),
-                  ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(null);
-                  },
-                  child: const Text('Cancel'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    String? password = passwordController.text;
-                    String? confirmPassword = confirmPasswordController.text;
-
-                    if (password != null &&
-                        confirmPassword != null &&
-                        password.length >= 8 &&
-                        password == confirmPassword) {
-                      Navigator.of(context).pop(password);
-                    } else {
-                      setState(() {
-                        passwordError =
-                            "Passwords do not match \nor are less than 8 characters long";
-                      });
-                    }
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
+    String? password = await showPasswordDialog(context, true);
 
     if (password != null) {
       setState(() {
@@ -577,11 +516,11 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   }
 
 // Function to handle NFC selection
-  Future<String?> _handleNFC() async {
+  Future<void> _handleNFC() async {
+    bubbleKey = await NFCReader.readNfc(context);
     setState(() {
       _bubbleKeyType = BubbleKeyType.nfc;
     });
-    NFCReader.readNfc(context);
   }
 
 // Function to handle Bluetooth selection
