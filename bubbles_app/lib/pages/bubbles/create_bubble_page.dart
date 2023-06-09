@@ -497,6 +497,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
 // Function to handle WiFi selection
   Future<void> _handleWiFi() async {
     bubbleKey = await getWifiBSSID();
+    print("WiFi BSSID: $bubbleKey");
     setState(() {
       _bubbleKeyType = BubbleKeyType.wifi;
     });
@@ -580,7 +581,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
     setState(() {
       _bubbleKeyType = BubbleKeyType.nfc;
     });
-    NFCReader.readNfc();
+    NFCReader.readNfc(context);
   }
 
 // Function to handle Bluetooth selection
