@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:async_button_builder/async_button_builder.dart';
 import 'package:bubbles_app/constants/bubble_key_types.dart';
 import 'package:bubbles_app/pages/bubbles/bubble_page.dart';
-import 'package:bubbles_app/pages/bubbles/bubble_tile.dart';
 
 import 'package:bubbles_app/pages/bubbles/create_bubble_page.dart';
+import 'package:bubbles_app/pages/bubbles/password_for_bubble.dart';
 
 //Packages
 import 'package:flutter/material.dart';
@@ -15,6 +15,7 @@ import 'package:get_it/get_it.dart';
 //Providers
 import '../../models/bubble.dart';
 import '../../networks/gps.dart';
+import '../../networks/nfc.dart';
 import '../../providers/authentication_provider.dart';
 import '../../providers/bubbles_page_provider.dart';
 import '../../services/navigation_service.dart';
@@ -269,11 +270,25 @@ class _BubblesPageState extends State<BubblesPage> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (bubble.keyType == BubbleKeyType.password) {
-                      print("Password");
+                      String? password =
+                          await showPasswordDialog(context, false);
+                      if (password != null && password == bubble.key) {
+                        _navigation.navigateToPage(BubblePage(bubble: bubble));
+                      } else {
+                        print("Wrong Password");
+                      }
                     } else if (bubble.keyType == BubbleKeyType.nfc) {
-                      print("NFC");
+                      String? nfc = await NFCReader.readNfc(context);
+                      print("Here The NFC prints");
+                      print("Yout NFC = $nfc");
+                      print("The Bubble NFC = $bubble.key");
+                      if (nfc == bubble.key) {
+                        _navigation.navigateToPage(BubblePage(bubble: bubble));
+                      } else {
+                        print("Wrong NFC");
+                      }
                     } else {
                       _navigation.navigateToPage(BubblePage(bubble: bubble));
                     }

@@ -10,21 +10,36 @@ class NFCReader {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return Center(
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
           child: Container(
-            width: 120,
-            height: 120,
+            width: 200,
+            height: 200,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                'assets/images/nfc_loading.gif', // Replace with the path to your GIF image
-                width: 100,
-                height: 100,
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Place your NFC tag near the device',
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: 120,
+                  height: 120,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset(
+                      'assets/images/nfc_loading.gif',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         );
@@ -43,6 +58,7 @@ class NFCReader {
         NfcManager.instance.startSession(
           onDiscovered: (NfcTag tag) async {
             print('NFC tag discovered');
+
             print(tag.data);
 
             Uint8List? uid;
