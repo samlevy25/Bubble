@@ -49,6 +49,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   late NavigationService navigation;
   late double _deviceHeight;
   late double _deviceWidth;
+  bool visible = false;
 
   final _registerFormKey = GlobalKey<FormState>();
 
@@ -74,15 +75,39 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
 
   Widget _buildUI() {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.lightBlue,
+            size: 30.0,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.info_outline,
+              color: Colors.lightBlue,
+              size: 30.0,
+            ),
+            onPressed: () {},
+          ),
+        ],
+      ),
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.symmetric(
             horizontal: _deviceHeight * 0.03,
-            vertical: _deviceHeight * 0.02,
+            vertical: _deviceHeight * 0.01,
           ),
           height: _deviceHeight * 0.98,
-          width: _deviceWidth * 0.97,
+          width: _deviceWidth,
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -90,20 +115,24 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(bottom: 10.0),
+                  padding: EdgeInsets.only(bottom: _deviceHeight * 0.02),
                   child: _bubbleImageField(),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 10.0),
+                  padding: EdgeInsets.only(bottom: _deviceHeight * 0.02),
                   child: _bubbleForms(),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 30.0),
+                  padding: EdgeInsets.only(bottom: _deviceHeight * 0.03),
                   child: _sizeSelector(),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 30.0),
+                  padding: EdgeInsets.only(bottom: _deviceHeight * 0.03),
                   child: _keyTypeSelector(),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: _deviceHeight * 0.03),
+                  child: dataDisplay(),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 10.0),
@@ -129,18 +158,33 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
           });
         }
       },
-      child: _bubbleImage != null
-          ? RoundedImageFile(
-              key: UniqueKey(),
-              image: _bubbleImage!,
-              size: _deviceHeight * 0.15,
-            )
-          : RoundedImageNetwork(
-              key: UniqueKey(),
-              imagePath:
-                  "https://firebasestorage.googleapis.com/v0/b/bubbles-96944.appspot.com/o/gui%2Fno_bubble_image.jpg?alt=media&token=dc17ae3f-e589-482c-b88c-81b4c9cb09b1",
-              size: _deviceHeight * 0.15,
+      child: Column(
+        children: [
+          _bubbleImage != null
+              ? RoundedImageFile(
+                  key: UniqueKey(),
+                  image: _bubbleImage!,
+                  size: _deviceHeight * 0.17,
+                )
+              : RoundedImageNetwork(
+                  key: UniqueKey(),
+                  imagePath:
+                      "https://firebasestorage.googleapis.com/v0/b/bubbles-96944.appspot.com/o/gui%2Fno_bubble_image.jpg?alt=media&token=dc17ae3f-e589-482c-b88c-81b4c9cb09b1",
+                  size: _deviceHeight * 0.17,
+                ),
+          SizedBox(height: _deviceHeight * 0.01),
+          Visibility(
+            visible: visible,
+            child: Text(
+              "Please select the bubble's image.",
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.red[(700)],
+              ),
             ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -186,7 +230,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
               ),
             ),
             SizedBox(
-              height: _deviceHeight * 0.01,
+              height: _deviceHeight * 0.02,
             ),
             TextFormField(
               onSaved: (value) => setState(() => _bubbleDescription = value),
@@ -226,7 +270,9 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   }
 
   Widget _createButton() {
-    bool isCreatingBubble = false; // Flag to track creation process
+    bool isCreatingBubble = false;
+    visible = false;
+    // Flag to track creation process
 
     return ElevatedButton(
       style: ButtonStyle(
@@ -255,6 +301,12 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
         ),
       ),
       onPressed: () async {
+        if (_bubbleImage == null) {
+          setState(() {
+            visible = true; // Set flag to indicate creation process
+          });
+        }
+
         if (_registerFormKey.currentState!.validate() &&
             _bubbleImage != null &&
             !isCreatingBubble) {
@@ -377,55 +429,83 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   }
 
   Widget _keyTypeSelector() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: BubbleKeyType.values.map((BubbleKeyType type) {
-        return Column(
-          children: [
-            InkWell(
-              onTap: () => _handleBubbleKeyType(type),
-              child: Icon(
-                type.icon,
-                size: 24.0,
-                color: _bubbleKeyType == type ? Colors.blue : Colors.grey,
-              ),
-            ),
-            Text(
-              type.name,
-              textAlign: TextAlign.center,
-            ),
-          ],
-        );
-      }).toList(),
+    return Column(
+      children: [
+        Text(
+          "Access technologies",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 23,
+          ),
+        ),
+        SizedBox(
+          height: _deviceHeight * 0.03,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: BubbleKeyType.values.map((BubbleKeyType type) {
+            return Column(
+              children: [
+                InkWell(
+                  onTap: () => _handleBubbleKeyType(type),
+                  child: Icon(
+                    type.icon,
+                    size: 24.0,
+                    color: _bubbleKeyType == type ? Colors.blue : Colors.grey,
+                  ),
+                ),
+                Text(
+                  type.name,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 
   Widget _sizeSelector() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: BubbleSize.values.map((BubbleSize size) {
-        final isSelected = _bubbleSize == size.index;
-        return Expanded(
-          child: Column(
-            children: [
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    _bubbleSize = size.index;
-                  });
-                },
-                child: Text(
-                  size.name,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: isSelected ? Colors.blue : Colors.black,
-                  ),
-                ),
-              ),
-            ],
+    return Column(
+      children: [
+        Text(
+          "Range",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 23,
           ),
-        );
-      }).toList(),
+        ),
+        SizedBox(
+          height: _deviceHeight * 0.02,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: BubbleSize.values.map((BubbleSize size) {
+            final isSelected = _bubbleSize == size.index;
+            return Expanded(
+              child: Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        _bubbleSize = size.index;
+                      });
+                    },
+                    child: Text(
+                      size.name,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: isSelected ? Colors.blue : Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 
@@ -434,6 +514,16 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
     return SizedBox(
       child: Column(
         children: [
+          Text(
+            "Your infomations",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 23,
+            ),
+          ),
+          SizedBox(
+            height: _deviceHeight * 0.02,
+          ),
           Center(child: currentLocation()),
           SizedBox(height: 10.0),
           Center(child: currentWIFI()),

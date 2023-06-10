@@ -99,12 +99,6 @@ class _BubblesPageState extends State<BubblesPage> {
         _pageProvider = context.watch<BubblesPageProvider>();
         return Scaffold(
           body: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                    'assets/images/undraw_Having_fun_re_vj4h.png'), // Replace with your image path
-              ),
-            ),
             padding: EdgeInsets.symmetric(
               horizontal: _deviceWidth * 0.03,
               vertical: _deviceHeight * 0.02,
@@ -201,8 +195,8 @@ class _BubblesPageState extends State<BubblesPage> {
           } else {
             return const Center(
               child: Text(
-                "No Bubbles Found.",
-                style: TextStyle(color: Colors.white),
+                "No Bubbles Found",
+                style: TextStyle(color: Colors.lightBlue, fontSize: 20),
               ),
             );
           }

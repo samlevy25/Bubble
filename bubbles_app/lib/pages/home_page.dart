@@ -89,10 +89,10 @@ class _HomePageState extends State<HomePage> {
             appBar: AppBar(
               backgroundColor: Colors.white,
               elevation: 0, // Set the elevation to 0 to remove the line
-              title: const TabBar(
+              title: TabBar(
                 indicatorSize:
                     TabBarIndicatorSize.label, // Set indicator size to label
-                indicator: UnderlineTabIndicator(
+                indicator: const UnderlineTabIndicator(
                   borderSide: BorderSide(
                       width: 2.0,
                       color: Colors.blue), // Set transparent border color
@@ -101,8 +101,9 @@ class _HomePageState extends State<HomePage> {
                 unselectedLabelColor:
                     Colors.grey, // Set the unselected tab label color
                 labelPadding: EdgeInsets.symmetric(
-                    horizontal: 16), // Adjust label padding to reduce tab size
-                tabs: [
+                    horizontal: _deviceWidt *
+                        0.02), // Adjust label padding to reduce tab size
+                tabs: const [
                   Tab(
                     child: Text(
                       'Bubbles',
@@ -141,10 +142,10 @@ class _HomePageState extends State<HomePage> {
             appBar: AppBar(
               elevation: 0, // Set the elevation to 0 to remove the line
               backgroundColor: Colors.white,
-              title: const TabBar(
+              title: TabBar(
                 indicatorSize:
                     TabBarIndicatorSize.label, // Set indicator size to label
-                indicator: UnderlineTabIndicator(
+                indicator: const UnderlineTabIndicator(
                   borderSide: BorderSide(
                       width: 2.0,
                       color: Colors.blue), // Set transparent border color
@@ -153,8 +154,9 @@ class _HomePageState extends State<HomePage> {
                 unselectedLabelColor:
                     Colors.black, // Set the unselected tab label color
                 labelPadding: EdgeInsets.symmetric(
-                    horizontal: 16), // Adjust label padding to reduce tab size
-                tabs: [
+                    horizontal: _deviceWidt *
+                        0.02), // Adjust label padding to reduce tab size
+                tabs: const [
                   Tab(
                     child: Text(
                       'Profile',
