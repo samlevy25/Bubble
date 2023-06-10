@@ -614,7 +614,8 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   }
 
 // Function to handle Bluetooth selection
-  void _handleBluetooth() {
+  Future<void> _handleBluetooth() async {
+    bubbleKey = await Bluetooth.scanAndConnect(context);
     setState(() {
       _bubbleKeyType = BubbleKeyType.bluetooth;
     });

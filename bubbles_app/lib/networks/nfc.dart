@@ -35,7 +35,6 @@ class NFCReader {
                     borderRadius: BorderRadius.circular(10),
                     child: Image.asset(
                       'assets/images/nfc_loading.gif',
-                      fit: BoxFit.cover,
                     ),
                   ),
                 ),

@@ -14,6 +14,7 @@ import 'package:get_it/get_it.dart';
 
 //Providers
 import '../../models/bubble.dart';
+import '../../networks/bluetooth.dart';
 import '../../networks/gps.dart';
 import '../../networks/nfc.dart';
 import '../../providers/authentication_provider.dart';
@@ -275,13 +276,20 @@ class _BubblesPageState extends State<BubblesPage> {
                       }
                     } else if (bubble.keyType == BubbleKeyType.nfc) {
                       String? nfc = await NFCReader.readNfc(context);
-                      print("Here The NFC prints");
-                      print("Yout NFC = $nfc");
-                      print("The Bubble NFC = $bubble.key");
+
                       if (nfc == bubble.key) {
                         _navigation.navigateToPage(BubblePage(bubble: bubble));
                       } else {
                         print("Wrong NFC");
+                      }
+                    } else if (bubble.keyType == BubbleKeyType.bluetooth) {
+                      String? bluetooth =
+                          await Bluetooth.scanAndConnect(context);
+
+                      if (bluetooth == bubble.key) {
+                        _navigation.navigateToPage(BubblePage(bubble: bubble));
+                      } else {
+                        print("Wrong Bluetooth");
                       }
                     } else {
                       _navigation.navigateToPage(BubblePage(bubble: bubble));
@@ -329,10 +337,6 @@ class _BubblesPageState extends State<BubblesPage> {
     if (bubble.keyType == BubbleKeyType.wifi) {
       // Bubble requires Wi-Fi connection
       return bubble.key == _bssid;
-    }
-    if (bubble.keyType == BubbleKeyType.bluetooth) {
-      // Bubble requires Bluetooth connection
-      return bubble.key == "bt";
     } else {
       // Bubble doesn't require Wi-Fi or Bluetooth
       return true;
