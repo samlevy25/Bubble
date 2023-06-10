@@ -2,14 +2,24 @@
     package="com.example.bubbles_app">
 
     <!-- NFC permission -->
-<uses-permission android:name="android.permission.NFC" />
-    <!-- GPS -->
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.NFC" />
 
+    <!-- Bluetooth permissions -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
-<uses-feature
+    <!-- GPS permissions -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- NFC feature -->
+    <uses-feature
         android:name="android.hardware.nfc"
+        android:required="true" />
+
+    <!-- Bluetooth feature -->
+    <uses-feature
+        android:name="android.hardware.bluetooth"
         android:required="true" />
 
     <application
@@ -26,22 +36,23 @@
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
 
-            <meta-data
-              android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
-
             <!-- NFC intent filter -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
             
-            <!-- NFC intent filter -->
+            <!-- NFC intent filters -->
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="application/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED" />
             </intent-filter>
         </activity>
 
