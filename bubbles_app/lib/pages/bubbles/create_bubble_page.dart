@@ -49,6 +49,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   late NavigationService navigation;
   late double _deviceHeight;
   late double _deviceWidth;
+  bool visible = false;
 
   final _registerFormKey = GlobalKey<FormState>();
 
@@ -114,23 +115,23 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(bottom: 30.0),
+                  padding: EdgeInsets.only(bottom: _deviceHeight * 0.02),
                   child: _bubbleImageField(),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 15.0),
+                  padding: EdgeInsets.only(bottom: _deviceHeight * 0.02),
                   child: _bubbleForms(),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 30.0),
+                  padding: EdgeInsets.only(bottom: _deviceHeight * 0.03),
                   child: _sizeSelector(),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 30.0),
+                  padding: EdgeInsets.only(bottom: _deviceHeight * 0.03),
                   child: _keyTypeSelector(),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 30.0),
+                  padding: EdgeInsets.only(bottom: _deviceHeight * 0.03),
                   child: dataDisplay(),
                 ),
                 Padding(
@@ -157,18 +158,33 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
           });
         }
       },
-      child: _bubbleImage != null
-          ? RoundedImageFile(
-              key: UniqueKey(),
-              image: _bubbleImage!,
-              size: _deviceHeight * 0.17,
-            )
-          : RoundedImageNetwork(
-              key: UniqueKey(),
-              imagePath:
-                  "https://firebasestorage.googleapis.com/v0/b/bubbles-96944.appspot.com/o/gui%2Fno_bubble_image.jpg?alt=media&token=dc17ae3f-e589-482c-b88c-81b4c9cb09b1",
-              size: _deviceHeight * 0.17,
+      child: Column(
+        children: [
+          _bubbleImage != null
+              ? RoundedImageFile(
+                  key: UniqueKey(),
+                  image: _bubbleImage!,
+                  size: _deviceHeight * 0.17,
+                )
+              : RoundedImageNetwork(
+                  key: UniqueKey(),
+                  imagePath:
+                      "https://firebasestorage.googleapis.com/v0/b/bubbles-96944.appspot.com/o/gui%2Fno_bubble_image.jpg?alt=media&token=dc17ae3f-e589-482c-b88c-81b4c9cb09b1",
+                  size: _deviceHeight * 0.17,
+                ),
+          SizedBox(height: _deviceHeight * 0.01),
+          Visibility(
+            visible: visible,
+            child: Text(
+              "Please select the bubble's image.",
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.red[(700)],
+              ),
             ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -254,7 +270,9 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   }
 
   Widget _createButton() {
-    bool isCreatingBubble = false; // Flag to track creation process
+    bool isCreatingBubble = false;
+    visible = false;
+    // Flag to track creation process
 
     return ElevatedButton(
       style: ButtonStyle(
@@ -283,6 +301,12 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
         ),
       ),
       onPressed: () async {
+        if (_bubbleImage == null) {
+          setState(() {
+            visible = true; // Set flag to indicate creation process
+          });
+        }
+
         if (_registerFormKey.currentState!.validate() &&
             _bubbleImage != null &&
             !isCreatingBubble) {

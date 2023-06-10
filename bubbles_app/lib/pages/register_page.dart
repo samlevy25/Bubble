@@ -39,6 +39,7 @@ class _RegisterPageState extends State<RegisterPage> {
   late String _username = '';
   late String _password = '';
   late String _confirmPassword = '';
+  bool visible = false;
 
   PlatformFile? _profileImage;
   final _registerFormKey = GlobalKey<FormState>();
@@ -183,20 +184,35 @@ class _RegisterPageState extends State<RegisterPage> {
               },
             );
       },
-      child: () {
-        return _profileImage != null
-            ? RoundedImageFile(
-                key: UniqueKey(),
-                image: _profileImage!,
-                size: _deviceHeight * 0.15,
-              )
-            : RoundedImageNetwork(
-                key: UniqueKey(),
-                imagePath:
-                    "https://firebasestorage.googleapis.com/v0/b/bubbles-96944.appspot.com/o/gui%2Fno_profile.jpeg?alt=media&token=a84c7e69-bb15-4f39-9279-ef031d19cd72",
-                size: _deviceHeight * 0.15,
-              );
-      }(),
+      child: Column(
+        children: [
+          () {
+            return _profileImage != null
+                ? RoundedImageFile(
+                    key: UniqueKey(),
+                    image: _profileImage!,
+                    size: _deviceHeight * 0.15,
+                  )
+                : RoundedImageNetwork(
+                    key: UniqueKey(),
+                    imagePath:
+                        "https://firebasestorage.googleapis.com/v0/b/bubbles-96944.appspot.com/o/gui%2Fno_profile.jpeg?alt=media&token=a84c7e69-bb15-4f39-9279-ef031d19cd72",
+                    size: _deviceHeight * 0.15,
+                  );
+          }(),
+          SizedBox(height: _deviceHeight * 0.01),
+          Visibility(
+            visible: visible,
+            child: Text(
+              "Please select a profile's image.",
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.red[(700)],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -266,6 +282,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _registerButton() {
+    visible = false;
     return RoundedButton(
       name: "Register",
       height: _deviceHeight * 0.065,
@@ -273,6 +290,11 @@ class _RegisterPageState extends State<RegisterPage> {
       onPressed: () async {
         checkEmail = false;
         checkUsername = false;
+        if (_profileImage == null) {
+          setState(() {
+            visible = true; // Set flag to indicate creation process
+          });
+        }
         try {
           // Fetch the sign-in methods associated with the email address
           final list =
