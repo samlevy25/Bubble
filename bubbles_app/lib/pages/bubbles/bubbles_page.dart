@@ -204,7 +204,7 @@ class _BubblesPageState extends State<BubblesPage> {
         } else {
           return const Center(
             child: CircularProgressIndicator(
-              color: Colors.white,
+              color: Colors.lightBlue,
             ),
           );
         }
