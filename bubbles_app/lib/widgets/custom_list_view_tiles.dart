@@ -265,7 +265,7 @@ class CustomExplorerListViewTile extends StatelessWidget {
               key: UniqueKey(),
               imagePath:
                   post.sender.imageURL, // Add this line to display the image
-              size: width * 0.08,
+              size: width * 0.15,
             ),
             Expanded(
               child: post.type == PostType.text

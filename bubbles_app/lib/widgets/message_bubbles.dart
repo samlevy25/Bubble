@@ -172,14 +172,17 @@ class TextPostBubble extends StatelessWidget {
               post.content,
               style: const TextStyle(
                 color: Color.fromARGB(255, 255, 255, 255),
-                fontSize: 50,
+                fontSize: 20,
               ),
             ),
+          ),
+          Divider(
+            color: Colors.white,
           ),
           Text(
             " ${post.sender.username}, ${timeago.format(post.sentTime)} at ${"Tel Aviv Center"}",
             style: const TextStyle(
-              color: Colors.white70,
+              color: Colors.white,
             ),
           ),
           if (actions)
