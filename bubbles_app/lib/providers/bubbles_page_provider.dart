@@ -46,7 +46,6 @@ class BubblesPageProvider extends ChangeNotifier {
           (d) async {
             Map<String, dynamic> bubbleData = d.data() as Map<String, dynamic>;
 
-            //Get Users In Bubble
 
             //Get Last Message For Bubble
             List<Message> messages = [];

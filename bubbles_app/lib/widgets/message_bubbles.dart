@@ -172,6 +172,7 @@ class TextPostBubble extends StatelessWidget {
               post.content,
               style: const TextStyle(
                 color: Color.fromARGB(255, 255, 255, 255),
+                fontSize: 50,
               ),
             ),
           ),

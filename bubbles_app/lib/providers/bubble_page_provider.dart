@@ -23,6 +23,7 @@ import '../providers/authentication_provider.dart';
 import '../models/message.dart';
 
 import 'package:translator/translator.dart';
+import 'package:profanity_filter/profanity_filter.dart';
 
 class BubblePageProvider extends ChangeNotifier {
   late DatabaseService _db;
@@ -91,7 +92,7 @@ class BubblePageProvider extends ChangeNotifier {
 
         for (Message message in messages!) {
           if (message.type == MessageType.text) {
-            message.content = await translateMsg(message.content);
+            message.content = await translateAndFilter(message.content);
           }
         }
 
@@ -154,8 +155,12 @@ class BubblePageProvider extends ChangeNotifier {
     _db.deleteBubble(_bubbleId);
   }
 
-  Future<String> translateMsg(String msg) async {
-    Translation translated = await msg.translate(to: 'fr');
-    return translated.toString();
+  Future<String> translateAndFilter(String msg) async {
+    final filter = ProfanityFilter();
+
+    Translation enTranslated = await msg.translate(to: 'en');
+    String filtered = filter.censor(enTranslated.toString());
+    Translation result = await filtered.translate(to: 'fr');
+    return result.toString();
   }
 }
