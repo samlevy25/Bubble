@@ -107,14 +107,20 @@ class ExplorerPageProvider extends ChangeNotifier {
 
   void sendTextPost() {
     if (_post != null) {
+      String uid = _db.generatePostUid();
       Post postToSend = Post(
-          content: _post!,
-          type: PostType.text,
-          sender: _auth.appUser,
-          sentTime: DateTime.now(),
-          comments: [],
-          geoPoint: const GeoPoint(0, 0));
-      _db.addPostToExplorer(postToSend);
+        uid: uid,
+        content: _post!,
+        type: PostType.text,
+        sender: _auth.appUser,
+        sentTime: DateTime.now(),
+        comments: [],
+        geoPoint: const GeoPoint(0, 0),
+        voters: [],
+        votesUp: 0,
+        votesDown: 0,
+      );
+      _db.addPostToExplorer(postToSend, uid);
     }
   }
 
@@ -124,14 +130,19 @@ class ExplorerPageProvider extends ChangeNotifier {
       if (file != null) {
         String? downloadURL =
             await _storage.saveExplorerImageToStorage(_auth.appUser.uid, file);
+        String uid = await _db.generatePostUid();
         Post postToSend = Post(
+            uid: uid,
             content: downloadURL!,
             type: PostType.image,
             sender: _auth.appUser,
             sentTime: DateTime.now(),
             comments: [],
-            geoPoint: const GeoPoint(0, 0));
-        _db.addPostToExplorer(postToSend);
+            geoPoint: const GeoPoint(0, 0),
+            voters: [],
+            votesUp: 0,
+            votesDown: 0);
+        _db.addPostToExplorer(postToSend, uid);
       }
     } catch (e) {
       if (kDebugMode) {

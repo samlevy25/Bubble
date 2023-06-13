@@ -413,9 +413,9 @@ extension ExplorerDatabaseService on DatabaseService {
         .snapshots();
   }
 
-  Future<void> addPostToExplorer(Post post) async {
+  Future<void> addPostToExplorer(Post post, String uid) async {
     try {
-      await _db.collection(postsCollection).add(
+      await _db.collection(postsCollection).doc(uid).set(
             post.toJson(),
           );
     } catch (e) {
@@ -423,5 +423,57 @@ extension ExplorerDatabaseService on DatabaseService {
         print(e);
       }
     }
+  }
+
+  Future<void> addVoteToPost(
+      String postID, String userID, int voteValue) async {
+    try {
+      print(postID);
+      final postRef = _db.collection(postsCollection).doc(postID);
+      final postSnapshot = await postRef.get();
+
+      print("postSnapshot.exists: ${postSnapshot.exists}");
+
+      if (postSnapshot.exists) {
+        final postVoters =
+            List<String>.from(postSnapshot.data()?['voters'] ?? []);
+        final votesUp = postSnapshot.data()?['votes_up'] ?? 0;
+        final votesDown = postSnapshot.data()?['votes_down'] ?? 0;
+
+        print("postVoters: $postVoters");
+        print("votesUp: $votesUp");
+        print("votesDown: $votesDown");
+
+        if (!postVoters.contains(userID)) {
+          postVoters.add(userID);
+
+          if (voteValue > 0) {
+            await postRef.update({
+              'voters': postVoters,
+              'votes_up': votesUp + 1,
+            });
+            print("Vote added: votes_up increased by 1");
+          } else if (voteValue < 0) {
+            await postRef.update({
+              'voters': postVoters,
+              'votes_down': votesDown + 1,
+            });
+            print("Vote added: votes_down increased by 1");
+          }
+        } else {
+          print("User has already voted");
+        }
+      } else {
+        print("Post not found");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  String generatePostUid() {
+    return _db.collection('postsCollection').doc().id;
   }
 }

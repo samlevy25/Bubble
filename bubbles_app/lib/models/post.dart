@@ -5,24 +5,33 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 enum PostType {
   text,
   image,
-  unkown,
+  unknown,
 }
 
 class Post {
+  final String uid; // Add uid property
   final AppUser sender;
   final PostType type;
   final String content;
   final DateTime sentTime;
   final GeoPoint geoPoint;
-  List<Comment> comments;
+  final List<Comment> comments;
+  final List<String> voters;
+  final int votesUp;
+  final int votesDown;
 
-  Post(
-      {required this.content,
-      required this.type,
-      required this.sender,
-      required this.sentTime,
-      required this.comments,
-      required this.geoPoint});
+  Post({
+    required this.uid,
+    required this.content,
+    required this.type,
+    required this.sender,
+    required this.sentTime,
+    required this.geoPoint,
+    required this.comments,
+    required this.voters,
+    required this.votesUp,
+    required this.votesDown,
+  });
 
   factory Post.fromJSON(Map<String, dynamic> jsonPost) {
     PostType postType;
@@ -34,16 +43,24 @@ class Post {
         postType = PostType.image;
         break;
       default:
-        postType = PostType.unkown;
+        postType = PostType.unknown;
     }
 
+    final List<dynamic> jsonVoters = jsonPost["voters"];
+    final List<String> voters = List<String>.from(jsonVoters);
+
     return Post(
-        content: jsonPost["content"],
-        type: postType,
-        sender: jsonPost["sender"],
-        sentTime: jsonPost["sent_time"].toDate(),
-        comments: jsonPost["comments"],
-        geoPoint: jsonPost["geopoint"]);
+      uid: jsonPost["uid"], // Add uid assignment
+      content: jsonPost["content"],
+      type: postType,
+      sender: jsonPost["sender"],
+      sentTime: jsonPost["sent_time"].toDate(),
+      geoPoint: jsonPost["geopoint"],
+      comments: jsonPost["comments"],
+      voters: voters,
+      votesUp: jsonPost["votes_up"],
+      votesDown: jsonPost["votes_down"],
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -59,12 +76,16 @@ class Post {
         postType = "";
     }
     return {
+      "uid": uid, // Include uid in the JSON
       "content": content,
       "type": postType,
       "sender": sender.uid,
       "sent_time": Timestamp.fromDate(sentTime),
-      "comments": comments,
       "geopoint": geoPoint,
+      "comments": comments,
+      "voters": voters,
+      "votes_up": votesUp,
+      "votes_down": votesDown,
     };
   }
 }

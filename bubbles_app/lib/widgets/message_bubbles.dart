@@ -155,7 +155,7 @@ class TextPostBubble extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(15),
         gradient: const LinearGradient(
           colors: [Colors.lightBlue, Colors.lightBlueAccent],
           stops: [0.30, 0.70],
@@ -171,59 +171,21 @@ class TextPostBubble extends StatelessWidget {
             child: Text(
               post.content,
               style: const TextStyle(
-                color: Color.fromARGB(255, 255, 255, 255),
-                fontSize: 20,
+                color: Colors.white,
+                fontSize: 15,
               ),
             ),
           ),
-          Divider(
+          const Divider(
             color: Colors.white,
           ),
           Text(
             " ${post.sender.username}, ${timeago.format(post.sentTime)} at ${"Tel Aviv Center"}",
             style: const TextStyle(
               color: Colors.white,
+              fontSize: 15,
             ),
           ),
-          if (actions)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start, // Add this line
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.bar_chart),
-                      color: Colors.white,
-                      iconSize: 15,
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.comment),
-                      color: Colors.white,
-                      iconSize: 15,
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.thumb_up),
-                      color: Colors.white,
-                      iconSize: 15,
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.thumb_down),
-                      color: Colors.white,
-                      iconSize: 15,
-                    ),
-                  ],
-                ),
-              ],
-            )
         ],
       ),
     );

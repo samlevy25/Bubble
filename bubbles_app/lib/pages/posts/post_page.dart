@@ -1,9 +1,11 @@
 import 'package:bubbles_app/models/comment.dart';
+import 'package:bubbles_app/providers/authentication_provider.dart';
 import 'package:bubbles_app/services/database_service.dart';
 import 'package:bubbles_app/widgets/rounded_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/app_user.dart';
 import '../../models/post.dart';
@@ -30,6 +32,8 @@ class _PostPageState extends State<PostPage> {
   SortBy _sortBy = SortBy.newest;
 
   late DatabaseService _db;
+  late AuthenticationProvider _auth;
+  late AppUser user;
 
   @override
   void initState() {
@@ -56,6 +60,8 @@ class _PostPageState extends State<PostPage> {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
     _db = GetIt.instance.get<DatabaseService>();
+    _auth = Provider.of<AuthenticationProvider>(context);
+    user = _auth.appUser;
 
     return Scaffold(
       appBar: AppBar(
@@ -72,6 +78,7 @@ class _PostPageState extends State<PostPage> {
             isOwnMessage: true,
             actions: true,
           ),
+          _rates(),
           const Divider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -154,6 +161,62 @@ class _PostPageState extends State<PostPage> {
               : Colors.black, // Text color based on selection
         ),
       ),
+    );
+  }
+
+  Widget _rates() {
+    // Get the initial rating from the post object
+    int totalVotes = widget.post.votesUp + widget.post.votesDown;
+    double goodRate =
+        totalVotes != 0 ? (widget.post.votesUp / totalVotes) * 100 : 0.0;
+    double badRate =
+        totalVotes != 0 ? (widget.post.votesDown / totalVotes) * 100 : 0.0;
+    bool isGood = goodRate > badRate;
+    double rate = isGood ? goodRate : badRate;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Icon(Icons.star, color: Colors.orange),
+            const SizedBox(width: 5),
+            Text(
+              '$rate%',
+              style: TextStyle(
+                color: isGood ? Colors.green : Colors.red,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  _db.addVoteToPost(widget.post.uid, user.uid, 1);
+                  print("Liked");
+                });
+              },
+              icon: Icon(Icons.thumb_up),
+              color: Colors.lightBlue,
+            ),
+            SizedBox(width: 10),
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  _db.addVoteToPost(widget.post.uid, user.uid, -1);
+                  print("DisLiked");
+                });
+              },
+              icon: Icon(Icons.thumb_down),
+              color: Colors.lightBlue,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
