@@ -171,8 +171,10 @@ class _PostPageState extends State<PostPage> {
         totalVotes != 0 ? (widget.post.votesUp / totalVotes) * 100 : 0.0;
     double badRate =
         totalVotes != 0 ? (widget.post.votesDown / totalVotes) * 100 : 0.0;
-    bool isGood = goodRate > badRate;
+    bool isGood = goodRate >= badRate;
     double rate = isGood ? goodRate : badRate;
+    print(widget.post.votesUp);
+    print(widget.post.votesDown);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
