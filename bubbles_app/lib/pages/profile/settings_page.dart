@@ -1,4 +1,5 @@
 import 'package:bubbles_app/widgets/custom_input_fields.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/src/platform_file.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -40,8 +41,33 @@ class _SettingsPageState extends State<SettingsPage> {
   PlatformFile? _profileImage;
 
   //username
-  String? _username;
+  String? _username = "";
   final _usernameFormKey = GlobalKey<FormState>();
+  bool checkUsername = false;
+  String? validateUsername(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a User name.';
+    }
+
+    RegExp regExp = RegExp(r".{8,}");
+    if (!regExp.hasMatch(value)) {
+      return 'Please enter a valid User name.';
+    }
+
+    if (checkUsername) {
+      return "The Username is already used.";
+    }
+
+    return null;
+  }
+
+  Future<bool> checkUsernameExists(String? username) async {
+    final collection = FirebaseFirestore.instance.collection('Users');
+    final querySnapshot =
+        await collection.where('username', isEqualTo: username).get();
+
+    return querySnapshot.docs.isNotEmpty;
+  }
 
   // email
   String? _email;
@@ -193,48 +219,58 @@ class _SettingsPageState extends State<SettingsPage> {
       children: [
         Form(
           key: _usernameFormKey,
-          child: CustomTextFormField(
-            onSaved: (value) {
-              setState(() {
-                _username = value;
-              });
-            },
-            regEx: r'.{8,}',
-            hintText: "Enter your new username here",
-            obscureText: false,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: _deviceWidth * 0.03,
+                vertical: _deviceHeight * 0.01),
+            child: TextFormField(
+              onChanged: (value) {
+                setState(() {
+                  _username = value;
+                });
+              },
+              validator: validateUsername,
+              decoration: InputDecoration(
+                labelStyle: const TextStyle(
+                  color: Colors.lightBlue,
+                ),
+                focusColor: Colors.lightBlue,
+                filled: true,
+                enabledBorder: UnderlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Colors.lightBlue,
+                  ),
+                ),
+                labelText: "New Username",
+              ),
+            ),
           ),
         ),
-        AsyncButtonBuilder(
-          onPressed: () async {
-            await Future.delayed(const Duration(seconds: 1));
-            if (_usernameFormKey.currentState!.validate()) {
-              validate = true;
-              _usernameFormKey.currentState!.save();
-              _db.updateUsername(_auth.appUser.uid, _username);
-            } else {
-              validate = false;
-              throw 'yikes';
-            }
-          },
-          builder: (context, child, callback, buttonState) {
-            final buttonColor = buttonState.when(
-              idle: () => null,
-              loading: () => null,
-              success: () => null,
-              error: (err, stack) => null,
-            );
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0)
+              .copyWith(bottom: _deviceHeight * 0.01),
+          child: ElevatedButton(
+            onPressed: () async {
+              checkUsername = false;
+              if (await checkUsernameExists(_username)) {
+                checkUsername = true;
+              }
 
-            return TextButton(
-              onPressed: callback,
-              style: validate
-                  ? null
-                  : OutlinedButton.styleFrom(
-                      backgroundColor: buttonColor,
-                    ),
-              child: child,
-            );
-          },
-          child: const Text('Submit'),
+              if (_usernameFormKey.currentState!.validate()) {
+                validate = true;
+                _usernameFormKey.currentState!.save();
+                _db.updateUsername(_auth.appUser.uid, _username);
+              } else {
+                validate = false;
+              }
+            },
+            child: const Text('Submit'),
+          ),
         ),
       ],
     );
@@ -553,7 +589,6 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-//about
   Widget _aboutLink() {
     final Uri _url = Uri.parse('https://bubbles-website-716a4.web.app/');
     return ListTile(

@@ -4,14 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/activity.dart';
-import '../../models/app_user.dart';
 import '../../providers/authentication_provider.dart';
-import '../../providers/chats_page_provider.dart';
+
 import '../../services/navigation_service.dart';
-import '../../widgets/profile_widget.dart';
-import '../chats/chats_page.dart';
-import 'settings_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
