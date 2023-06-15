@@ -81,106 +81,108 @@ class _SignIn extends State<LoginPage> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: _deviceWidth * 0.03,
-            vertical: _deviceHeight * 0.02,
-          ),
-          height: _deviceHeight * 0.98,
-          width: _deviceWidth,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/images/login.png',
-                  alignment: Alignment.topCenter,
-                  height: _deviceHeight * 0.35,
-                ),
-                const Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Welcome,",
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 40,
-                    ),
+        child: Center(
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: _deviceWidth * 0.03,
+              vertical: _deviceHeight * 0.06,
+            ),
+            height: _deviceHeight,
+            width: _deviceWidth,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/login.png',
+                    alignment: Alignment.topCenter,
+                    height: _deviceHeight * 0.35,
                   ),
-                ),
-                const Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Sign in to continue !",
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: _deviceHeight * 0.03,
-                ),
-                _loginForm(),
-                SizedBox(
-                  height: _deviceHeight * 0.01,
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) {
-                          return const ResetPasswordPage();
-                        },
-                      ));
-                    },
-                    style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.lightBlue),
-                    ),
-                    child: const Text('Forgot password ?'),
-                  ),
-                ),
-                SizedBox(
-                  height: _deviceHeight * 0.01,
-                ),
-                _loginBottun(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Expanded(
-                        child: Divider(
-                          color: Colors.black54,
-                          thickness: 1,
-                        ),
+                  const Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Welcome,",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 40,
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        child: Text(
-                          "or",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
+                    ),
+                  ),
+                  const Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Sign in to continue !",
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: _deviceHeight * 0.03,
+                  ),
+                  _loginForm(),
+                  SizedBox(
+                    height: _deviceHeight * 0.01,
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return const ResetPasswordPage();
+                          },
+                        ));
+                      },
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.lightBlue),
+                      ),
+                      child: const Text('Forgot password ?'),
+                    ),
+                  ),
+                  SizedBox(
+                    height: _deviceHeight * 0.01,
+                  ),
+                  _loginBottun(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Expanded(
+                          child: Divider(
+                            color: Colors.black54,
+                            thickness: 1,
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          color: Colors.black54,
-                          thickness: 1,
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(
+                            "or",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                        Expanded(
+                          child: Divider(
+                            color: Colors.black54,
+                            thickness: 1,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                _SignUpBottun(e: true),
-              ],
+                  _SignUpBottun(e: true),
+                ],
+              ),
             ),
           ),
         ),
