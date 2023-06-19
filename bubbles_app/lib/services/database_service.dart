@@ -66,6 +66,20 @@ class DatabaseService {
     }
   }
 
+  // Update the email of a user document
+  Future<void> updateEmail(
+    String uid,
+    newEmail,
+  ) async {
+    try {
+      await _db.collection(userCollection).doc(uid).update({"email": newEmail});
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
   // Update the image URL of a user document
   Future<void> updateImageURL(
     String uid,

@@ -35,7 +35,7 @@ class _SettingsPageState extends State<SettingsPage> {
   late DatabaseService _db;
 
   // current password for re-auth
-  String? _currentPassword;
+  String? _currentPassword = "";
 
   // image
   PlatformFile? _profileImage;
@@ -44,6 +44,7 @@ class _SettingsPageState extends State<SettingsPage> {
   String? _username = "";
   final _usernameFormKey = GlobalKey<FormState>();
   bool checkUsername = false;
+  bool sameUsername = false;
   String? validateUsername(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter a User name.';
@@ -52,6 +53,10 @@ class _SettingsPageState extends State<SettingsPage> {
     RegExp regExp = RegExp(r".{8,}");
     if (!regExp.hasMatch(value)) {
       return 'Please enter a valid User name.';
+    }
+
+    if (sameUsername) {
+      return "Entered current Username. Please provide a new one.";
     }
 
     if (checkUsername) {
@@ -70,8 +75,59 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   // email
-  String? _email;
+  String? _email = "";
   final _emailFormKey = GlobalKey<FormState>();
+  bool checkEmail = false;
+  bool checkAuth = false;
+  bool sameEmail = false;
+  String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter an email address.';
+    }
+
+    RegExp regExp = RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+
+    if (!regExp.hasMatch(value)) {
+      return 'Please enter a valid email address.';
+    }
+
+    if (sameEmail) {
+      return "Entered current email. Please provide a new one.";
+    }
+
+    if (checkEmail) {
+      return "The Email is already used.";
+    }
+
+    return null;
+  }
+
+  Future<bool> checkEmailExists(String? email) async {
+    final collection = FirebaseFirestore.instance.collection('Users');
+    final querySnapshot =
+        await collection.where('email', isEqualTo: email).get();
+
+    return querySnapshot.docs.isNotEmpty;
+  }
+
+  String? validatePasswordForEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a password.';
+    }
+
+    RegExp regExp = RegExp(r".{6,}");
+
+    if (!regExp.hasMatch(value)) {
+      return 'Please enter a valid password.';
+    }
+
+    if (checkAuth) {
+      return "The password is wrong, please try again !";
+    }
+
+    return null;
+  }
 
   // password
   String? _newPassword;
@@ -257,6 +313,11 @@ class _SettingsPageState extends State<SettingsPage> {
           child: ElevatedButton(
             onPressed: () async {
               checkUsername = false;
+              sameUsername = false;
+
+              if (_auth.appUser.username == _username) {
+                sameUsername = true;
+              }
               if (await checkUsernameExists(_username)) {
                 checkUsername = true;
               }
@@ -281,67 +342,108 @@ class _SettingsPageState extends State<SettingsPage> {
     return ExpansionTile(
       leading: const Icon(Icons.email),
       title: const Text('Email'),
-      subtitle: const Text('change the login email'),
+      subtitle: const Text('Change the login email'),
       children: [
         Form(
           key: _emailFormKey,
           child: Column(
             children: [
-              CustomTextFormField(
-                onSaved: (value) {
-                  setState(() {
-                    _email = value;
-                  });
-                },
-                regEx:
-                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
-                hintText: "Enter your new email here",
-                obscureText: false,
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: _deviceWidth * 0.03,
+                    vertical: _deviceHeight * 0.01),
+                child: TextFormField(
+                  onChanged: (value) {
+                    setState(() {
+                      _email = value;
+                    });
+                  },
+                  validator: validateEmail,
+                  decoration: InputDecoration(
+                    labelStyle: const TextStyle(
+                      color: Colors.lightBlue,
+                    ),
+                    focusColor: Colors.lightBlue,
+                    filled: true,
+                    enabledBorder: UnderlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(
+                        color: Colors.lightBlue,
+                      ),
+                    ),
+                    labelText: "New Email",
+                  ),
+                ),
               ),
-              CustomTextFormField(
-                onSaved: (value) {
-                  setState(() {
-                    _currentPassword = value;
-                  });
-                },
-                regEx: r'.{8,}',
-                hintText: "Enter your current password ",
-                obscureText: true,
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: _deviceWidth * 0.03,
+                    vertical: _deviceHeight * 0.01),
+                child: TextFormField(
+                  onChanged: (value) {
+                    setState(() {
+                      _currentPassword = value;
+                    });
+                  },
+                  validator: validatePasswordForEmail,
+                  decoration: InputDecoration(
+                    labelStyle: const TextStyle(
+                      color: Colors.lightBlue,
+                    ),
+                    focusColor: Colors.lightBlue,
+                    filled: true,
+                    enabledBorder: UnderlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(
+                        color: Colors.lightBlue,
+                      ),
+                    ),
+                    labelText: "Current password",
+                  ),
+                ),
               ),
             ],
           ),
         ),
-        AsyncButtonBuilder(
-          onPressed: () async {
-            await Future.delayed(const Duration(seconds: 1));
-            if (_emailFormKey.currentState!.validate()) {
-              validate = true;
-              _emailFormKey.currentState!.save();
-              _auth.changeEmail(_email, _currentPassword);
-            } else {
-              validate = false;
-              throw 'yikes';
-            }
-          },
-          builder: (context, child, callback, buttonState) {
-            final buttonColor = buttonState.when(
-              idle: () => null,
-              loading: () => null,
-              success: () => null,
-              error: (err, stack) => null,
-            );
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0)
+              .copyWith(bottom: _deviceHeight * 0.01),
+          child: ElevatedButton(
+            onPressed: () async {
+              checkEmail = false;
+              checkAuth = false;
+              sameEmail = false;
 
-            return TextButton(
-              onPressed: callback,
-              style: validate
-                  ? null
-                  : OutlinedButton.styleFrom(
-                      backgroundColor: buttonColor,
-                    ),
-              child: child,
-            );
-          },
-          child: const Text('Submit'),
+              if (_auth.appUser.email == _email) {
+                sameEmail = true;
+              }
+
+              if (await checkEmailExists(_email)) {
+                checkEmail = true;
+              }
+
+              if (await _auth.changeEmail(_email, _currentPassword) == false) {
+                checkAuth = true;
+              }
+
+              if (_emailFormKey.currentState!.validate()) {
+                validate = true;
+                _emailFormKey.currentState!.save();
+                _db.updateEmail(_auth.appUser.uid, _email);
+              } else {
+                validate = false;
+              }
+            },
+            child: const Text('Submit'),
+          ),
         ),
       ],
     );

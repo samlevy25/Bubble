@@ -119,7 +119,24 @@ class AuthenticationProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> changeEmail(newEmail, currentPassword) async {
+  // Future<void> changeEmail(newEmail, currentPassword) async {
+  //   try {
+  //     UserCredential? authResult =
+  //         await _auth.currentUser?.reauthenticateWithCredential(
+  //       EmailAuthProvider.credential(
+  //         email: _auth.currentUser!.email!,
+  //         password: currentPassword,
+  //       ),
+  //     );
+  //     await authResult?.user?.updateEmail(newEmail);
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print(e);
+  //     }
+  //   }
+  // }
+
+  Future<bool> changeEmail(newEmail, currentPassword) async {
     try {
       UserCredential? authResult =
           await _auth.currentUser?.reauthenticateWithCredential(
@@ -129,10 +146,12 @@ class AuthenticationProvider extends ChangeNotifier {
         ),
       );
       await authResult?.user?.updateEmail(newEmail);
+      return true;
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      return false;
+      // if (kDebugMode) {
+      //   print(e);
+      // }
     }
   }
 
