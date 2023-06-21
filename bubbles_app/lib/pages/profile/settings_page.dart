@@ -8,6 +8,7 @@ import 'package:async_button_builder/async_button_builder.dart';
 import '../../providers/authentication_provider.dart';
 import '../../services/cloud_storage_service.dart';
 import '../../services/database_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -29,13 +30,16 @@ class _SettingsPageState extends State<SettingsPage> {
   late double _deviceWidth;
 
   bool validate = true;
-
+  UserCredential? authResult;
   late AuthenticationProvider _auth;
   late CloudStorageService _cloudStorage;
   late DatabaseService _db;
 
   // current password for re-auth
   String? _currentPassword = "";
+
+  //Check for re-auth
+  bool checkAuth = false;
 
   // image
   PlatformFile? _profileImage;
@@ -78,7 +82,6 @@ class _SettingsPageState extends State<SettingsPage> {
   String? _email = "";
   final _emailFormKey = GlobalKey<FormState>();
   bool checkEmail = false;
-  bool checkAuth = false;
   bool sameEmail = false;
   String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
@@ -119,7 +122,7 @@ class _SettingsPageState extends State<SettingsPage> {
     RegExp regExp = RegExp(r".{6,}");
 
     if (!regExp.hasMatch(value)) {
-      return 'Please enter a valid password.';
+      return 'Password must be at least 6 characters long.';
     }
 
     if (checkAuth) {
@@ -130,8 +133,49 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   // password
-  String? _newPassword;
+  String? _newPassword = "";
+  String? _confirmPassword = "";
+  bool samePassword = false;
+  bool _confirm = false;
   final _passwordFormKey = GlobalKey<FormState>();
+  String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a password.';
+    }
+
+    RegExp regExp = RegExp(r".{6,}");
+
+    // RegExp(r".{6,}").hasMatch(_newPassword)
+
+    if (!regExp.hasMatch(value)) {
+      return 'Password must be at least 6 characters long.';
+    }
+
+    if (samePassword) {
+      return "Entered current password. Please provide a new one.";
+    }
+
+    return null;
+  }
+
+  String? validateConfirmPassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter the confirm password.';
+    }
+
+    RegExp regExp = RegExp(r".{6,}");
+
+    if (!regExp.hasMatch(value)) {
+      return 'Confim password must be at least 6 characters long.';
+    }
+
+    if (_confirm &&
+        ((!samePassword && RegExp(r".{6,}").hasMatch(_newPassword!)))) {
+      return "Password and confirmation do not match.";
+    }
+
+    return null;
+  }
 
   // radius
   double _currentSliderValue = 0;
@@ -355,6 +399,37 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: TextFormField(
                   onChanged: (value) {
                     setState(() {
+                      _currentPassword = value;
+                    });
+                  },
+                  validator: validatePasswordForEmail,
+                  decoration: InputDecoration(
+                    labelStyle: const TextStyle(
+                      color: Colors.lightBlue,
+                    ),
+                    focusColor: Colors.lightBlue,
+                    filled: true,
+                    enabledBorder: UnderlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(
+                        color: Colors.lightBlue,
+                      ),
+                    ),
+                    labelText: "Current password",
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: _deviceWidth * 0.03,
+                    vertical: _deviceHeight * 0.01),
+                child: TextFormField(
+                  onChanged: (value) {
+                    setState(() {
                       _email = value;
                     });
                   },
@@ -379,6 +454,54 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
               ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0)
+              .copyWith(bottom: _deviceHeight * 0.01),
+          child: ElevatedButton(
+            onPressed: () async {
+              checkEmail = false;
+              checkAuth = false;
+              sameEmail = false;
+              authResult = await _auth.changeEmail(_email, _currentPassword);
+
+              if (_auth.appUser.email == _email) {
+                sameEmail = true;
+              }
+
+              if (await checkEmailExists(_email)) {
+                checkEmail = true;
+              }
+
+              if (authResult == null) {
+                checkAuth = true;
+              }
+
+              if (_emailFormKey.currentState!.validate()) {
+                _emailFormKey.currentState!.save();
+                await authResult?.user?.updateEmail(_email!);
+                _db.updateEmail(_auth.appUser.uid, _email);
+              }
+            },
+            child: const Text('Submit'),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _changePassword() {
+    return ExpansionTile(
+      leading: const Icon(Icons.password),
+      title: const Text('Password'),
+      subtitle: const Text('change the login password'),
+      children: [
+        Form(
+          key: _passwordFormKey,
+          child: Column(
+            children: [
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: _deviceWidth * 0.03,
@@ -410,6 +533,68 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
               ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: _deviceWidth * 0.03,
+                    vertical: _deviceHeight * 0.01),
+                child: TextFormField(
+                  onChanged: (value) {
+                    setState(() {
+                      _newPassword = value;
+                    });
+                  },
+                  validator: validatePassword,
+                  decoration: InputDecoration(
+                    labelStyle: const TextStyle(
+                      color: Colors.lightBlue,
+                    ),
+                    focusColor: Colors.lightBlue,
+                    filled: true,
+                    enabledBorder: UnderlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(
+                        color: Colors.lightBlue,
+                      ),
+                    ),
+                    labelText: "New password",
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: _deviceWidth * 0.03,
+                    vertical: _deviceHeight * 0.01),
+                child: TextFormField(
+                  onChanged: (value) {
+                    setState(() {
+                      _confirmPassword = value;
+                    });
+                  },
+                  validator: validateConfirmPassword,
+                  decoration: InputDecoration(
+                    labelStyle: const TextStyle(
+                      color: Colors.lightBlue,
+                    ),
+                    focusColor: Colors.lightBlue,
+                    filled: true,
+                    enabledBorder: UnderlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(
+                        color: Colors.lightBlue,
+                      ),
+                    ),
+                    labelText: "Confirm password",
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -418,101 +603,32 @@ class _SettingsPageState extends State<SettingsPage> {
               .copyWith(bottom: _deviceHeight * 0.01),
           child: ElevatedButton(
             onPressed: () async {
-              checkEmail = false;
               checkAuth = false;
-              sameEmail = false;
+              _confirm = false;
+              authResult =
+                  await _auth.changePassword(_newPassword, _currentPassword);
+              samePassword = false;
 
-              if (_auth.appUser.email == _email) {
-                sameEmail = true;
-              }
-
-              if (await checkEmailExists(_email)) {
-                checkEmail = true;
-              }
-
-              if (await _auth.changeEmail(_email, _currentPassword) == false) {
+              if (authResult == null) {
                 checkAuth = true;
+              } else {
+                if (_currentPassword == _newPassword) {
+                  samePassword = true;
+                }
+              }
+              print(
+                  "Confirm password : $_confirmPassword  --  New Password : $_newPassword");
+              if (_confirmPassword != _newPassword) {
+                _confirm = true;
               }
 
-              if (_emailFormKey.currentState!.validate()) {
-                validate = true;
-                _emailFormKey.currentState!.save();
-                _db.updateEmail(_auth.appUser.uid, _email);
-              } else {
-                validate = false;
+              if (_passwordFormKey.currentState!.validate()) {
+                _passwordFormKey.currentState!.save();
+                await authResult?.user?.updatePassword(_newPassword!);
               }
             },
             child: const Text('Submit'),
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _changePassword() {
-    return ExpansionTile(
-      leading: const Icon(Icons.password),
-      title: const Text('Password'),
-      subtitle: const Text('change the login password'),
-      children: [
-        Form(
-          key: _passwordFormKey,
-          child: Column(
-            children: [
-              CustomTextFormField(
-                onSaved: (value) {
-                  setState(() {
-                    _currentPassword = value;
-                  });
-                },
-                regEx: r'.{8,}',
-                hintText: "Enter your current password ",
-                obscureText: true,
-              ),
-              CustomTextFormField(
-                onSaved: (value) {
-                  setState(() {
-                    _newPassword = value;
-                  });
-                },
-                regEx: r'.{8,}',
-                hintText: "Enter your new password here",
-                obscureText: true,
-              ),
-            ],
-          ),
-        ),
-        AsyncButtonBuilder(
-          onPressed: () async {
-            await Future.delayed(const Duration(seconds: 1));
-            if (_passwordFormKey.currentState!.validate()) {
-              validate = true;
-              _passwordFormKey.currentState!.save();
-              _auth.changePassword(_newPassword, _currentPassword);
-            } else {
-              validate = false;
-              throw 'yikes';
-            }
-          },
-          builder: (context, child, callback, buttonState) {
-            final buttonColor = buttonState.when(
-              idle: () => null,
-              loading: () => null,
-              success: () => null,
-              error: (err, stack) => null,
-            );
-
-            return TextButton(
-              onPressed: callback,
-              style: validate
-                  ? null
-                  : OutlinedButton.styleFrom(
-                      backgroundColor: buttonColor,
-                    ),
-              child: child,
-            );
-          },
-          child: const Text('Submit'),
         ),
       ],
     );

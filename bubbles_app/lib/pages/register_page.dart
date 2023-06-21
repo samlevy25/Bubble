@@ -71,7 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
     RegExp regExp = RegExp(r".{6,}");
 
     if (!regExp.hasMatch(value)) {
-      return 'Please enter a valid password.';
+      return 'Password must be at least 6 characters long.';
     }
 
     return null;

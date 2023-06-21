@@ -119,24 +119,7 @@ class AuthenticationProvider extends ChangeNotifier {
     }
   }
 
-  // Future<void> changeEmail(newEmail, currentPassword) async {
-  //   try {
-  //     UserCredential? authResult =
-  //         await _auth.currentUser?.reauthenticateWithCredential(
-  //       EmailAuthProvider.credential(
-  //         email: _auth.currentUser!.email!,
-  //         password: currentPassword,
-  //       ),
-  //     );
-  //     await authResult?.user?.updateEmail(newEmail);
-  //   } catch (e) {
-  //     if (kDebugMode) {
-  //       print(e);
-  //     }
-  //   }
-  // }
-
-  Future<bool> changeEmail(newEmail, currentPassword) async {
+  Future<UserCredential?> changeEmail(newEmail, currentPassword) async {
     try {
       UserCredential? authResult =
           await _auth.currentUser?.reauthenticateWithCredential(
@@ -145,17 +128,14 @@ class AuthenticationProvider extends ChangeNotifier {
           password: currentPassword,
         ),
       );
-      await authResult?.user?.updateEmail(newEmail);
-      return true;
-    } catch (e) {
-      return false;
-      // if (kDebugMode) {
-      //   print(e);
-      // }
-    }
+
+      return authResult;
+      // ignore: empty_catches
+    } catch (e) {}
+    return null;
   }
 
-  Future<void> changePassword(newPassword, currrentPassword) async {
+  Future<UserCredential?> changePassword(newPassword, currrentPassword) async {
     try {
       UserCredential? authResult =
           await _auth.currentUser?.reauthenticateWithCredential(
@@ -164,11 +144,9 @@ class AuthenticationProvider extends ChangeNotifier {
           password: currrentPassword,
         ),
       );
-      await authResult?.user?.updatePassword(newPassword);
+      return authResult;
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      return null;
     }
   }
 }
