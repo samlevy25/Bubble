@@ -29,11 +29,12 @@ class _SettingsPageState extends State<SettingsPage> {
   late double _deviceHeight;
   late double _deviceWidth;
 
-  bool validate = true;
   UserCredential? authResult;
   late AuthenticationProvider _auth;
   late CloudStorageService _cloudStorage;
   late DatabaseService _db;
+
+  bool changed = false;
 
   // current password for re-auth
   String? _currentPassword = "";
@@ -43,6 +44,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   // image
   PlatformFile? _profileImage;
+  bool visible = false;
 
   //username
   String? _username = "";
@@ -223,17 +225,41 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         body: ListView(
           children: <Widget>[
-            const ListTile(title: Text("Profile")),
+            const ListTile(
+                title: Text(
+              "Profile",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            )),
             _changeProfileImage(),
             _changeUsername(),
-            const ListTile(title: Text("Security")),
+            const ListTile(
+                title: Text(
+              "Security",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            )),
             _changeEmail(),
             _changePassword(),
-            const ListTile(title: Text("App")),
+            const ListTile(
+                title: Text(
+              "App",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            )),
             _changeLanguage(),
             _changeRadius(),
             _logout(),
-            const ListTile(title: Text("About")),
+            const ListTile(
+                title: Text(
+              "About",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            )),
             _aboutLink(),
           ],
         ),
@@ -248,64 +274,90 @@ class _SettingsPageState extends State<SettingsPage> {
       title: const Text('Profile Image'),
       subtitle: const Text('change the display Image'),
       children: [
-        GestureDetector(
-          onTap: () {
-            GetIt.instance.get<MediaService>().pickedImageFromLibary().then(
-                  (file) => {
-                    setState(
-                      () {
-                        _profileImage = file;
-                      },
-                    )
-                  },
-                );
-          },
-          child: () {
-            return _profileImage != null
-                ? RoundedImageFile(
-                    key: UniqueKey(),
-                    image: _profileImage!,
-                    size: _deviceHeight * 0.15,
-                  )
-                : RoundedImageNetwork(
-                    key: UniqueKey(),
-                    imagePath: _auth.appUser.imageURL,
-                    size: _deviceHeight * 0.15,
-                  );
-          }(),
-        ),
-        AsyncButtonBuilder(
-          onPressed: () async {
-            await Future.delayed(const Duration(seconds: 1));
-            if (_profileImage != null) {
-              validate = true;
-              String? imageURL = await _cloudStorage.saveUserImageToStorage(
-                  _auth.appUser.uid, _profileImage!);
-              _db.updateImageURL(_auth.appUser.uid, imageURL!);
-            } else {
-              validate = false;
-              throw 'yikes';
-            }
-          },
-          builder: (context, child, callback, buttonState) {
-            final buttonColor = buttonState.when(
-              idle: () => null,
-              loading: () => null,
-              success: () => null,
-              error: (err, stack) => null,
-            );
-
-            return TextButton(
-              onPressed: callback,
-              style: validate
-                  ? null
-                  : OutlinedButton.styleFrom(
-                      backgroundColor: buttonColor,
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 700),
+          child: changed
+              ? const Center(
+                  child: Text(
+                    "Profile image changed successfully.",
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
                     ),
-              child: child,
-            );
-          },
-          child: const Text('Submit'),
+                    key: Key('imagage changed'),
+                  ),
+                )
+              : GestureDetector(
+                  onTap: () {
+                    GetIt.instance
+                        .get<MediaService>()
+                        .pickedImageFromLibary()
+                        .then(
+                          (file) => {
+                            setState(
+                              () {
+                                _profileImage = file;
+                              },
+                            )
+                          },
+                        );
+                  },
+                  child: () {
+                    return _profileImage != null
+                        ? RoundedImageFile(
+                            key: UniqueKey(),
+                            image: _profileImage!,
+                            size: _deviceHeight * 0.15,
+                          )
+                        : RoundedImageNetwork(
+                            key: UniqueKey(),
+                            imagePath: _auth.appUser.imageURL,
+                            size: _deviceHeight * 0.15,
+                          );
+                  }(),
+                ),
+        ),
+        SizedBox(height: _deviceHeight * 0.01),
+        Visibility(
+          visible: visible,
+          child: Text(
+            "Please select a new profile's image.",
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.red[(700)],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0)
+              .copyWith(bottom: _deviceHeight * 0.01),
+          child: ElevatedButton(
+            onPressed: () async {
+              setState(() {
+                changed = false;
+                visible = false;
+              });
+
+              if (_profileImage != null) {
+                setState(() {
+                  changed = true;
+                });
+                Future.delayed(const Duration(seconds: 3), () {
+                  setState(() {
+                    changed = false;
+                  });
+                });
+                String? imageURL = await _cloudStorage.saveUserImageToStorage(
+                    _auth.appUser.uid, _profileImage!);
+                _db.updateImageURL(_auth.appUser.uid, imageURL!);
+              } else {
+                setState(() {
+                  visible = true;
+                });
+              }
+            },
+            child: const Text('Submit'),
+          ),
         ),
       ],
     );
@@ -356,6 +408,10 @@ class _SettingsPageState extends State<SettingsPage> {
               .copyWith(bottom: _deviceHeight * 0.01),
           child: ElevatedButton(
             onPressed: () async {
+              setState(() {
+                visible = false;
+                changed = false;
+              });
               checkUsername = false;
               sameUsername = false;
 
@@ -367,11 +423,11 @@ class _SettingsPageState extends State<SettingsPage> {
               }
 
               if (_usernameFormKey.currentState!.validate()) {
-                validate = true;
                 _usernameFormKey.currentState!.save();
                 _db.updateUsername(_auth.appUser.uid, _username);
-              } else {
-                validate = false;
+                setState(() {
+                  changed = true;
+                });
               }
             },
             child: const Text('Submit'),
@@ -616,8 +672,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   samePassword = true;
                 }
               }
-              print(
-                  "Confirm password : $_confirmPassword  --  New Password : $_newPassword");
+
               if (_confirmPassword != _newPassword) {
                 _confirm = true;
               }
