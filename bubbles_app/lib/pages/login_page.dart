@@ -82,7 +82,7 @@ class _SignIn extends State<LoginPage> {
           child: Container(
             padding: EdgeInsets.symmetric(
               horizontal: _deviceWidth * 0.03,
-              vertical: _deviceHeight * 0.06,
+              vertical: _deviceHeight * 0.05,
             ),
             height: _deviceHeight,
             width: _deviceWidth,
@@ -124,7 +124,7 @@ class _SignIn extends State<LoginPage> {
                   ),
                   _loginForm(),
                   SizedBox(
-                    height: _deviceHeight * 0.01,
+                    height: _deviceHeight * 0.00000000001,
                   ),
                   Align(
                     alignment: Alignment.centerRight,
@@ -282,9 +282,6 @@ class _SignIn extends State<LoginPage> {
                   fontSize: 13,
                 ),
               ),
-            SizedBox(
-              height: _deviceHeight * 0.01,
-            ),
           ],
         ),
       ),
