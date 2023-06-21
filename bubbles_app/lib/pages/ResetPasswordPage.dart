@@ -106,6 +106,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     const SizedBox(height: 50),
                     AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
+                      transitionBuilder:
+                          (Widget child, Animation<double> animation) {
+                        return ScaleTransition(scale: animation, child: child);
+                      },
                       child: _isMailSent
                           ? const Center(
                               child: Text(
