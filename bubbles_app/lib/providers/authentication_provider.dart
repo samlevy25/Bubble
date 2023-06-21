@@ -73,20 +73,20 @@ class AuthenticationProvider extends ChangeNotifier {
     });
   }
 
-  Future<void> loginUsingEmailAndPassword(String email, String password) async {
+  Future<String?> loginUsingEmailAndPassword(
+      String email, String password) async {
     try {
-      _auth.signOut();
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      print("User logged in");
-    } on FirebaseAuthException {
-      if (kDebugMode) {
-        print("Error logging user into Firebase");
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential.user!.uid;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+      } else if (e.code == 'wrong-password') {
+      } else {}
     }
+    return null;
   }
 
   Future<String?> registerUserUsingEmailAndPassword(

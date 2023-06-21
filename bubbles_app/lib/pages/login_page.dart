@@ -29,12 +29,13 @@ class _SignIn extends State<LoginPage> {
   late NavigationService _navigation;
   late bool keyboardOpen;
   bool isPasswordVisible = true;
+  String? _loginError = "";
 
   late final _loginFormKey = GlobalKey<FormState>();
 
-  late String? _email;
+  String? _email = "";
   late bool checkEmail;
-  String? _password;
+  String? _password = "";
 
   String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
@@ -45,10 +46,6 @@ class _SignIn extends State<LoginPage> {
     RegExp regExp = RegExp(pattern);
     if (!regExp.hasMatch(value)) {
       return 'Please enter a valid email address.';
-    }
-
-    if (checkEmail) {
-      return "The Email is already used.";
     }
 
     return null;
@@ -73,7 +70,7 @@ class _SignIn extends State<LoginPage> {
     _auth = Provider.of<AuthenticationProvider>(context);
     _navigation = GetIt.instance.get<NavigationService>();
     keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
-    _email = "";
+
     return _buildUI();
   }
 
@@ -149,7 +146,7 @@ class _SignIn extends State<LoginPage> {
                   SizedBox(
                     height: _deviceHeight * 0.01,
                   ),
-                  _loginBottun(),
+                  _loginButton(),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: Row(
@@ -200,7 +197,7 @@ class _SignIn extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             TextFormField(
-              onSaved: (value) {
+              onChanged: (value) {
                 setState(() {
                   _email = value;
                 });
@@ -233,7 +230,7 @@ class _SignIn extends State<LoginPage> {
               height: MediaQuery.of(context).size.height * 0.01,
             ),
             TextFormField(
-              onSaved: (value) {
+              onChanged: (value) {
                 setState(() {
                   _password = value;
                 });
@@ -274,13 +271,27 @@ class _SignIn extends State<LoginPage> {
                 labelText: "Password",
               ),
             ),
+            SizedBox(
+              height: _deviceHeight * 0.01,
+            ),
+            if (_loginError != null)
+              Text(
+                _loginError!,
+                style: TextStyle(
+                  color: Colors.red[(700)],
+                  fontSize: 13,
+                ),
+              ),
+            SizedBox(
+              height: _deviceHeight * 0.01,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _loginBottun({bool? e}) {
+  Widget _loginButton({bool? e}) {
     return RoundedButton(
       empty: e ?? false,
       name: "Login",
@@ -288,11 +299,30 @@ class _SignIn extends State<LoginPage> {
       width: _deviceWidth,
       onPressed: () async {
         checkEmail = false;
+        print("Email : $_email -- Password : $_password");
 
         if (_loginFormKey.currentState!.validate()) {
           _loginFormKey.currentState!.save();
-          _auth.loginUsingEmailAndPassword(_email!, _password!);
-        } else {}
+
+          String? userId =
+              await _auth.loginUsingEmailAndPassword(_email!, _password!);
+
+          print("UserID = $userId");
+
+          if (userId != null) {
+            setState(() {
+              _loginError = null;
+            });
+          } else {
+            setState(() {
+              _loginError = 'Invalid email or password';
+            });
+          }
+        } else {
+          setState(() {
+            _loginError = null;
+          });
+        }
       },
     );
   }
