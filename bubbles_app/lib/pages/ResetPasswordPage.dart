@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -15,6 +16,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   bool _isMailSent = false;
   late double _deviceHeight;
   late double _deviceWidth;
+  bool checkEmail = false;
+  String? _email = "";
 
   @override
   void initState() {
@@ -29,26 +32,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     });
   }
 
-  Future<void> _resetPassword() async {
-    if (_formKey.currentState!.validate()) {
-      try {
-        await FirebaseAuth.instance.sendPasswordResetEmail(
-          email: _emailController.text.trim(),
-        );
-        setState(() {
-          _isMailSent = true;
-        });
-        Future.delayed(const Duration(seconds: 3), () {
-          setState(() {
-            _isMailSent = false;
-          });
-        });
-      } on FirebaseAuthException catch (e) {
-        setState(() {
-          _errorMessage = e.message!;
-        });
-      }
-    }
+  Future<bool> checkEmailExists(String? email) async {
+    final collection = FirebaseFirestore.instance.collection('Users');
+    final querySnapshot =
+        await collection.where('email', isEqualTo: email).get();
+
+    return !querySnapshot.docs.isNotEmpty;
   }
 
   @override
@@ -115,17 +104,26 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         return ScaleTransition(scale: animation, child: child);
                       },
                       child: _isMailSent
-                          ? const Center(
-                              child: Text(
-                                'Mail Sent!',
-                                style: TextStyle(
-                                  color: Colors.green,
-                                  fontWeight: FontWeight.bold,
+                          ? Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: _deviceHeight * 0.024),
+                              child: const Center(
+                                child: Text(
+                                  'Mail Sent!',
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  key: Key('MailSent'),
                                 ),
-                                key: Key('MailSent'),
                               ),
                             )
                           : TextFormField(
+                              onChanged: (value) {
+                                setState(() {
+                                  _email = value;
+                                });
+                              },
                               controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
@@ -152,21 +150,56 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter your email';
-                                } else if (!value.contains('@')) {
-                                  return 'Please enter a valid email';
                                 }
+
+                                RegExp regExp = RegExp(
+                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+
+                                if (!regExp.hasMatch(value)) {
+                                  return 'Please enter a valid email address.';
+                                }
+
+                                if (checkEmail) {
+                                  return "Email doesn't exist";
+                                }
+
                                 return null;
                               },
                             ),
                     ),
                     SizedBox(height: _deviceHeight * 0.02),
-                    Text(
-                      _errorMessage,
-                      style: const TextStyle(color: Colors.red),
-                    ),
                     Center(
                       child: ElevatedButton(
-                        onPressed: _resetPassword,
+                        onPressed: () async {
+                          checkEmail = false;
+
+                          if (await checkEmailExists(_email)) {
+                            checkEmail = true;
+                          }
+
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+
+                            try {
+                              await FirebaseAuth.instance
+                                  .sendPasswordResetEmail(
+                                email: _emailController.text.trim(),
+                              );
+                              setState(() {
+                                _isMailSent = true;
+                              });
+                              Future.delayed(const Duration(seconds: 3), () {
+                                setState(() {
+                                  _isMailSent = false;
+                                });
+                              });
+                            } on FirebaseAuthException catch (e) {
+                              setState(() {
+                                _errorMessage = e.message!;
+                              });
+                            }
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.lightBlue,
                           shape: RoundedRectangleBorder(
