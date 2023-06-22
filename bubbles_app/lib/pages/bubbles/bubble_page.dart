@@ -11,7 +11,7 @@ import '../../models/message.dart';
 import '../../providers/authentication_provider.dart';
 import '../../widgets/custom_input_fields.dart';
 import '../../widgets/custom_list_view_tiles.dart';
-import 'bubble_details.dart';
+import 'Edit_bubble.dart';
 
 class BubblePage extends StatefulWidget {
   final Bubble bubble;
@@ -33,24 +33,6 @@ class _BubblePageState extends State<BubblePage> {
 
   late GlobalKey<FormState> _messageFormState;
   late ScrollController _messagesListViewController;
-
-  void _openBubbleDetailsPage() {
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 550),
-        pageBuilder: (context, animation, secondaryAnimation) {
-          return SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0.0, -1.0),
-              end: Offset.zero,
-            ).animate(animation),
-            child: BubbleDetailsPage(bubble: widget.bubble),
-          );
-        },
-      ),
-    );
-  }
 
   @override
   void initState() {
@@ -87,44 +69,35 @@ class _BubblePageState extends State<BubblePage> {
         _pageProvider = context.watch<BubblePageProvider>();
         return Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             backgroundColor:
                 BubbleKeyType.getColorByIndex(widget.bubble.keyType.index),
-            title: Center(
-              child: Row(
-                children: [
-                  CircleAvatar(
-                      backgroundColor: Colors.white,
-                      backgroundImage: NetworkImage(widget.bubble.image)),
-                  const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () {
-                      _openBubbleDetailsPage();
-                    },
-                    child: Column(
-                      children: [
-                        Text(
-                          widget.bubble.name,
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                        Text(
-                          widget.bubble.description,
-                          style: const TextStyle(
-                              fontSize: 12.0, fontStyle: FontStyle.italic),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+            title: Row(
+              children: [
+                CircleAvatar(
+                    backgroundColor: Colors.white,
+                    backgroundImage: NetworkImage(widget.bubble.image)),
+                const SizedBox(width: 10),
+                Text(
+                  widget.bubble.name,
+                  style: const TextStyle(fontSize: 20),
+                ),
+              ],
             ),
             actions: [
               IconButton(
                 icon: const Icon(
-                  Icons.delete,
+                  Icons.more_vert,
                   color: Color.fromRGBO(255, 255, 255, 1),
                 ),
                 onPressed: () {
-                  _pageProvider.deleteBubble();
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return EditPage(
+                        bubble: widget.bubble,
+                      );
+                    },
+                  ));
                 },
               ),
             ],

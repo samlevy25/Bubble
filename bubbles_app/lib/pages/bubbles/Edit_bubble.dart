@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors
-
+import 'package:bubbles_app/constants/bubble_key_types.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/bubble.dart';
+import '../../providers/authentication_provider.dart';
 
 class EditPage extends StatefulWidget {
   final Bubble bubble;
@@ -15,21 +17,59 @@ class EditPage extends StatefulWidget {
 class _EditPageState extends State<EditPage> {
   final GlobalKey<FormState> nameFormKey = GlobalKey<FormState>();
   String newName = '';
+  late double _deviceHeight;
+
+  late AuthenticationProvider _auth;
 
   final GlobalKey<FormState> descriptionFormKey = GlobalKey<FormState>();
   String newDescription = '';
 
   @override
   Widget build(BuildContext context) {
+    _deviceHeight = MediaQuery.of(context).size.height;
+    _auth = Provider.of<AuthenticationProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Bubble'),
-      ),
+          centerTitle: true,
+          title: Text('Edit Bubble'),
+          backgroundColor:
+              BubbleKeyType.getColorByIndex(widget.bubble.keyType.index)),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment
+              .center, // Aligne les enfants horizontalement au centre
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: _deviceHeight * 0.01),
+              child: CircleAvatar(
+                radius: 70,
+                backgroundImage: NetworkImage(widget.bubble.getImageURL()),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: _deviceHeight * 0.01),
+              child: Text(
+                widget.bubble.getName(),
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: _deviceHeight * 0.02),
+              child: Text(
+                widget.bubble.getDescription(),
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black54,
+                ),
+              ),
+            ),
             ExpansionTile(
               title: Text(
                 'Change Name',
@@ -39,7 +79,7 @@ class _EditPageState extends State<EditPage> {
                 ),
               ),
               children: [
-                SizedBox(height: 16.0),
+                SizedBox(height: _deviceHeight * 0.005),
                 Form(
                   key: nameFormKey,
                   child: TextFormField(
@@ -50,9 +90,9 @@ class _EditPageState extends State<EditPage> {
                     },
                     decoration: InputDecoration(
                       labelStyle: TextStyle(
-                        color: Color.fromARGB(255, 21, 0, 255),
+                        color: Colors.lightBlue,
                       ),
-                      focusColor: Color.fromARGB(255, 21, 0, 255),
+                      focusColor: Colors.lightBlue,
                       filled: true,
                       enabledBorder: UnderlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -61,7 +101,7 @@ class _EditPageState extends State<EditPage> {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
-                          color: Color.fromARGB(255, 21, 0, 255),
+                          color: Colors.lightBlue,
                         ),
                       ),
                       labelText: "New Name",
@@ -77,7 +117,7 @@ class _EditPageState extends State<EditPage> {
                     },
                   ),
                 ),
-                SizedBox(height: 16.0),
+                SizedBox(height: _deviceHeight * 0.01),
                 ElevatedButton(
                   onPressed: () {
                     if (nameFormKey.currentState!.validate()) {
@@ -97,7 +137,7 @@ class _EditPageState extends State<EditPage> {
                 ),
               ),
               children: [
-                SizedBox(height: 16.0),
+                SizedBox(height: _deviceHeight * 0.005),
                 Form(
                   key: descriptionFormKey,
                   child: TextFormField(
@@ -108,9 +148,9 @@ class _EditPageState extends State<EditPage> {
                     },
                     decoration: InputDecoration(
                       labelStyle: TextStyle(
-                        color: Color.fromARGB(255, 21, 0, 255),
+                        color: Colors.lightBlue,
                       ),
-                      focusColor: Color.fromARGB(255, 21, 0, 255),
+                      focusColor: Colors.lightBlue,
                       filled: true,
                       enabledBorder: UnderlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -119,7 +159,7 @@ class _EditPageState extends State<EditPage> {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
-                          color: Color.fromARGB(255, 21, 0, 255),
+                          color: Colors.lightBlue,
                         ),
                       ),
                       labelText: "New Description",
@@ -135,7 +175,7 @@ class _EditPageState extends State<EditPage> {
                     },
                   ),
                 ),
-                SizedBox(height: 16.0),
+                SizedBox(height: _deviceHeight * 0.01),
                 ElevatedButton(
                   onPressed: () {
                     if (descriptionFormKey.currentState!.validate()) {
@@ -162,13 +202,29 @@ class _EditPageState extends State<EditPage> {
                     fontSize: 18,
                   ),
                 ),
-                SizedBox(height: 16.0),
+                SizedBox(height: _deviceHeight * 0.01),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        widget.bubble.deleteBubble();
+                        widget.bubble.admin != _auth.appUser.uid
+                            ? showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    content: Center(
+                                      child: Text(
+                                        "Only admin can delete the group",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            : widget.bubble.deleteBubble();
                       },
                       child: Text('Yes, I\'m sure'),
                     ),
