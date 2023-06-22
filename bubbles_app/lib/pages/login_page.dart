@@ -123,9 +123,6 @@ class _SignIn extends State<LoginPage> {
                     height: _deviceHeight * 0.03,
                   ),
                   _loginForm(),
-                  SizedBox(
-                    height: _deviceHeight * 0.00000000001,
-                  ),
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
@@ -142,9 +139,6 @@ class _SignIn extends State<LoginPage> {
                       ),
                       child: const Text('Forgot password ?'),
                     ),
-                  ),
-                  SizedBox(
-                    height: _deviceHeight * 0.01,
                   ),
                   _loginButton(),
                   Padding(
@@ -270,9 +264,6 @@ class _SignIn extends State<LoginPage> {
                 ),
                 labelText: "Password",
               ),
-            ),
-            SizedBox(
-              height: _deviceHeight * 0.01,
             ),
             if (_loginError != null)
               Text(
