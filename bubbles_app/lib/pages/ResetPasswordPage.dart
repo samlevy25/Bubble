@@ -13,6 +13,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   final TextEditingController _emailController = TextEditingController();
   String _errorMessage = '';
   bool _isMailSent = false;
+  late double _deviceHeight;
+  late double _deviceWidth;
 
   @override
   void initState() {
@@ -57,6 +59,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    _deviceHeight = MediaQuery.of(context).size.height;
+    _deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -75,11 +79,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 16.0),
+            SizedBox(height: _deviceHeight * 0.01),
             Image.asset('assets/images/resetPassword.png'),
-            const SizedBox(height: 16.0),
+            SizedBox(height: _deviceHeight * 0.01),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: EdgeInsets.symmetric(horizontal: _deviceWidth * 0.03),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -91,7 +95,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         children: [
                           TextSpan(text: 'Enter your '),
                           TextSpan(
-                            text: 'Email',
+                            text: 'email',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.lightBlue,
@@ -99,11 +103,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           ),
                           TextSpan(
                               text:
-                                  ' and we will send you a password reset link'),
+                                  ' adress and we will send you instructions to reset your password.'),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 50),
+                    SizedBox(height: _deviceHeight * 0.04),
                     AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
                       transitionBuilder:
@@ -155,12 +159,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                               },
                             ),
                     ),
-                    const SizedBox(height: 16.0),
+                    SizedBox(height: _deviceHeight * 0.02),
                     Text(
                       _errorMessage,
                       style: const TextStyle(color: Colors.red),
                     ),
-                    const SizedBox(height: 16.0),
                     Center(
                       child: ElevatedButton(
                         onPressed: _resetPassword,
@@ -169,8 +172,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 20),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: _deviceWidth * 0.1,
+                              vertical: _deviceHeight * 0.025),
                         ),
                         child: const Text(
                           'Reset Password',
