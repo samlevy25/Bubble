@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 // w
 import '../widgets/rounded_button.dart';
@@ -24,6 +25,7 @@ class LoginPage extends StatefulWidget {
 class _SignIn extends State<LoginPage> {
   late double _deviceHeight;
   late double _deviceWidth;
+  late ProgressDialog pr;
 
   late AuthenticationProvider _auth;
   late NavigationService _navigation;
@@ -45,7 +47,7 @@ class _SignIn extends State<LoginPage> {
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
     RegExp regExp = RegExp(pattern);
     if (!regExp.hasMatch(value)) {
-      return 'Please enter a valid email address.';
+      return "Invalid email. Use format: 'name@example.com'.";
     }
 
     return null;
@@ -70,6 +72,8 @@ class _SignIn extends State<LoginPage> {
     _auth = Provider.of<AuthenticationProvider>(context);
     _navigation = GetIt.instance.get<NavigationService>();
     keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+    pr = ProgressDialog(context);
+    pr.style(message: "Connecting...");
 
     return _buildUI();
   }
@@ -287,15 +291,14 @@ class _SignIn extends State<LoginPage> {
       width: _deviceWidth,
       onPressed: () async {
         checkEmail = false;
-        print("Email : $_email -- Password : $_password");
 
         if (_loginFormKey.currentState!.validate()) {
           _loginFormKey.currentState!.save();
 
+          await pr.show();
+
           String? userId =
               await _auth.loginUsingEmailAndPassword(_email!, _password!);
-
-          print("UserID = $userId");
 
           if (userId != null) {
             setState(() {
@@ -311,6 +314,8 @@ class _SignIn extends State<LoginPage> {
             _loginError = null;
           });
         }
+
+        await pr.hide();
       },
     );
   }

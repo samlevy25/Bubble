@@ -98,7 +98,7 @@ class _SettingsPageState extends State<SettingsPage> {
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 
     if (!regExp.hasMatch(value)) {
-      return 'Please enter a valid email address.';
+      return "Invalid email. Use format: 'name@example.com'.";
     }
 
     if (sameEmail) {
