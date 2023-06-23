@@ -184,9 +184,20 @@ class _PostPageState extends State<PostPage> {
             Icon(Icons.star, color: Colors.orange),
             const SizedBox(width: 5),
             Text(
-              '$rate%',
+              '${double.parse(rate.toStringAsFixed(2))}%',
               style: TextStyle(
                 color: isGood ? Colors.green : Colors.red,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(width: 20),
+            const Icon(Icons.people, color: Colors.grey),
+            const SizedBox(width: 5),
+            Text(
+              '$totalVotes',
+              style: const TextStyle(
+                color: Colors.black,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
