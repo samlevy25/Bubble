@@ -154,7 +154,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildUI() {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Sign up'),
@@ -168,29 +167,29 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ),
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: _deviceHeight * 0.03,
-          vertical: _deviceHeight * 0.02,
-        ),
-        height: _deviceHeight * 0.80,
-        width: _deviceWidth * 0.97,
-        child: Form(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _profileImageField(),
-              SizedBox(
-                height: _deviceHeight * 0.05,
-              ),
-              _registerForm(),
-              SizedBox(
-                height: _deviceHeight * 0.05,
-              ),
-              _registerButton(),
-            ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: _deviceHeight * 0.03,
+            vertical: _deviceHeight * 0.06,
+          ),
+          child: Form(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _profileImageField(),
+                SizedBox(
+                  height: _deviceHeight * 0.05,
+                ),
+                _registerForm(),
+                SizedBox(
+                  height: _deviceHeight * 0.05,
+                ),
+                _registerButton(),
+              ],
+            ),
           ),
         ),
       ),

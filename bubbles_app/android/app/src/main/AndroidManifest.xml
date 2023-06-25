@@ -23,9 +23,9 @@
         android:required="true" />
 
     <application
-        android:label="bubbles_app"
+        android:label="Bubble"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/logo">
 
         <activity
             android:name=".MainActivity"

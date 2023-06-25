@@ -135,7 +135,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                   child: dataDisplay(),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 10.0),
+                  padding: EdgeInsets.only(bottom: _deviceHeight * 0.03),
                   child: _createButton(),
                 ),
               ],
