@@ -26,7 +26,11 @@ class Chat {
   }
 
   String title() {
-    return _recepient.first.username;
+    print("ok");
+    print(recepients());
+    String title = _recepient.first.username;
+    print("OK");
+    return title;
   }
 
   String imageURL() {

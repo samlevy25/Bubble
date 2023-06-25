@@ -189,7 +189,9 @@ class DatabaseService {
   // Get user document for a specific user ID
   Future<DocumentSnapshot> getUser(String uid) async {
     try {
+      print('Fetching user document for UID: $uid');
       final userDoc = await _db.collection(userCollection).doc(uid).get();
+      print('User document fetched successfully');
       return userDoc;
     } catch (e) {
       print('Error getting user document: $e');
