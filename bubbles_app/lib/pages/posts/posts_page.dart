@@ -1,5 +1,6 @@
 //Packages
 import 'package:bubbles_app/widgets/pop_up_menu.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 //Providers
@@ -49,7 +50,9 @@ class _PostsPageState extends State<PostsPage> {
     });
     _pageProvider.post = postContent; // Update the post content in the provider
     _pageProvider.sendTextPost(); // Send the post to the database
-    print('Created Post: $postContent');
+    if (kDebugMode) {
+      print('Created Post: $postContent');
+    }
   }
 
   @override
@@ -93,7 +96,7 @@ class _PostsPageState extends State<PostsPage> {
                               Expanded(
                                 child: TextButton(
                                     onPressed: _openCreatePostDialog,
-                                    child: Text('Create Post')),
+                                    child: const Text('Create Post')),
                               ),
                             ],
                           ),
@@ -167,13 +170,14 @@ class _PostsPageState extends State<PostsPage> {
                   actions: false,
                 ),
                 onLongPress: () {
-                  PopupMenu.showUserDetails(context,_auth.appUser, post.sender);
+                  PopupMenu.showUserDetails(
+                      context, _auth.appUser, post.sender);
                 },
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PostPage(post: post),
+                      builder: (context) => PostPage(postUid: post.uid),
                     ),
                   );
                 },

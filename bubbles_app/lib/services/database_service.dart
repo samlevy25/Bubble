@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 import '../models/activity.dart';
+import '../models/app_user.dart';
+import '../models/comment.dart';
 import '../models/message.dart';
 import '../models/post.dart';
 
@@ -419,6 +421,65 @@ extension BubbleDatabaseService on DatabaseService {
 
 // Extension for Explorer-related database operations
 extension ExplorerDatabaseService on DatabaseService {
+  Future<Post?> getPost(String postUid) async {
+    print("UID: $postUid");
+    try {
+      final postSnapshot =
+          await _db.collection(postsCollection).doc(postUid).get();
+      print("Post snapshot: $postSnapshot");
+
+      if (postSnapshot.exists) {
+        final postData = postSnapshot.data();
+        print("Post data: $postData");
+
+        final senderUid = postData?["sender"];
+        if (senderUid != null && senderUid is String) {
+          final userDoc = await getUser(senderUid);
+          print("User document: $userDoc");
+
+          if (userDoc.exists) {
+            final senderData = userDoc.data() as Map<String, dynamic>;
+            senderData["uid"] = userDoc.id;
+            print("Sender data: $senderData");
+
+            final AppUser sender = AppUser.fromJSON(senderData);
+            print("Sender object: $sender");
+
+            postData?["sender"] = sender;
+
+            final commentsCollection =
+                postSnapshot.reference.collection('comments');
+            final commentsQuerySnapshot = await commentsCollection.get();
+            final List<Comment> comments = [];
+
+            for (final commentDoc in commentsQuerySnapshot.docs) {
+              final commentData = commentDoc.data();
+              // Assuming Comment.fromJSON is a factory method in Comment class to create Comment object
+              final comment = Comment.fromJSON(commentData);
+              comments.add(comment);
+            }
+
+            postData?["comments"] = comments;
+
+            return Post.fromJSON(postData!);
+          } else {
+            print("Sender document not found");
+          }
+        } else {
+          print("Invalid or missing sender UID");
+        }
+      } else {
+        print("Post not found");
+      }
+      return null;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return null;
+    }
+  }
+
   // Stream posts for the Explorer feature
   Stream<QuerySnapshot> streamPostsForExplorer() {
     return _db
@@ -489,5 +550,19 @@ extension ExplorerDatabaseService on DatabaseService {
 
   String generatePostUid() {
     return _db.collection('postsCollection').doc().id;
+  }
+
+  Future<void> addCommentToPost(String postID, Comment comment) async {
+    try {
+      final postRef = _db.collection(postsCollection).doc(postID);
+
+      await postRef.collection('comments').add(
+            comment.toJson(),
+          );
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 }

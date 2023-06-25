@@ -3,6 +3,7 @@ import 'package:bubbles_app/providers/authentication_provider.dart';
 import 'package:bubbles_app/services/database_service.dart';
 import 'package:bubbles_app/widgets/rounded_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
@@ -14,12 +15,15 @@ import '../../widgets/custom_list_view_tiles.dart';
 //Packages
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../widgets/pop_up_menu.dart';
+
 enum SortBy { newest, oldest }
 
 class PostPage extends StatefulWidget {
-  final Post post;
+  final String postUid;
+  late Post post;
 
-  PostPage({Key? key, required this.post}) : super(key: key);
+  PostPage({Key? key, required this.postUid}) : super(key: key);
 
   @override
   _PostPageState createState() => _PostPageState();
@@ -28,17 +32,52 @@ class PostPage extends StatefulWidget {
 class _PostPageState extends State<PostPage> {
   late double _deviceHeight;
   late double _deviceWidth;
-  late List<Comment> _comments;
+  Post? post;
   SortBy _sortBy = SortBy.newest;
 
   late DatabaseService _db;
   late AuthenticationProvider _auth;
   late AppUser user;
+  late bool _isLoading;
+
+  late TextEditingController _commentController;
 
   @override
   void initState() {
-    _comments = widget.post.comments;
     super.initState();
+    _isLoading = true;
+    _commentController = TextEditingController();
+    initializePost();
+  }
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    super.dispose();
+  }
+
+  void initializePost() {
+    DatabaseService().getPost(widget.postUid).then((retrievedPost) {
+      if (retrievedPost != null) {
+        setState(() {
+          post = retrievedPost;
+          _isLoading = false;
+        });
+      } else {
+        print("Post not found");
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }).catchError((e) {
+      if (kDebugMode) {
+        print("Error retrieving post");
+        print(e);
+      }
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 
   void _sortComments(SortBy sortBy) {
@@ -46,10 +85,10 @@ class _PostPageState extends State<PostPage> {
       _sortBy = sortBy;
       switch (_sortBy) {
         case SortBy.newest:
-          _comments.sort((a, b) => b.sentTime.compareTo(a.sentTime));
+          post?.comments.sort((a, b) => b.sentTime.compareTo(a.sentTime));
           break;
         case SortBy.oldest:
-          _comments.sort((a, b) => a.sentTime.compareTo(b.sentTime));
+          post?.comments.sort((a, b) => a.sentTime.compareTo(b.sentTime));
           break;
       }
     });
@@ -67,68 +106,88 @@ class _PostPageState extends State<PostPage> {
       appBar: AppBar(
         title: const Text("Full Post View"),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: _deviceHeight * 0.02),
-          CustomExplorerListViewTile(
-            deviceHeight: _deviceHeight,
-            width: _deviceWidth * 0.80,
-            post: widget.post,
-            isOwnMessage: true,
-            actions: true,
-          ),
-          _rates(),
-          const Divider(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              _buildSortButton(SortBy.newest),
-              const SizedBox(width: 10),
-              _buildSortButton(SortBy.oldest),
-              Expanded(
-                child:
-                    TextButton(onPressed: () {}, child: const Text('Comment')),
-              ),
-            ],
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _comments.length,
-              itemBuilder: (context, index) {
-                final comment = _comments[index];
-                return FutureBuilder<DocumentSnapshot>(
-                  future: _db.getUser(comment.senderID),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<DocumentSnapshot> snapshot) {
-                    if (snapshot.hasData && snapshot.data!.data() != null) {
-                      Map<String, dynamic> userData =
-                          snapshot.data?.data() as Map<String, dynamic>;
-                      userData["uid"] = comment.senderID;
-                      final commenter = AppUser.fromJSON(userData);
-                      commenter;
-                      return ListTile(
-                        leading: RoundedImageNetwork(
-                          key: UniqueKey(),
-                          imagePath: commenter.imageURL,
-                          size: _deviceWidth * 0.08,
-                        ),
-                        title: Text(comment.content),
-                        subtitle: Text(
-                            "${commenter.username}, ${timeago.format(comment.sentTime)} "),
-                      );
-                    } else if (snapshot.hasError) {
-                      return const Text('Something went wrong');
-                    } else {
-                      return const SizedBox.shrink(); // or a placeholder widget
-                    }
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: _deviceHeight * 0.02),
+                GestureDetector(
+                  child: CustomExplorerListViewTile(
+                    deviceHeight: _deviceHeight,
+                    width: _deviceWidth * 0.80,
+                    post: post!,
+                    isOwnMessage: true,
+                    actions: true,
+                  ),
+                  onLongPress: () {
+                    PopupMenu.showUserDetails(
+                        context, _auth.appUser, post!.sender);
                   },
-                );
-              },
+                ),
+                _rates(),
+                const Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    _buildSortButton(SortBy.newest),
+                    const SizedBox(width: 10),
+                    _buildSortButton(SortBy.oldest),
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () {
+                          _showCommentPopup(context);
+                        },
+                        child: const Text('Comment'),
+                      ),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: post?.comments.length,
+                    itemBuilder: (context, index) {
+                      final comment = post?.comments[index];
+                      return FutureBuilder<DocumentSnapshot>(
+                        future: _db.getUser(comment!.senderID),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<DocumentSnapshot> snapshot) {
+                          if (snapshot.hasData &&
+                              snapshot.data!.data() != null) {
+                            Map<String, dynamic> userData =
+                                snapshot.data?.data() as Map<String, dynamic>;
+                            userData["uid"] = comment.senderID;
+                            final commenter = AppUser.fromJSON(userData);
+                            commenter;
+                            return GestureDetector(
+                              child: ListTile(
+                                leading: RoundedImageNetwork(
+                                  key: UniqueKey(),
+                                  imagePath: commenter.imageURL,
+                                  size: _deviceWidth * 0.08,
+                                ),
+                                title: Text(comment.content),
+                                subtitle: Text(
+                                  "${commenter.username}, ${timeago.format(comment.sentTime)} ",
+                                ),
+                              ),
+                              onLongPress: () {
+                                PopupMenu.showUserDetails(
+                                    context, _auth.appUser, commenter);
+                              },
+                            );
+                          } else if (snapshot.hasError) {
+                            return const Text('Something went wrong');
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -146,9 +205,9 @@ class _PostPageState extends State<PostPage> {
         backgroundColor: MaterialStateProperty.resolveWith<Color>(
           (Set<MaterialState> states) {
             if (isSelected) {
-              return Colors.blue; // Selected button color
+              return Colors.blue;
             } else {
-              return Colors.white; // Default button color
+              return Colors.white;
             }
           },
         ),
@@ -156,25 +215,20 @@ class _PostPageState extends State<PostPage> {
       child: Text(
         sortOption == SortBy.newest ? 'Newest' : 'Oldest',
         style: TextStyle(
-          color: isSelected
-              ? Colors.white
-              : Colors.black, // Text color based on selection
+          color: isSelected ? Colors.white : Colors.black,
         ),
       ),
     );
   }
 
   Widget _rates() {
-    // Get the initial rating from the post object
-    int totalVotes = widget.post.votesUp + widget.post.votesDown;
+    int totalVotes = post!.votesUp + post!.votesDown;
     double goodRate =
-        totalVotes != 0 ? (widget.post.votesUp / totalVotes) * 100 : 0.0;
+        totalVotes != 0 ? (post!.votesUp / totalVotes) * 100 : 0.0;
     double badRate =
-        totalVotes != 0 ? (widget.post.votesDown / totalVotes) * 100 : 0.0;
+        totalVotes != 0 ? (post!.votesDown / totalVotes) * 100 : 0.0;
     bool isGood = goodRate >= badRate;
     double rate = isGood ? goodRate : badRate;
-    print(widget.post.votesUp);
-    print(widget.post.votesDown);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -209,8 +263,9 @@ class _PostPageState extends State<PostPage> {
             IconButton(
               onPressed: () {
                 setState(() {
-                  _db.addVoteToPost(widget.post.uid, user.uid, 1);
+                  _db.addVoteToPost(post!.uid, user.uid, 1);
                   print("Liked");
+                  _refreshPost();
                 });
               },
               icon: Icon(Icons.thumb_up),
@@ -220,8 +275,9 @@ class _PostPageState extends State<PostPage> {
             IconButton(
               onPressed: () {
                 setState(() {
-                  _db.addVoteToPost(widget.post.uid, user.uid, -1);
-                  print("DisLiked");
+                  _db.addVoteToPost(post!.uid, user.uid, -1);
+                  print("Disliked");
+                  _refreshPost();
                 });
               },
               icon: Icon(Icons.thumb_down),
@@ -231,5 +287,70 @@ class _PostPageState extends State<PostPage> {
         ),
       ],
     );
+  }
+
+  Future<void> _addComment() async {
+    if (_commentController.text.trim().isEmpty) return;
+
+    try {
+      final commentContent = _commentController.text.trim();
+      final comment = Comment(
+        content: commentContent,
+        senderID: user.uid,
+        sentTime: DateTime.now(),
+        type: CommentType.text,
+      );
+
+      await _db.addCommentToPost(post!.uid, comment);
+
+      // Clear the comment text field
+      _commentController.clear();
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error adding comment: $e");
+      }
+    }
+  }
+
+  void _showCommentPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Write a Comment'),
+          content: TextField(
+            controller: _commentController,
+            decoration: const InputDecoration(
+              hintText: 'Enter your comment...',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _addComment();
+                Navigator.of(context).pop();
+                _refreshPost();
+              },
+              child: const Text('Submit'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _refreshPost() async {
+    final retrievedPost = await DatabaseService().getPost(widget.postUid);
+    if (retrievedPost != null) {
+      setState(() {
+        post = retrievedPost;
+      });
+    }
   }
 }

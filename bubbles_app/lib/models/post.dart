@@ -32,35 +32,40 @@ class Post {
     required this.votesUp,
     required this.votesDown,
   });
-
   factory Post.fromJSON(Map<String, dynamic> jsonPost) {
-    PostType postType;
-    switch (jsonPost["type"]) {
-      case "text":
-        postType = PostType.text;
-        break;
-      case "image":
-        postType = PostType.image;
-        break;
-      default:
-        postType = PostType.unknown;
+    print("jsonData: $jsonPost");
+    try {
+      PostType postType;
+      switch (jsonPost["type"]) {
+        case "text":
+          postType = PostType.text;
+          break;
+        case "image":
+          postType = PostType.image;
+          break;
+        default:
+          postType = PostType.unknown;
+      }
+
+      final List<dynamic> jsonVoters = jsonPost["voters"];
+      final List<String> voters = List<String>.from(jsonVoters);
+
+      return Post(
+        uid: jsonPost["uid"],
+        content: jsonPost["content"],
+        type: postType,
+        sender: jsonPost["sender"],
+        sentTime: (jsonPost["sent_time"] as Timestamp).toDate(),
+        geoPoint: jsonPost["geopoint"] as GeoPoint,
+        comments: jsonPost["comments"] as List<Comment>,
+        voters: voters,
+        votesUp: jsonPost["votes_up"],
+        votesDown: jsonPost["votes_down"],
+      );
+    } catch (e) {
+      print('Error creating Post from JSON: $e');
+      rethrow;
     }
-
-    final List<dynamic> jsonVoters = jsonPost["voters"];
-    final List<String> voters = List<String>.from(jsonVoters);
-
-    return Post(
-      uid: jsonPost["uid"], // Add uid assignment
-      content: jsonPost["content"],
-      type: postType,
-      sender: jsonPost["sender"],
-      sentTime: jsonPost["sent_time"].toDate(),
-      geoPoint: jsonPost["geopoint"],
-      comments: jsonPost["comments"],
-      voters: voters,
-      votesUp: jsonPost["votes_up"],
-      votesDown: jsonPost["votes_down"],
-    );
   }
 
   Map<String, dynamic> toJson() {
