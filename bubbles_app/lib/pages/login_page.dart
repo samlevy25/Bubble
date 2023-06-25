@@ -128,7 +128,7 @@ class _SignIn extends State<LoginPage> {
                   ),
                   _loginForm(),
                   Align(
-                    alignment: Alignment.centerRight,
+                    alignment: Alignment.center,
                     child: TextButton(
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(
