@@ -47,6 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           _image(),
           _userDetails(),
+          _userRate(),
           Expanded(
             child: _activityList(),
           ),
@@ -81,6 +82,21 @@ class _ProfilePageState extends State<ProfilePage> {
           style: const TextStyle(color: Colors.grey),
         ),
       ],
+    );
+  }
+
+  Widget _userRate() {
+    var x = _auth.appUser.upVotes;
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Rate: ${x}%",
+            style: const TextStyle(fontSize: 15),
+          ),
+        ],
+      ),
     );
   }
 

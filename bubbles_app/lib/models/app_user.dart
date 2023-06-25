@@ -10,6 +10,9 @@ class AppUser {
   final String imageURL;
   late DateTime lastActive;
   late List<Activity> activities;
+  late int upVotes;
+  late int downVotes;
+  late int numberOfVotes;
 
   final DatabaseService _db = GetIt.instance.get<DatabaseService>();
 
@@ -20,6 +23,9 @@ class AppUser {
     required this.imageURL,
     required this.lastActive,
     required this.activities,
+    required this.upVotes,
+    required this.downVotes,
+    required this.numberOfVotes,
   });
 
   factory AppUser.fromJSON(Map<String, dynamic> json) {
@@ -30,6 +36,9 @@ class AppUser {
       imageURL: json["image"],
       lastActive: json["last_active"].toDate(),
       activities: json["activities"] ?? [],
+      upVotes: json["up_votes"] ?? 0,
+      downVotes: json["down_votes"] ?? 0,
+      numberOfVotes: json["number_of_votes"] ?? 0,
     );
   }
 

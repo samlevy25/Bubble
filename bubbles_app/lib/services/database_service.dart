@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bubbles_app/constants/bubble_key_types.dart';
 import 'package:bubbles_app/constants/bubble_sizes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 import '../models/activity.dart';
@@ -456,12 +457,23 @@ extension ExplorerDatabaseService on DatabaseService {
 
             for (final commentDoc in commentsQuerySnapshot.docs) {
               final commentData = commentDoc.data();
-              // Assuming Comment.fromJSON is a factory method in Comment class to create Comment object
-              final comment = Comment.fromJSON(commentData);
-              comments.add(comment);
+              final commenterUid = commentData['sender_id'];
+              if (commenterUid != null && commenterUid is String) {
+                final commenterDoc = await getUser(commenterUid);
+                if (commenterDoc.exists) {
+                  final commenterData =
+                      commenterDoc.data() as Map<String, dynamic>;
+                  commenterData["uid"] = commenterDoc.id;
+                  final commenter = AppUser.fromJSON(commenterData);
+                  commentData['sender'] = commenter;
+                  final comment = Comment.fromJSON(commentData);
+                  comments.add(comment);
+                }
+              }
             }
 
             postData?["comments"] = comments;
+            print(comments);
 
             return Post.fromJSON(postData!);
           } else {
@@ -473,6 +485,7 @@ extension ExplorerDatabaseService on DatabaseService {
       } else {
         print("Post not found");
       }
+
       return null;
     } catch (e) {
       if (kDebugMode) {
@@ -551,20 +564,102 @@ extension ExplorerDatabaseService on DatabaseService {
   }
 
   String generatePostUid() {
-    return _db.collection('postsCollection').doc().id;
+    return _db.collection(postsCollection).doc().id;
   }
 
-  Future<void> addCommentToPost(String postID, Comment comment) async {
+  String generateCommentUid(String postUid) {
+    return FirebaseFirestore.instance
+        .collection(postsCollection)
+        .doc(postUid)
+        .collection('comments')
+        .doc()
+        .id;
+  }
+
+  Future<void> addCommentToPost(
+      String postID, String commentUID, Comment comment) async {
     try {
       final postRef = _db.collection(postsCollection).doc(postID);
 
-      await postRef.collection('comments').add(
+      await postRef.collection('comments').doc(commentUID).set(
             comment.toJson(),
           );
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
+    }
+  }
+
+  Future<void> addVoteToComment(
+    String postId,
+    String commentId,
+    String userId,
+    int voteValue,
+  ) async {
+    try {
+      final commentRef = FirebaseFirestore.instance
+          .collection('Posts')
+          .doc(postId)
+          .collection('comments')
+          .doc(commentId);
+
+      final commentSnapshot = await commentRef.get();
+
+      if (commentSnapshot.exists) {
+        final commentData = commentSnapshot.data();
+
+        final List<String> commentVoters =
+            List<String>.from(commentData?['voters'] ?? []);
+        final int votesUp = commentData?['votes_up'] ?? 0;
+        final int votesDown = commentData?['votes_down'] ?? 0;
+
+        if (!commentVoters.contains(userId)) {
+          commentVoters.add(userId);
+
+          final String senderId = commentData?['sender_id'];
+          if (senderId != null && senderId is String) {
+            final userRef = _db.collection('Users').doc(senderId);
+
+            if (voteValue > 0) {
+              await commentRef.update({
+                'voters': commentVoters,
+                'votes_up': votesUp + 1,
+              });
+              print("Vote added to comment: votes_up increased by 1");
+              userRef.set(
+                {
+                  'up_votes': FieldValue.increment(1),
+                  'number_of_votes': FieldValue.increment(1),
+                },
+                SetOptions(merge: true),
+              );
+            } else if (voteValue < 0) {
+              await commentRef.update({
+                'voters': commentVoters,
+                'votes_down': votesDown + 1,
+              });
+              print("Vote added to comment: votes_down increased by 1");
+              userRef.set(
+                {
+                  'down_votes': FieldValue.increment(1),
+                  'number_of_votes': FieldValue.increment(1),
+                },
+                SetOptions(merge: true),
+              );
+            } else {
+              print("Invalid or missing sender UID");
+            }
+          }
+        } else {
+          print("User has already voted on this comment");
+        }
+      } else {
+        print("Comment not found");
+      }
+    } catch (e) {
+      print('Error adding vote to comment: $e');
+      throw e;
     }
   }
 }

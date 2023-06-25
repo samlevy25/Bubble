@@ -45,6 +45,7 @@ class _PostPageState extends State<PostPage> {
   @override
   void initState() {
     super.initState();
+    _db = GetIt.instance.get<DatabaseService>();
     _isLoading = true;
     _commentController = TextEditingController();
     initializePost();
@@ -57,7 +58,7 @@ class _PostPageState extends State<PostPage> {
   }
 
   void initializePost() {
-    DatabaseService().getPost(widget.postUid).then((retrievedPost) {
+    _db.getPost(widget.postUid).then((retrievedPost) {
       if (retrievedPost != null) {
         setState(() {
           post = retrievedPost;
@@ -154,11 +155,13 @@ class _PostPageState extends State<PostPage> {
                             AsyncSnapshot<DocumentSnapshot> snapshot) {
                           if (snapshot.hasData &&
                               snapshot.data!.data() != null) {
+                            // Retrieve commenter data from snapshot
                             Map<String, dynamic> userData =
                                 snapshot.data?.data() as Map<String, dynamic>;
                             userData["uid"] = comment.senderID;
                             final commenter = AppUser.fromJSON(userData);
                             commenter;
+
                             return GestureDetector(
                               child: ListTile(
                                 leading: RoundedImageNetwork(
@@ -168,7 +171,33 @@ class _PostPageState extends State<PostPage> {
                                 ),
                                 title: Text(comment.content),
                                 subtitle: Text(
-                                  "${commenter.username}, ${timeago.format(comment.sentTime)} ",
+                                  "${commenter.username}, ${timeago.format(comment.sentTime)}",
+                                ),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Icons.star,
+                                      color: Colors.orange,
+                                    ),
+                                    Text(comment.votesUp.toString()),
+                                    IconButton(
+                                      onPressed: () {
+                                        _addVoteToComment(
+                                            comment.uid, 1); // Upvote
+                                      },
+                                      icon: Icon(Icons.thumb_up),
+                                      color: Colors.lightBlue,
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        _addVoteToComment(
+                                            comment.uid, -1); // Downvote
+                                      },
+                                      icon: Icon(Icons.thumb_down),
+                                      color: Colors.lightBlue,
+                                    ),
+                                  ],
                                 ),
                               ),
                               onLongPress: () {
@@ -246,7 +275,7 @@ class _PostPageState extends State<PostPage> {
               ),
             ),
             const SizedBox(width: 20),
-            const Icon(Icons.people, color: Colors.grey),
+            const Icon(Icons.remove_red_eye, color: Colors.grey),
             const SizedBox(width: 5),
             Text(
               '$totalVotes',
@@ -294,14 +323,19 @@ class _PostPageState extends State<PostPage> {
 
     try {
       final commentContent = _commentController.text.trim();
+      final uid = _db.generateCommentUid(post!.uid);
       final comment = Comment(
+        uid: uid,
         content: commentContent,
         senderID: user.uid,
         sentTime: DateTime.now(),
         type: CommentType.text,
+        voters: [],
+        votesUp: 0,
+        votesDown: 0,
       );
 
-      await _db.addCommentToPost(post!.uid, comment);
+      await _db.addCommentToPost(post!.uid, uid, comment);
 
       // Clear the comment text field
       _commentController.clear();
@@ -343,6 +377,11 @@ class _PostPageState extends State<PostPage> {
         );
       },
     );
+  }
+
+  void _addVoteToComment(String commentUid, int voteValue) {
+    _db.addVoteToComment(post!.uid, commentUid, user.uid, voteValue);
+    _refreshPost();
   }
 
   Future<void> _refreshPost() async {
