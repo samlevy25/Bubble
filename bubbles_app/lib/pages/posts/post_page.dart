@@ -171,15 +171,19 @@ class _PostPageState extends State<PostPage> {
                                   imagePath: commenter.imageURL,
                                   size: _deviceWidth * 0.08,
                                 ),
-                                title: Text(commenter.username),
-                                subtitle: Text(
-                                  "${comment.content}, ${timeago.format(comment.sentTime)}",
-                                ),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
+                                title: Row(
                                   children: [
+                                    Text(
+                                      commenter.username,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    const Spacer(),
                                     const Icon(
                                       Icons.star,
+                                      size: 15,
                                       color: Color.fromARGB(255, 21, 18, 13),
                                     ),
                                     Text(comment.votesUp.toString()),
@@ -189,6 +193,7 @@ class _PostPageState extends State<PostPage> {
                                             comment.uid, 1); // Upvote
                                       },
                                       icon: const Icon(Icons.thumb_up),
+                                      iconSize: 15,
                                       color: Colors.lightBlue,
                                     ),
                                     IconButton(
@@ -197,9 +202,28 @@ class _PostPageState extends State<PostPage> {
                                             comment.uid, -1); // Downvote
                                       },
                                       icon: const Icon(Icons.thumb_down),
+                                      iconSize: 15,
                                       color: Colors.lightBlue,
                                     ),
                                   ],
+                                ),
+                                subtitle: Flexible(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        comment.content,
+                                      ),
+                                      SizedBox(height: _deviceHeight * 0.005),
+                                      Text(
+                                        timeago.format(comment.sentTime),
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               onLongPress: () {
