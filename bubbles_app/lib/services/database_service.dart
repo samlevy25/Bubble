@@ -99,7 +99,7 @@ class DatabaseService {
 
   Future<void> addUserActivity(String uid, Activity activity) async {
     try {
-      DocumentReference userRef = _db.collection('users').doc(uid);
+      DocumentReference userRef = _db.collection(userCollection).doc(uid);
       CollectionReference activitiesRef = userRef.collection('activities');
 
       await activitiesRef.add({

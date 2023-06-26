@@ -65,7 +65,9 @@ class _PostPageState extends State<PostPage> {
           _isLoading = false;
         });
       } else {
-        print("Post not found");
+        if (kDebugMode) {
+          print("Post not found");
+        }
         setState(() {
           _isLoading = false;
         });
@@ -108,7 +110,7 @@ class _PostPageState extends State<PostPage> {
         title: const Text("Full Post View"),
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -194,7 +196,7 @@ class _PostPageState extends State<PostPage> {
                                         _addVoteToComment(
                                             comment.uid, -1); // Downvote
                                       },
-                                      icon: Icon(Icons.thumb_down),
+                                      icon: const Icon(Icons.thumb_down),
                                       color: Colors.lightBlue,
                                     ),
                                   ],
@@ -264,7 +266,7 @@ class _PostPageState extends State<PostPage> {
       children: [
         Row(
           children: [
-            Icon(Icons.star, color: Colors.orange),
+            const Icon(Icons.star, color: Colors.orange),
             const SizedBox(width: 5),
             Text(
               '${double.parse(rate.toStringAsFixed(2))}%',
@@ -297,10 +299,10 @@ class _PostPageState extends State<PostPage> {
                   _refreshPost();
                 });
               },
-              icon: Icon(Icons.thumb_up),
+              icon: const Icon(Icons.thumb_up),
               color: Colors.lightBlue,
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             IconButton(
               onPressed: () {
                 setState(() {
@@ -309,7 +311,7 @@ class _PostPageState extends State<PostPage> {
                   _refreshPost();
                 });
               },
-              icon: Icon(Icons.thumb_down),
+              icon: const Icon(Icons.thumb_down),
               color: Colors.lightBlue,
             ),
           ],
