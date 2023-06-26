@@ -88,29 +88,24 @@ class _HomePageState extends State<HomePage> {
           child: Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.white,
-              elevation: 0, 
+              elevation: 0,
               title: TabBar(
-                indicatorSize:
-                    TabBarIndicatorSize.label, 
+                indicatorSize: TabBarIndicatorSize.label,
                 indicator: const UnderlineTabIndicator(
-                  borderSide: BorderSide(
-                      width: 2.0,
-                      color: Colors.blue), 
+                  borderSide: BorderSide(width: 2.0, color: Colors.blue),
                 ),
-                labelColor: Colors.white, 
-                unselectedLabelColor:
-                    Colors.grey, 
-                labelPadding: EdgeInsets.symmetric(
-                    horizontal: _deviceWidt *
-                        0.02), 
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.grey,
+                labelPadding:
+                    EdgeInsets.symmetric(horizontal: _deviceWidt * 0.02),
                 tabs: const [
                   Tab(
                     child: Text(
                       'Bubbles',
                       style: TextStyle(
                         color: Colors.grey,
-                        fontSize: 14, 
-                      ), 
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                   Tab(
@@ -118,8 +113,8 @@ class _HomePageState extends State<HomePage> {
                       'Explorer',
                       style: TextStyle(
                         color: Colors.grey,
-                        fontSize: 14, 
-                      ), 
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                 ],
