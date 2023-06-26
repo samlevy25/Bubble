@@ -123,7 +123,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                   child: _bubbleForms(),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: _deviceHeight * 0.03),
+                  padding: EdgeInsets.only(bottom: _deviceHeight * 0.01),
                   child: _sizeSelector(),
                 ),
                 Padding(
@@ -431,11 +431,18 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   Widget _keyTypeSelector() {
     return Column(
       children: [
-        Text(
-          "Access technologies",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 23,
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Access technologies",
+            style: TextStyle(
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Colors.black54,
+              fontFamily: 'RobotoMono',
+            ),
+            textAlign: TextAlign.left,
           ),
         ),
         SizedBox(
@@ -469,16 +476,20 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
   Widget _sizeSelector() {
     return Column(
       children: [
-        Text(
-          "Range",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 23,
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Range",
+            style: TextStyle(
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Colors.black54,
+            ),
+            textAlign: TextAlign.left,
           ),
         ),
-        SizedBox(
-          height: _deviceHeight * 0.02,
-        ),
+        SizedBox(height: _deviceHeight * 0.01),
         Slider(
           value: _bubbleSize!.toDouble(),
           min: 5,
@@ -500,11 +511,17 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
     return SizedBox(
       child: Column(
         children: [
-          Text(
-            "Your infomations",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 23,
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Your informations",
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: Colors.black54,
+              ),
+              textAlign: TextAlign.left,
             ),
           ),
           SizedBox(
