@@ -127,7 +127,7 @@ class _BubblePageState extends State<BubblePage> {
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: _sendMessageForm(),
+                child: sendMessageForm(),
               ),
             ],
           ),
@@ -140,7 +140,7 @@ class _BubblePageState extends State<BubblePage> {
     if (_pageProvider.messages != null) {
       if (_pageProvider.messages!.isNotEmpty) {
         return SizedBox(
-          height: _deviceHeight * 0.74,
+          height: _deviceHeight * 0.78,
           child: ListView.builder(
             controller: _messagesListViewController,
             itemCount: _pageProvider.messages!.length,
@@ -175,83 +175,54 @@ class _BubblePageState extends State<BubblePage> {
     }
   }
 
-  Widget _sendMessageForm() {
-    return Container(
-      height: _deviceHeight * 0.06,
-      decoration: BoxDecoration(
-        color: const Color.fromRGBO(30, 29, 37, 1.0),
-        borderRadius: BorderRadius.circular(100),
-      ),
-      margin: EdgeInsets.symmetric(
-        horizontal: _deviceWidth * 0.04,
-        vertical: _deviceHeight * 0.03,
-      ),
+  Widget sendMessageForm() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
       child: Form(
         key: _messageFormState,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _messageTextField(),
-            _sendMessageButton(),
-            _imageMessageButton(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _messageTextField() {
-    return SizedBox(
-      width: _deviceWidth * 0.65,
-      child: CustomTextFormField(
+        child: TextFormField(
           onSaved: (value) {
-            _pageProvider.message = value;
+            _pageProvider.message = value!;
           },
-          regEx: r"^(?!\s*$).+",
-          hintText: "Type a message",
-          obscureText: false),
-    );
-  }
-
-  Widget _sendMessageButton() {
-    double size = _deviceHeight * 0.04;
-    return SizedBox(
-      height: size,
-      width: size,
-      child: IconButton(
-        icon: const Icon(
-          Icons.send,
-          color: Colors.white,
+          decoration: InputDecoration(
+            fillColor: const Color.fromARGB(255, 255, 255, 255),
+            filled: true,
+            hintText: "Message",
+            hintStyle: const TextStyle(color: Colors.grey),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.black, width: 1),
+              borderRadius: BorderRadius.circular(100.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.black, width: 0.7),
+              borderRadius: BorderRadius.circular(100.0),
+            ),
+            suffixIcon: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    _pageProvider.sendImageMessage();
+                  },
+                  icon: const Icon(Icons.photo_camera),
+                  color: Colors.lightBlue,
+                ),
+                IconButton(
+                  onPressed: () {
+                    if (_messageFormState.currentState!.validate()) {
+                      _messageFormState.currentState!.save();
+                      _pageProvider.sendTextMessage();
+                      _messageFormState.currentState!.reset();
+                    }
+                  },
+                  icon: const Icon(Icons.send),
+                  color: Colors.lightBlue,
+                ),
+              ],
+            ),
+          ),
         ),
-        onPressed: () {
-          if (_messageFormState.currentState!.validate()) {
-            _messageFormState.currentState!.save();
-            _pageProvider.sendTextMessage();
-            _messageFormState.currentState!.reset();
-          }
-        },
-      ),
-    );
-  }
-
-  Widget _imageMessageButton() {
-    double size = _deviceHeight * 0.04;
-    return SizedBox(
-      height: size,
-      width: size,
-      child: FloatingActionButton(
-        backgroundColor: const Color.fromRGBO(
-          0,
-          82,
-          218,
-          1.0,
-        ),
-        onPressed: () {
-          _pageProvider.sendImageMessage();
-        },
-        child: const Icon(Icons.camera_enhance),
       ),
     );
   }

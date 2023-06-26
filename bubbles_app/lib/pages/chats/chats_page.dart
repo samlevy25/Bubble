@@ -86,7 +86,7 @@ class _ChatsPageState extends State<ChatsPage> {
                     _chatTile(
                       chats[index],
                     ),
-                    SizedBox(height: 10)
+                    const SizedBox(height: 10)
                   ],
                 );
               },
