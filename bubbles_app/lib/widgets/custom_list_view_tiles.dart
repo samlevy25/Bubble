@@ -267,6 +267,9 @@ class CustomExplorerListViewTile extends StatelessWidget {
                   post.sender.imageURL, // Add this line to display the image
               size: width * 0.15,
             ),
+            SizedBox(
+              width: 5,
+            ),
             Expanded(
               child: post.type == PostType.text
                   ? TextPostBubble(

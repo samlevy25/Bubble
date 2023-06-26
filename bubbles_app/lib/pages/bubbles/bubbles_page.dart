@@ -233,9 +233,9 @@ class _BubblesPageState extends State<BubblesPage> {
                     RoundedImageNetwork(
                       key: UniqueKey(),
                       imagePath: bubble.image,
-                      size: _deviceHeight * 0.1,
+                      size: _deviceHeight * 0.15,
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: _deviceHeight * 0.01),
                     Text(
                       bubble.name,
                       style: const TextStyle(
@@ -245,21 +245,21 @@ class _BubblesPageState extends State<BubblesPage> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: _deviceHeight * 0.01),
                     Text(
                       bubble.description,
                       style: const TextStyle(
                           color: Colors.white, fontStyle: FontStyle.italic),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: _deviceHeight * 0.01),
                     Text(
                       bubble.locationName!,
                       style: const TextStyle(
                           color: Colors.white, fontStyle: FontStyle.normal),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: _deviceHeight * 0.01),
                     Text(
                       "${bubble.messages.map((message) => message.sender.uid).toSet().length} Members",
                       style: const TextStyle(

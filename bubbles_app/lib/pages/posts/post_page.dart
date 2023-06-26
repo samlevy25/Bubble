@@ -107,7 +107,8 @@ class _PostPageState extends State<PostPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Full Post View"),
+        title: Text("${_auth.appUser.username}'s post"),
+        centerTitle: true,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -172,7 +173,7 @@ class _PostPageState extends State<PostPage> {
                                   size: _deviceWidth * 0.08,
                                 ),
                                 title: Column(
-                                  mainAxisSize: MainAxisSize.min,
+                                  // mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
                                   children: [
@@ -190,7 +191,7 @@ class _PostPageState extends State<PostPage> {
                                           Icons.star,
                                           size: 15,
                                           color:
-                                              Color.fromARGB(255, 21, 18, 13),
+                                              Color.fromARGB(255, 255, 162, 0),
                                         ),
                                         Text(comment.votesUp.toString()),
                                         IconButton(

@@ -93,6 +93,7 @@ class _PostsPageState extends State<PostsPage> {
                               _buildSortButton('Newest'),
                               const SizedBox(width: 10),
                               _buildSortButton('Oldest'),
+                              Spacer(),
                               Expanded(
                                 child: TextButton(
                                     onPressed: _openCreatePostDialog,
