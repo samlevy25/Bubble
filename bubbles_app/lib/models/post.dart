@@ -9,12 +9,13 @@ enum PostType {
 }
 
 class Post {
-  final String uid; // Add uid property
+  final String uid;
   final AppUser sender;
   final PostType type;
   final String content;
   final DateTime sentTime;
-  final GeoPoint geoPoint;
+  final String geoHash;
+  final String LocationName;
   final List<Comment> comments;
   final List<String> voters;
   final int votesUp;
@@ -26,7 +27,8 @@ class Post {
     required this.type,
     required this.sender,
     required this.sentTime,
-    required this.geoPoint,
+    required this.geoHash,
+    required this.LocationName,
     required this.comments,
     required this.voters,
     required this.votesUp,
@@ -56,7 +58,8 @@ class Post {
         type: postType,
         sender: jsonPost["sender"],
         sentTime: (jsonPost["sent_time"] as Timestamp).toDate(),
-        geoPoint: jsonPost["geopoint"] as GeoPoint,
+        geoHash: jsonPost["geoHash"],
+        LocationName: jsonPost["LocationName"],
         comments: jsonPost["comments"] as List<Comment>,
         voters: voters,
         votesUp: jsonPost["votes_up"],
@@ -86,7 +89,8 @@ class Post {
       "type": postType,
       "sender": sender.uid,
       "sent_time": Timestamp.fromDate(sentTime),
-      "geopoint": geoPoint,
+      "geoHash": geoHash,
+      "LocationName": LocationName,
       "comments": comments,
       "voters": voters,
       "votes_up": votesUp,

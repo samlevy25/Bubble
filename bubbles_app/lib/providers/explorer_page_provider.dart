@@ -2,6 +2,7 @@ import 'dart:async';
 
 //Packages
 import 'package:bubbles_app/models/comment.dart';
+import 'package:bubbles_app/networks/gps.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -105,7 +106,7 @@ class ExplorerPageProvider extends ChangeNotifier {
 
   void listenToKeyboardChanges() {}
 
-  void sendTextPost() {
+  Future<void> sendTextPost() async {
     if (_post != null) {
       String uid = _db.generatePostUid();
       Post postToSend = Post(
@@ -115,7 +116,8 @@ class ExplorerPageProvider extends ChangeNotifier {
         sender: _auth.appUser,
         sentTime: DateTime.now(),
         comments: [],
-        geoPoint: const GeoPoint(0, 0),
+        geoHash: await getCurrentGeoHash(22),
+        LocationName: await getCurrentLocationName(),
         voters: [],
         votesUp: 0,
         votesDown: 0,
@@ -138,7 +140,8 @@ class ExplorerPageProvider extends ChangeNotifier {
             sender: _auth.appUser,
             sentTime: DateTime.now(),
             comments: [],
-            geoPoint: const GeoPoint(0, 0),
+            geoHash: await getCurrentGeoHash(22),
+            LocationName: await getCurrentLocationName(),
             voters: [],
             votesUp: 0,
             votesDown: 0);

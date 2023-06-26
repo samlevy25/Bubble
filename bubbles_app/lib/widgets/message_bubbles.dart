@@ -180,7 +180,7 @@ class TextPostBubble extends StatelessWidget {
             color: Colors.white,
           ),
           Text(
-            " ${post.sender.username}, ${timeago.format(post.sentTime)} at ${"Tel Aviv Center"}",
+            " ${post.sender.username}, ${timeago.format(post.sentTime)} at ${post.LocationName}",
             style: const TextStyle(
               color: Colors.white,
               fontSize: 15,

@@ -52,16 +52,25 @@ Future<String> getCurrentGeoHash(int range) async {
 
 Future<String> getCurrentLocationName() async {
   try {
+    // Get the current geopoint
     cf.GeoPoint g = await getCurrentGeoPoint(22);
+
+    // Retrieve placemarks for the given coordinates
     List<Placemark> placemarks =
         await placemarkFromCoordinates(g.latitude, g.longitude);
 
-    Placemark p = placemarks[0];
+    // Retrieve the first placemark
+    Placemark placemark = placemarks.first;
+
+    // Concatenate the desired address components
+    String address = '${placemark.street}, ${placemark.locality}';
+
     if (kDebugMode) {
-      print(p.name);
+      print(address);
     }
 
-    return "${p.street}, ${p.country}";
+    // Return the address
+    return address;
   } catch (e) {
     return "Unknown";
   }
