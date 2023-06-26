@@ -479,31 +479,17 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
         SizedBox(
           height: _deviceHeight * 0.02,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: BubbleSize.values.map((BubbleSize size) {
-            final isSelected = _bubbleSize == size.index;
-            return Expanded(
-              child: Column(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        _bubbleSize = size.index;
-                      });
-                    },
-                    child: Text(
-                      size.name,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: isSelected ? Colors.blue : Colors.black,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
+        Slider(
+          value: _bubbleSize!.toDouble(),
+          min: 5,
+          max: 8,
+          divisions: 3,
+          onChanged: (double value) {
+            setState(() {
+              _bubbleSize = value.round();
+            });
+          },
+          label: BubbleSize.getNameByIndex(_bubbleSize!),
         ),
       ],
     );

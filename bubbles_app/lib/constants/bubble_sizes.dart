@@ -21,4 +21,13 @@ class BubbleSize {
     }
     return null;
   }
+
+  static String getNameByIndex(int index) {
+    for (var size in values) {
+      if (size.index == index) {
+        return size.name;
+      }
+    }
+    throw Exception('Invalid BubbleSize index');
+  }
 }
