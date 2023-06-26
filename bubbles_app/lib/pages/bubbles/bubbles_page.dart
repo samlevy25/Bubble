@@ -247,9 +247,9 @@ class _BubblesPageState extends State<BubblesPage> {
                         color: Colors.white,
                       ),
                     ),
-                    const Text(
-                      "Bubble Location",
-                      style: TextStyle(
+                    Text(
+                      bubble.locationName!,
+                      style: const TextStyle(
                         color: Colors.white,
                       ),
                     ),
@@ -328,10 +328,10 @@ class _BubblesPageState extends State<BubblesPage> {
         ),
         padding: const EdgeInsets.all(12), // inner padding of the button
       ),
-      child: Row(
+      child: const Row(
         mainAxisSize: MainAxisSize
             .min, // To make the Row size itself to contain its children
-        children: const <Widget>[
+        children: <Widget>[
           Icon(Icons.create),
           SizedBox(width: 10),
           Text(
