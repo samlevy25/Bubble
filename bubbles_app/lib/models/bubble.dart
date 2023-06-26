@@ -30,6 +30,7 @@ class Bubble {
 
   final String geohash;
   final GeoPoint geoPoint;
+  final String? locationName;
   final String admin;
 
   final DatabaseService _db = GetIt.instance.get<DatabaseService>();
@@ -47,6 +48,7 @@ class Bubble {
     required this.key,
     required this.geohash,
     required this.geoPoint,
+    required this.locationName,
     required this.size,
   }) {}
 

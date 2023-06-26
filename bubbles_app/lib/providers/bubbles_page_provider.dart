@@ -46,7 +46,6 @@ class BubblesPageProvider extends ChangeNotifier {
           (d) async {
             Map<String, dynamic> bubbleData = d.data() as Map<String, dynamic>;
 
-
             //Get Last Message For Bubble
             List<Message> messages = [];
             QuerySnapshot bubbleMessage =
@@ -71,6 +70,7 @@ class BubblesPageProvider extends ChangeNotifier {
             String? methodValue = bubbleData['key'];
             String geohash = bubbleData['geohash'];
             GeoPoint? geoPoint = bubbleData['geoPoint'];
+            String? locationName = bubbleData['locationName'];
             String admin = bubbleData['admin'];
             String description = bubbleData['description'];
             int size = bubbleData["size"];
@@ -88,6 +88,7 @@ class BubblesPageProvider extends ChangeNotifier {
                 key: methodValue,
                 geohash: geohash,
                 geoPoint: geoPoint ?? const GeoPoint(0, 0),
+                locationName: locationName,
                 description: description,
                 size: size);
           },

@@ -358,6 +358,7 @@ extension BubbleDatabaseService on DatabaseService {
     required String? key,
     required String geohash,
     required GeoPoint geoPoint,
+    required String? locationName,
     required int bubbleSize,
     String? description,
   }) async {
@@ -366,6 +367,7 @@ extension BubbleDatabaseService on DatabaseService {
         {
           "geohash": geohash,
           "geopoint": geoPoint,
+          "locationName": locationName,
           "admin": createrUid,
           "image": imageURL,
           "name": name,
