@@ -149,16 +149,41 @@ class _EditPageState extends State<EditPage> {
                       isNameChanged = false;
                     });
 
-                    if (nameFormKey.currentState!.validate()) {
-                      setState(() {
-                        isNameChanged = true;
-                      });
-                      Future.delayed(const Duration(seconds: 3), () {
+                    if (widget.bubble.admin != _auth.appUser.uid) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                  15.0), // Customize your padding here
+                              child: Text(
+                                'Only admin can change name bubble',
+                                textAlign: TextAlign
+                                    .center, // This will center your text.
+                                style: TextStyle(
+                                  fontWeight: FontWeight
+                                      .bold, // For making the text bold
+                                  color: Colors.red, // For making the text red
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      if (nameFormKey.currentState!.validate()) {
                         setState(() {
-                          isNameChanged = false;
+                          isNameChanged = true;
                         });
-                      });
-                      widget.bubble.updateBubbleName(newName);
+                        Future.delayed(const Duration(seconds: 3), () {
+                          setState(() {
+                            isNameChanged = false;
+                          });
+                        });
+                        widget.bubble.updateBubbleName(newName);
+                      }
                     }
                   },
                   child: Text('Save'),
@@ -240,17 +265,40 @@ class _EditPageState extends State<EditPage> {
                     setState(() {
                       isDescriptionChanged = false;
                     });
-                    if (descriptionFormKey.currentState!.validate()) {
-                      setState(() {
-                        isDescriptionChanged = true;
-                      });
-                      Future.delayed(const Duration(seconds: 3), () {
+                    if (widget.bubble.admin != _auth.appUser.uid) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                  17.0), // Customize your padding here
+                              child: Text(
+                                'Only admin can change description bubble',
+                                style: TextStyle(
+                                  fontWeight: FontWeight
+                                      .bold, // For making the text bold
+                                  color: Colors.red,
+                                  fontSize: 15, // For making the text red
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      if (descriptionFormKey.currentState!.validate()) {
                         setState(() {
-                          isDescriptionChanged = false;
+                          isDescriptionChanged = true;
                         });
-                      });
+                        Future.delayed(const Duration(seconds: 3), () {
+                          setState(() {
+                            isDescriptionChanged = false;
+                          });
+                        });
 
-                      widget.bubble.updateBubbleDescription(newDescription);
+                        widget.bubble.updateBubbleDescription(newDescription);
+                      }
                     }
                   },
                   child: Text('Save'),
@@ -283,7 +331,7 @@ class _EditPageState extends State<EditPage> {
                                 color: Colors.green,
                                 fontWeight: FontWeight.bold,
                               ),
-                              key: Key('imagage changed'),
+                              key: Key('image changed'),
                             ),
                           ),
                         )
@@ -308,12 +356,20 @@ class _EditPageState extends State<EditPage> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return AlertDialog(
-                                content: Center(
+                              return Dialog(
+                                child: Padding(
+                                  padding: EdgeInsets.all(
+                                      15.0), // Customize your padding here
                                   child: Text(
-                                    "Only admin can delete the group",
+                                    'Only admin can remove bubble',
+                                    textAlign: TextAlign
+                                        .center, // This will center your text.
                                     style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight
+                                          .bold, // For making the text bold
+                                      color:
+                                          Colors.red, // For making the text red
+                                      fontSize: 15,
                                     ),
                                   ),
                                 ),
