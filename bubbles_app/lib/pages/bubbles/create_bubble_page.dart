@@ -12,6 +12,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../networks/bluetooth.dart';
 import '../../networks/gps.dart';
@@ -95,7 +96,13 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
               color: Colors.lightBlue,
               size: 30.0,
             ),
-            onPressed: () {},
+            onPressed: () async {
+              final Uri _url =
+                  Uri.parse('https://bubbles-website-716a4.web.app/');
+              if (!await launchUrl(_url)) {
+                throw Exception('Could not launch $_url');
+              }
+            },
           ),
         ],
       ),
@@ -438,9 +445,8 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             style: TextStyle(
               fontStyle: FontStyle.italic,
               fontWeight: FontWeight.bold,
-              fontSize: 18,
-              color: Colors.black54,
-              fontFamily: 'RobotoMono',
+              fontSize: 15,
+              color: Colors.black45,
             ),
             textAlign: TextAlign.left,
           ),
@@ -483,8 +489,8 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             style: TextStyle(
               fontStyle: FontStyle.italic,
               fontWeight: FontWeight.bold,
-              fontSize: 18,
-              color: Colors.black54,
+              fontSize: 15,
+              color: Colors.black45,
             ),
             textAlign: TextAlign.left,
           ),
@@ -518,8 +524,8 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: Colors.black54,
+                fontSize: 15,
+                color: Colors.black45,
               ),
               textAlign: TextAlign.left,
             ),

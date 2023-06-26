@@ -169,16 +169,16 @@ class _PostPageState extends State<PostPage> {
                                   imagePath: commenter.imageURL,
                                   size: _deviceWidth * 0.08,
                                 ),
-                                title: Text(comment.content),
+                                title: Text(commenter.username),
                                 subtitle: Text(
-                                  "${commenter.username}, ${timeago.format(comment.sentTime)}",
+                                  "${comment.content}, ${timeago.format(comment.sentTime)}",
                                 ),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     const Icon(
                                       Icons.star,
-                                      color: Colors.orange,
+                                      color: Color.fromARGB(255, 21, 18, 13),
                                     ),
                                     Text(comment.votesUp.toString()),
                                     IconButton(
@@ -186,7 +186,7 @@ class _PostPageState extends State<PostPage> {
                                         _addVoteToComment(
                                             comment.uid, 1); // Upvote
                                       },
-                                      icon: Icon(Icons.thumb_up),
+                                      icon: const Icon(Icons.thumb_up),
                                       color: Colors.lightBlue,
                                     ),
                                     IconButton(
