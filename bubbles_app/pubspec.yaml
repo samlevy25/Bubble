@@ -41,6 +41,7 @@ dependencies:
   flutter_blue: ^0.8.0
   profanity_filter: ^2.0.0
   progress_dialog_null_safe: ^1.0.7
+  nice_buttons: ^0.0.3
   
 
 

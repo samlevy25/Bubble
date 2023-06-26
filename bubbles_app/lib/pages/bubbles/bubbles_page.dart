@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:async_button_builder/async_button_builder.dart';
 import 'package:bubbles_app/constants/bubble_key_types.dart';
 import 'package:bubbles_app/pages/bubbles/bubble_page.dart';
+import 'package:nice_buttons/nice_buttons.dart';
 
 import 'package:bubbles_app/pages/bubbles/create_bubble_page.dart';
 import 'package:bubbles_app/pages/bubbles/password_for_bubble.dart';
@@ -316,11 +317,29 @@ class _BubblesPageState extends State<BubblesPage> {
   }
 
   Widget _createBubble() {
-    return FloatingActionButton(
+    return ElevatedButton(
       onPressed: () {
         _navigation.navigateToPage(const CreateBubblePage());
       },
-      child: const Icon(Icons.create),
+      style: ElevatedButton.styleFrom(
+        // color of the text and icon
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20), // border radius
+        ),
+        padding: const EdgeInsets.all(12), // inner padding of the button
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize
+            .min, // To make the Row size itself to contain its children
+        children: const <Widget>[
+          Icon(Icons.create),
+          SizedBox(width: 10),
+          Text(
+            'Create Bubble',
+            style: TextStyle(fontSize: 20),
+          ),
+        ],
+      ),
     );
   }
 
