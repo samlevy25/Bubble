@@ -167,23 +167,29 @@ class TextPostBubble extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Flexible(
-            child: Text(
-              post.content,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 15,
+          Padding(
+            padding: EdgeInsets.only(top: 8.0),
+            child: Flexible(
+              child: Text(
+                post.content,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
               ),
             ),
           ),
           const Divider(
             color: Colors.white,
           ),
-          Text(
-            " ${post.sender.username}, ${timeago.format(post.sentTime)} at ${post.LocationName}",
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
+          Padding(
+            padding: EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              " ${timeago.format(post.sentTime)} at ${post.LocationName}",
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+              ),
             ),
           ),
         ],

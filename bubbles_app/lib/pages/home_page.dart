@@ -88,29 +88,29 @@ class _HomePageState extends State<HomePage> {
           child: Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.white,
-              elevation: 0, // Set the elevation to 0 to remove the line
+              elevation: 0, 
               title: TabBar(
                 indicatorSize:
-                    TabBarIndicatorSize.label, // Set indicator size to label
+                    TabBarIndicatorSize.label, 
                 indicator: const UnderlineTabIndicator(
                   borderSide: BorderSide(
                       width: 2.0,
-                      color: Colors.blue), // Set transparent border color
+                      color: Colors.blue), 
                 ),
-                labelColor: Colors.white, // Set the label (selected tab) color
+                labelColor: Colors.white, 
                 unselectedLabelColor:
-                    Colors.grey, // Set the unselected tab label color
+                    Colors.grey, 
                 labelPadding: EdgeInsets.symmetric(
                     horizontal: _deviceWidt *
-                        0.02), // Adjust label padding to reduce tab size
+                        0.02), 
                 tabs: const [
                   Tab(
                     child: Text(
                       'Bubbles',
                       style: TextStyle(
                         color: Colors.grey,
-                        fontSize: 14, // Adjust font size for smaller tabs
-                      ), // Set the text color for the tab
+                        fontSize: 14, 
+                      ), 
                     ),
                   ),
                   Tab(
@@ -118,8 +118,8 @@ class _HomePageState extends State<HomePage> {
                       'Explorer',
                       style: TextStyle(
                         color: Colors.grey,
-                        fontSize: 14, // Adjust font size for smaller tabs
-                      ), // Set the text color for the tab
+                        fontSize: 14, 
+                      ), 
                     ),
                   ),
                 ],
