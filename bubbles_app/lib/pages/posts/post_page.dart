@@ -171,40 +171,51 @@ class _PostPageState extends State<PostPage> {
                                   imagePath: commenter.imageURL,
                                   size: _deviceWidth * 0.08,
                                 ),
-                                title: Row(
+                                title: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
-                                    Text(
-                                      commenter.username,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                      ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          commenter.username,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        const Icon(
+                                          Icons.star,
+                                          size: 15,
+                                          color:
+                                              Color.fromARGB(255, 21, 18, 13),
+                                        ),
+                                        Text(comment.votesUp.toString()),
+                                        IconButton(
+                                          onPressed: () {
+                                            _addVoteToComment(
+                                                comment.uid, 1); // Upvote
+                                          },
+                                          icon: const Icon(Icons.thumb_up),
+                                          iconSize: 15,
+                                          color: Colors.lightBlue,
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            _addVoteToComment(
+                                                comment.uid, -1); // Downvote
+                                          },
+                                          icon: const Icon(Icons.thumb_down),
+                                          iconSize: 15,
+                                          color: Colors.lightBlue,
+                                        ),
+                                      ],
                                     ),
-                                    const Spacer(),
-                                    const Icon(
-                                      Icons.star,
-                                      size: 15,
-                                      color: Color.fromARGB(255, 21, 18, 13),
-                                    ),
-                                    Text(comment.votesUp.toString()),
-                                    IconButton(
-                                      onPressed: () {
-                                        _addVoteToComment(
-                                            comment.uid, 1); // Upvote
-                                      },
-                                      icon: const Icon(Icons.thumb_up),
-                                      iconSize: 15,
-                                      color: Colors.lightBlue,
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        _addVoteToComment(
-                                            comment.uid, -1); // Downvote
-                                      },
-                                      icon: const Icon(Icons.thumb_down),
-                                      iconSize: 15,
-                                      color: Colors.lightBlue,
-                                    ),
+                                    const Divider(
+                                        color: Colors
+                                            .grey), // This adds a horizontal line
                                   ],
                                 ),
                                 subtitle: Flexible(
@@ -214,13 +225,15 @@ class _PostPageState extends State<PostPage> {
                                     children: [
                                       Text(
                                         comment.content,
+                                        style: const TextStyle(
+                                            fontSize: 17, color: Colors.black),
                                       ),
-                                      SizedBox(height: _deviceHeight * 0.005),
+                                      SizedBox(height: _deviceHeight * 0.006),
                                       Text(
                                         timeago.format(comment.sentTime),
                                         style: const TextStyle(
-                                          fontSize: 12,
-                                        ),
+                                            fontSize: 13,
+                                            color: Colors.black38),
                                       ),
                                     ],
                                   ),
