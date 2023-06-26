@@ -262,6 +262,16 @@ class DatabaseService {
     }
     return null;
   }
+
+  void  updatePreferredLanguage(String uid, String selectedLanguage) {
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(uid)
+        .update({'preferredLanguage': selectedLanguage})
+        .then((value) => print('Preferred language updated successfully'))
+        .catchError(
+            (error) => print('Failed to update preferred language: $error'));
+  }
 }
 
 // Extension methods for Bubble-related database operations

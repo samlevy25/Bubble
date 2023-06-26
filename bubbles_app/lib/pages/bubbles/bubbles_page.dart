@@ -227,12 +227,15 @@ class _BubblesPageState extends State<BubblesPage> {
               Container(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     RoundedImageNetwork(
                       key: UniqueKey(),
                       imagePath: bubble.image,
                       size: _deviceHeight * 0.1,
                     ),
+                    SizedBox(height: 8),
                     Text(
                       bubble.name,
                       style: const TextStyle(
@@ -240,24 +243,29 @@ class _BubblesPageState extends State<BubblesPage> {
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
+                      textAlign: TextAlign.center,
                     ),
+                    SizedBox(height: 8),
                     Text(
                       bubble.description,
                       style: const TextStyle(
-                        color: Colors.white,
-                      ),
+                          color: Colors.white, fontStyle: FontStyle.italic),
+                      textAlign: TextAlign.center,
                     ),
+                    SizedBox(height: 8),
                     Text(
                       bubble.locationName!,
                       style: const TextStyle(
-                        color: Colors.white,
-                      ),
+                          color: Colors.white, fontStyle: FontStyle.normal),
+                      textAlign: TextAlign.center,
                     ),
-                    const Text(
-                      "Bubble Length",
-                      style: TextStyle(
+                    SizedBox(height: 8),
+                    Text(
+                      "${bubble.messages.map((message) => message.sender.uid).toSet().length} Members",
+                      style: const TextStyle(
                         color: Colors.white,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),

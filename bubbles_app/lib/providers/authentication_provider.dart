@@ -64,6 +64,7 @@ class AuthenticationProvider extends ChangeNotifier {
                 "up_votes": userData["up_votes"],
                 "down_votes": userData["down_votes"],
                 "number_of_votes": userData["number_of_votes"],
+                "preferred_language": userData["preferred_language"],
               });
 
               _navigationService.removeAndNavigateToRoute('/home');
