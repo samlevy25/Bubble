@@ -107,7 +107,7 @@ class _PostPageState extends State<PostPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("${_auth.appUser.username}'s post"),
+        title: Text("Post"),
         centerTitle: true,
       ),
       body: _isLoading
