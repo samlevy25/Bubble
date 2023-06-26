@@ -3,22 +3,28 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class Bluetooth {
+  static Future<void> ensurePermissionsGranted() async {
+    // Request the BLUETOOTH_CONNECT and BLUETOOTH_SCAN permissions
+    Map<Permission, PermissionStatus> permissionStatuses =
+        await [Permission.bluetoothConnect, Permission.bluetoothScan].request();
+
+    // Check if the permissions were granted
+    if (permissionStatuses[Permission.bluetoothConnect]!.isDenied ||
+        permissionStatuses[Permission.bluetoothScan]!.isDenied) {
+      // The permission was denied, show an error message
+      throw Exception('Bluetooth connect or scan permission denied');
+    }
+  }
+
   static Future<String?> scanAndConnect(BuildContext context) async {
+    // Ensure the necessary permissions are granted before starting
+    await ensurePermissionsGranted();
+
     FlutterBlue flutterBlue = FlutterBlue.instance;
     List<ScanResult> deviceList = [];
 
-    // Request permissions
-    Map<Permission, PermissionStatus> statuses = await [
-      Permission.bluetooth,
-    ].request();
-
-    if (statuses[Permission.bluetooth]!.isDenied) {
-      // We didn't get the permission, handle it appropriately in your app
-      return null;
-    }
-
     // Start scanning
-    flutterBlue.startScan(timeout: Duration(seconds: 5));
+    flutterBlue.startScan(timeout: const Duration(seconds: 5));
 
     showDialog(
       context: context,
@@ -29,12 +35,12 @@ class Bluetooth {
             borderRadius: BorderRadius.circular(20.0),
           ),
           child: Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text('Scanning...', style: TextStyle(fontSize: 18)),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Image.asset('assets/images/bluetooth_loading.gif'),
               ],
             ),
@@ -55,11 +61,12 @@ class Bluetooth {
       }
     });
 
-    // Stop scanning
-    flutterBlue.stopScan();
+    // Wait for scanning to complete
+    await Future.delayed(const Duration(seconds: 5));
 
-    // Wait a bit to collect devices
-    await Future.delayed(Duration(seconds: 5));
+    // Stop scanning and dispose the subscription
+    flutterBlue.stopScan();
+    subscription.cancel();
 
     Navigator.of(context).pop(); // dismiss the dialog
 
@@ -68,8 +75,8 @@ class Bluetooth {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Select a device'),
-          content: Container(
+          title: const Text('Select a device'),
+          content: SizedBox(
             width: double.maxFinite,
             child: ListView(
               children: deviceList.map((ScanResult result) {
