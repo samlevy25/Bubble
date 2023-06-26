@@ -263,7 +263,7 @@ class DatabaseService {
     return null;
   }
 
-  void  updatePreferredLanguage(String uid, String selectedLanguage) {
+  void updatePreferredLanguage(String uid, String selectedLanguage) {
     FirebaseFirestore.instance
         .collection('Users')
         .doc(uid)
@@ -425,7 +425,7 @@ extension BubbleDatabaseService on DatabaseService {
       await _db
           .collection(bubblesCollection)
           .doc(uid)
-          .update({"name": newDescriptionBubble});
+          .update({"description": newDescriptionBubble});
     } catch (e) {
       if (kDebugMode) {
         print(e);

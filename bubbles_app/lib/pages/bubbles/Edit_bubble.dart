@@ -18,6 +18,9 @@ class _EditPageState extends State<EditPage> {
   final GlobalKey<FormState> nameFormKey = GlobalKey<FormState>();
   String newName = '';
   late double _deviceHeight;
+  bool isNameChanged = false;
+  bool isDescriptionChanged = false;
+  bool isBubbleRemove = false;
 
   late AuthenticationProvider _auth;
 
@@ -82,46 +85,105 @@ class _EditPageState extends State<EditPage> {
                 SizedBox(height: _deviceHeight * 0.005),
                 Form(
                   key: nameFormKey,
-                  child: TextFormField(
-                    onChanged: (value) {
-                      setState(() {
-                        newName = value;
-                      });
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 700),
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                      return ScaleTransition(scale: animation, child: child);
                     },
-                    decoration: InputDecoration(
-                      labelStyle: TextStyle(
-                        color: Colors.lightBlue,
-                      ),
-                      focusColor: Colors.lightBlue,
-                      filled: true,
-                      enabledBorder: UnderlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: Colors.lightBlue,
-                        ),
-                      ),
-                      labelText: "New Name",
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a name.';
-                      }
-                      if (!RegExp(r'.{8,}').hasMatch(value)) {
-                        return 'Name must be at least 8 characters long.';
-                      }
-                      return null;
-                    },
+                    child: isNameChanged
+                        ? Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: _deviceHeight * 0.0241),
+                              child: const Text(
+                                "Profile image changed successfully.",
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                key: Key('imagage changed'),
+                              ),
+                            ),
+                          )
+                        : TextFormField(
+                            onChanged: (value) {
+                              setState(() {
+                                newName = value;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              labelStyle: TextStyle(
+                                color: Colors.lightBlue,
+                              ),
+                              focusColor: Colors.lightBlue,
+                              filled: true,
+                              enabledBorder: UnderlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: Colors.lightBlue,
+                                ),
+                              ),
+                              labelText: "New Name",
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter a name.';
+                              }
+                              if (!RegExp(r'.{8,}').hasMatch(value)) {
+                                return 'Name must be at least 8 characters long.';
+                              }
+                              return null;
+                            },
+                          ),
                   ),
                 ),
                 SizedBox(height: _deviceHeight * 0.01),
                 ElevatedButton(
                   onPressed: () {
-                    if (nameFormKey.currentState!.validate()) {
-                      widget.bubble.updateBubbleName(newName);
+                    setState(() {
+                      isNameChanged = false;
+                    });
+
+                    if (widget.bubble.admin != _auth.appUser.uid) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                  15.0), // Customize your padding here
+                              child: Text(
+                                'Only admin can change name bubble',
+                                textAlign: TextAlign
+                                    .center, // This will center your text.
+                                style: TextStyle(
+                                  fontWeight: FontWeight
+                                      .bold, // For making the text bold
+                                  color: Colors.red, // For making the text red
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      if (nameFormKey.currentState!.validate()) {
+                        setState(() {
+                          isNameChanged = true;
+                        });
+                        Future.delayed(const Duration(seconds: 3), () {
+                          setState(() {
+                            isNameChanged = false;
+                          });
+                        });
+                        widget.bubble.updateBubbleName(newName);
+                      }
                     }
                   },
                   child: Text('Save'),
@@ -140,46 +202,103 @@ class _EditPageState extends State<EditPage> {
                 SizedBox(height: _deviceHeight * 0.005),
                 Form(
                   key: descriptionFormKey,
-                  child: TextFormField(
-                    onChanged: (value) {
-                      setState(() {
-                        newDescription = value;
-                      });
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 700),
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                      return ScaleTransition(scale: animation, child: child);
                     },
-                    decoration: InputDecoration(
-                      labelStyle: TextStyle(
-                        color: Colors.lightBlue,
-                      ),
-                      focusColor: Colors.lightBlue,
-                      filled: true,
-                      enabledBorder: UnderlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: Colors.lightBlue,
-                        ),
-                      ),
-                      labelText: "New Description",
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a description.';
-                      }
-                      if (!RegExp(r'.{8,}').hasMatch(value)) {
-                        return 'Description must be at least 8 characters long.';
-                      }
-                      return null;
-                    },
+                    child: isDescriptionChanged
+                        ? Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: _deviceHeight * 0.0241),
+                              child: const Text(
+                                "Profile image changed successfully.",
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                key: Key('imagage changed'),
+                              ),
+                            ),
+                          )
+                        : TextFormField(
+                            onChanged: (value) {
+                              setState(() {
+                                newDescription = value;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              labelStyle: TextStyle(
+                                color: Colors.lightBlue,
+                              ),
+                              focusColor: Colors.lightBlue,
+                              filled: true,
+                              enabledBorder: UnderlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: Colors.lightBlue,
+                                ),
+                              ),
+                              labelText: "New Description",
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter a description.';
+                              }
+                              if (!RegExp(r'.{8,}').hasMatch(value)) {
+                                return 'Description must be at least 8 characters long.';
+                              }
+                              return null;
+                            },
+                          ),
                   ),
                 ),
                 SizedBox(height: _deviceHeight * 0.01),
                 ElevatedButton(
                   onPressed: () {
-                    if (descriptionFormKey.currentState!.validate()) {
-                      widget.bubble.updateBubbleDescription(newDescription);
+                    setState(() {
+                      isDescriptionChanged = false;
+                    });
+                    if (widget.bubble.admin != _auth.appUser.uid) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                  17.0), // Customize your padding here
+                              child: Text(
+                                'Only admin can change description bubble',
+                                style: TextStyle(
+                                  fontWeight: FontWeight
+                                      .bold, // For making the text bold
+                                  color: Colors.red,
+                                  fontSize: 15, // For making the text red
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      if (descriptionFormKey.currentState!.validate()) {
+                        setState(() {
+                          isDescriptionChanged = true;
+                        });
+                        Future.delayed(const Duration(seconds: 3), () {
+                          setState(() {
+                            isDescriptionChanged = false;
+                          });
+                        });
+
+                        widget.bubble.updateBubbleDescription(newDescription);
+                      }
                     }
                   },
                   child: Text('Save'),
@@ -195,12 +314,34 @@ class _EditPageState extends State<EditPage> {
                 ),
               ),
               children: [
-                Text(
-                  'Are you sure you want to delete this bubble ?',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 18,
-                  ),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 700),
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) {
+                    return ScaleTransition(scale: animation, child: child);
+                  },
+                  child: isBubbleRemove
+                      ? Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: _deviceHeight * 0.0025),
+                            child: const Text(
+                              "Bubble has been successfully deleted.",
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              key: Key('image changed'),
+                            ),
+                          ),
+                        )
+                      : Text(
+                          'Are you sure you want to delete this bubble ?',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 18,
+                          ),
+                        ),
                 ),
                 SizedBox(height: _deviceHeight * 0.01),
                 Row(
@@ -208,23 +349,44 @@ class _EditPageState extends State<EditPage> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        widget.bubble.admin != _auth.appUser.uid
-                            ? showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    content: Center(
-                                      child: Text(
-                                        "Only admin can delete the group",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                        setState(() {
+                          isDescriptionChanged = false;
+                        });
+                        if (widget.bubble.admin != _auth.appUser.uid) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                child: Padding(
+                                  padding: EdgeInsets.all(
+                                      15.0), // Customize your padding here
+                                  child: Text(
+                                    'Only admin can remove bubble',
+                                    textAlign: TextAlign
+                                        .center, // This will center your text.
+                                    style: TextStyle(
+                                      fontWeight: FontWeight
+                                          .bold, // For making the text bold
+                                      color:
+                                          Colors.red, // For making the text red
+                                      fontSize: 15,
                                     ),
-                                  );
-                                },
-                              )
-                            : widget.bubble.deleteBubble();
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        } else {
+                          setState(() {
+                            isBubbleRemove = true;
+                          });
+                          Future.delayed(const Duration(seconds: 3), () {
+                            setState(() {
+                              isBubbleRemove = false;
+                            });
+                          });
+                          widget.bubble.deleteBubble();
+                        }
                       },
                       child: Text('Yes, I\'m sure'),
                     ),

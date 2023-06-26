@@ -7,7 +7,7 @@ class Bluetooth {
     List<ScanResult> deviceList = [];
 
     // Start scanning
-    flutterBlue.startScan(timeout: Duration(seconds: 5));
+    flutterBlue.startScan(timeout: Duration(seconds: 10));
 
     showDialog(
         context: context,
@@ -46,7 +46,7 @@ class Bluetooth {
     flutterBlue.stopScan();
 
     // Wait a bit to collect devices
-    await Future.delayed(Duration(seconds: 5));
+    await Future.delayed(Duration(seconds: 10));
 
     Navigator.of(context).pop(); // dismiss the dialog
 
