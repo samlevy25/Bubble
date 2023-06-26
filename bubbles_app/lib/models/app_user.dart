@@ -13,7 +13,7 @@ class AppUser {
   late int upVotes;
   late int downVotes;
   late int numberOfVotes;
-  late final String preferredLanguage;
+  String preferredLanguage;
 
   final DatabaseService _db = GetIt.instance.get<DatabaseService>();
 

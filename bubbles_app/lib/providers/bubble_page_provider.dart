@@ -162,6 +162,7 @@ class BubblePageProvider extends ChangeNotifier {
     // }
     final filter = ProfanityFilter();
     final String preferedLanguage = _auth.appUser.preferredLanguage;
+    print("preferedLanguage: $preferedLanguage");
 
     Translation enTranslated = await msg.translate(to: 'en');
     String filtered = filter.censor(enTranslated.toString());
