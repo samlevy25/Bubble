@@ -13,6 +13,7 @@ class AppUser {
   late int upVotes;
   late int downVotes;
   late int numberOfVotes;
+  late final String preferredLanguage;
 
   final DatabaseService _db = GetIt.instance.get<DatabaseService>();
 
@@ -26,6 +27,7 @@ class AppUser {
     required this.upVotes,
     required this.downVotes,
     required this.numberOfVotes,
+    required this.preferredLanguage,
   });
 
   factory AppUser.fromJSON(Map<String, dynamic> json) {
@@ -39,6 +41,7 @@ class AppUser {
       upVotes: json["up_votes"] ?? 0,
       downVotes: json["down_votes"] ?? 0,
       numberOfVotes: json["number_of_votes"] ?? 0,
+      preferredLanguage: json["preferred_language"] ?? "en",
     );
   }
 

@@ -92,7 +92,8 @@ class BubblePageProvider extends ChangeNotifier {
 
         for (Message message in messages!) {
           if (message.type == MessageType.text) {
-            message.content = await translateAndFilter(message.content);
+            message.content =
+                await translateAndFilter(message.sender, message.content);
           }
         }
 
@@ -155,12 +156,16 @@ class BubblePageProvider extends ChangeNotifier {
     _db.deleteBubble(_bubbleId);
   }
 
-  Future<String> translateAndFilter(String msg) async {
+  Future<String> translateAndFilter(AppUser msgSender, String msg) async {
+    if (msgSender.uid == _auth.appUser.uid) {
+      return msg;
+    }
     final filter = ProfanityFilter();
+    final String preferedLanguage = _auth.appUser.preferredLanguage;
 
     Translation enTranslated = await msg.translate(to: 'en');
     String filtered = filter.censor(enTranslated.toString());
-    Translation result = await filtered.translate(to: 'fr');
+    Translation result = await filtered.translate(to: preferedLanguage);
     return result.toString();
   }
 }

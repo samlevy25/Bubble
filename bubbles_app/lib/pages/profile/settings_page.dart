@@ -1,6 +1,8 @@
+import 'package:bubbles_app/constants/language.dart';
 import 'package:bubbles_app/widgets/custom_input_fields.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/src/platform_file.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +19,8 @@ import '../../services/media_service.dart';
 import '../../widgets/rounded_image.dart';
 
 import 'package:list_picker/list_picker.dart';
+
+import '../../constants/language.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage();
@@ -209,28 +213,6 @@ class _SettingsPageState extends State<SettingsPage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-          ),
-          backgroundColor: Colors.lightBlue,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          title: const Text(
-            "Settings",
-            textAlign: TextAlign.center,
-          ),
-          centerTitle: true,
-        ),
         body: ListView(
           children: <Widget>[
             const ListTile(
@@ -258,8 +240,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 fontWeight: FontWeight.bold,
               ),
             )),
-            _changeLanguage(),
-            _changeRadius(),
+            _changeLanguage(context),
             _logout(),
             const ListTile(
                 title: Text(
@@ -854,163 +835,40 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   //App
-  Widget _changeLanguage() {
+  Widget _changeLanguage(BuildContext context) {
     return ExpansionTile(
       leading: const Icon(Icons.language),
       title: const Text('Language'),
-      subtitle: const Text('change App Language'),
+      subtitle: const Text('Change App Language'),
       children: [
         Center(
           child: ElevatedButton(
             onPressed: () async {
-              lang = await showDialog(
+              final selectedLanguage = await showDialog<String>(
                 context: context,
-                builder: (context) => Scaffold(
-                  appBar: AppBar(
-                    title: const Text('Select your Language'),
-                  ),
-                  body: const ListPickerDialog(
-                    label: "Language",
-                    items: [
-                      'Afrikaans',
-                      'Albanian',
-                      'Amharic',
-                      'Arabic',
-                      'Armenian',
-                      'Azerbaijani',
-                      'Basque',
-                      'Belarusian',
-                      'Bengali',
-                      'Bosnian',
-                      'Bulgarian',
-                      'Catalan',
-                      'Cebuano',
-                      'Chichewa',
-                      'Chinese (Simplified)',
-                      'Chinese (Traditional)',
-                      'Corsican',
-                      'Croatian',
-                      'Czech',
-                      'Danish',
-                      'Dutch',
-                      'English',
-                      'Esperanto',
-                      'Estonian',
-                      'Filipino',
-                      'Finnish',
-                      'French',
-                      'Frisian',
-                      'Galician',
-                      'Georgian',
-                      'German',
-                      'Greek',
-                      'Gujarati',
-                      'Haitian Creole',
-                      'Hausa',
-                      'Hawaiian',
-                      'Hebrew',
-                      'Hindi',
-                      'Hmong',
-                      'Hungarian',
-                      'Icelandic',
-                      'Igbo',
-                      'Indonesian',
-                      'Irish',
-                      'Italian',
-                      'Japanese',
-                      'Javanese',
-                      'Kannada',
-                      'Kazakh',
-                      'Khmer',
-                      'Kinyarwanda',
-                      'Korean',
-                      'Kurdish (Kurmanji)',
-                      'Kurdish (Sorani)',
-                      'Kyrgyz',
-                      'Lao',
-                      'Latin',
-                      'Latvian',
-                      'Lithuanian',
-                      'Luxembourgish',
-                      'Macedonian',
-                      'Malagasy',
-                      'Malay',
-                      'Malayalam',
-                      'Maltese',
-                      'Maori',
-                      'Marathi',
-                      'Mongolian',
-                      'Myanmar (Burmese)',
-                      'Nepali',
-                      'Norwegian',
-                      'Odia (Oriya)',
-                      'Pashto',
-                      'Persian',
-                      'Polish',
-                      'Portuguese',
-                      'Punjabi',
-                      'Romanian',
-                      'Russian',
-                      'Samoan',
-                      'Scots Gaelic',
-                      'Serbian',
-                      'Sesotho',
-                      'Shona',
-                      'Sindhi',
-                      'Sinhala',
-                      'Slovak',
-                      'Slovenian',
-                      'Somali',
-                      'Spanish',
-                      'Sundanese',
-                      'Swahili',
-                      'Swedish',
-                      'Tajik',
-                      'Tamil',
-                      'Tatar',
-                      'Telugu',
-                      'Thai',
-                      'Turkish',
-                      'Turkmen',
-                      'Ukrainian',
-                      'Urdu',
-                      'Uyghur',
-                      'Uzbek',
-                      'Vietnamese',
-                      'Welsh',
-                      'Xhosa',
-                      'Yiddish',
-                      'Yoruba',
-                      'Zulu'
-                    ],
-                  ),
+                builder: (context) => SimpleDialog(
+                  title: const Text('Select your Language'),
+                  children: LanguageCodes.languageDict.keys.map((language) {
+                    return SimpleDialogOption(
+                      onPressed: () => Navigator.pop(
+                          context, LanguageCodes.languageDict[language]),
+                      child: Text(language),
+                    );
+                  }).toList(),
                 ),
               );
+
+              if (selectedLanguage != null) {
+                _auth.appUser.preferredLanguage = selectedLanguage;
+                _db.updatePreferredLanguage(
+                    _auth.appUser.uid, selectedLanguage);
+                if (kDebugMode) {
+                  print('Selected Language: $selectedLanguage');
+                }
+              }
             },
             child: const Text('Select your Language'),
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _changeRadius() {
-    return ExpansionTile(
-      leading: const Icon(Icons.gps_fixed),
-      title: const Text('Radius'),
-      subtitle: const Text('change the Radius'),
-      children: [
-        Slider(
-          value: _currentSliderValue,
-          max: 3,
-          min: 0,
-          divisions: 3,
-          label: ["30m", "150m", "1Km", "5Km"][_currentSliderValue.round()],
-          onChanged: (double value) {
-            setState(() {
-              _currentSliderValue = value;
-            });
-          },
         ),
       ],
     );

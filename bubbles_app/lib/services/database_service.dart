@@ -262,6 +262,16 @@ class DatabaseService {
     }
     return null;
   }
+
+  void  updatePreferredLanguage(String uid, String selectedLanguage) {
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(uid)
+        .update({'preferredLanguage': selectedLanguage})
+        .then((value) => print('Preferred language updated successfully'))
+        .catchError(
+            (error) => print('Failed to update preferred language: $error'));
+  }
 }
 
 // Extension methods for Bubble-related database operations
@@ -358,6 +368,7 @@ extension BubbleDatabaseService on DatabaseService {
     required String? key,
     required String geohash,
     required GeoPoint geoPoint,
+    required String? locationName,
     required int bubbleSize,
     String? description,
   }) async {
@@ -366,6 +377,7 @@ extension BubbleDatabaseService on DatabaseService {
         {
           "geohash": geohash,
           "geopoint": geoPoint,
+          "locationName": locationName,
           "admin": createrUid,
           "image": imageURL,
           "name": name,

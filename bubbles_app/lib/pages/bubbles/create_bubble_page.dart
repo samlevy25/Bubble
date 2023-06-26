@@ -358,6 +358,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             print("getting location..."); // Print statement added
             String location = await getCurrentGeoHash(_bubbleSize!);
             GeoPoint geoPoint = await getCurrentGeoPoint(22);
+            String locationName = await getCurrentLocationName();
             print("saving image to storage..."); // Print statement added
             String? imageURL = await _cloudStorage.saveBubbleImageToStorage(
               bubbleUid,
@@ -377,6 +378,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
               key: bubbleKey,
               geohash: location,
               geoPoint: geoPoint,
+              locationName: locationName,
               description: description,
               bubbleSize: _bubbleSize!,
             );
@@ -398,6 +400,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
                   keyType: _bubbleKeyType,
                   key: bubbleKey,
                   geohash: location,
+                  locationName: locationName,
                   description: description!,
                   geoPoint: geoPoint,
                   size: _bubbleSize!),
