@@ -176,7 +176,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
               : RoundedImageNetwork(
                   key: UniqueKey(),
                   imagePath:
-                      "https://firebasestorage.googleapis.com/v0/b/bubbles-96944.appspot.com/o/gui%2Fno_bubble_image.jpg?alt=media&token=dc17ae3f-e589-482c-b88c-81b4c9cb09b1",
+                      "https://firebasestorage.googleapis.com/v0/b/bubbles-96944.appspot.com/o/gui%2FaddPhoto.jpg?alt=media&token=b39ea09e-fca1-4c8a-945f-e247f6b7734d",
                   size: _deviceHeight * 0.17,
                 ),
           SizedBox(height: _deviceHeight * 0.01),
