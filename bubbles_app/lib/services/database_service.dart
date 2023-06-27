@@ -414,9 +414,9 @@ extension BubbleDatabaseService on DatabaseService {
           "keyType": keyType,
           "key": key,
           "size": bubbleSize,
+          "lastTimeUpdated": DateTime.now().toUtc(),
         },
       );
-      updateLastTimeBubbleUpdated(bubbleUid);
     } catch (e) {
       if (kDebugMode) {
         print(e);
