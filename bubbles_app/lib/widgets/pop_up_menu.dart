@@ -66,10 +66,6 @@ class PopupMenu {
     }
   }
 
-  static void openPrivateChat() {
-    print('Opening private chat');
-  }
-
   static void showUserDetails(
       BuildContext context, AppUser user1, AppUser user2) {
     NavigationService navigation = GetIt.instance.get<NavigationService>();
@@ -102,6 +98,23 @@ class PopupMenu {
                     navigation.navigateToPage(ChatPage(chat: chat));
                   },
                   child: const Text('Open Private Chat'),
+                ),
+              if (user1.uid != user2.uid)
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  onPressed: () async {
+                    DatabaseService db = GetIt.instance.get<DatabaseService>();
+                    db.reportUser(user2.uid);
+                    navigation.goBack();
+                  },
+                  child: Text(
+                    'Report ${user2.username}',
+                  ),
                 ),
             ],
           ),

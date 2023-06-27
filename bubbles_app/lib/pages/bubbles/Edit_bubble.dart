@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:bubbles_app/constants/bubble_key_types.dart';
+import 'package:bubbles_app/services/automated_dbms_api.dart';
+import 'package:bubbles_app/services/database_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import '../../models/bubble.dart';
 import '../../providers/authentication_provider.dart';
@@ -21,6 +24,7 @@ class _EditPageState extends State<EditPage> {
   bool isNameChanged = false;
   bool isDescriptionChanged = false;
   bool isBubbleRemove = false;
+  final DatabaseService _db = GetIt.instance.get<DatabaseService>();
 
   late AuthenticationProvider _auth;
 
@@ -394,6 +398,11 @@ class _EditPageState extends State<EditPage> {
                 ),
               ],
             ),
+            TextButton(
+                onPressed: () {
+                  AutomatedDBMSAPI.bubbleReq(widget.bubble.uid);
+                },
+                child: Text('Report Bubble')),
           ],
         ),
       ),
