@@ -1,9 +1,8 @@
 import 'dart:async';
 
-import 'package:bubbles_app/constants/bubble_key_types.dart';
-import 'package:bubbles_app/constants/bubble_sizes.dart';
+import 'package:bubbles_app/services/automated_dbms_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/foundation.dart';
 
 import '../models/activity.dart';
@@ -271,6 +270,20 @@ class DatabaseService {
         .then((value) => print('Preferred language updated successfully'))
         .catchError(
             (error) => print('Failed to update preferred language: $error'));
+  }
+
+  void reportUser(String uid) {
+    final userRef = _db.collection('Users').doc(uid);
+
+    userRef.set(
+      {
+        'down_votes': FieldValue.increment(1),
+        'number_of_votes': FieldValue.increment(1),
+      },
+      SetOptions(merge: true),
+    );
+
+    AutomatedDBMSAPI.userReq(uid);
   }
 }
 

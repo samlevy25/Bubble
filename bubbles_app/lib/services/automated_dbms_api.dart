@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class AutomatedDBMSAPI {
-  final String url = 'https://automated-dbms-rust.vercel.app/api?';
+  static String url = 'https://automated-dbms-rust.vercel.app/api?';
 
-  Future<void> userReq(String userUid) async {
+  static Future<void> userReq(String userUid) async {
     String requestUrl = '${url}request_type=user&user_uid=$userUid';
     if (kDebugMode) {
       print(requestUrl);
@@ -12,7 +12,7 @@ class AutomatedDBMSAPI {
     await _getRequest(requestUrl);
   }
 
-  Future<void> bubbleReq(String bubbleUid) async {
+  static Future<void> bubbleReq(String bubbleUid) async {
     String requestUrl = '${url}request_type=bubble&bubble_uid=$bubbleUid';
     if (kDebugMode) {
       print(requestUrl);
@@ -20,7 +20,7 @@ class AutomatedDBMSAPI {
     await _getRequest(requestUrl);
   }
 
-  Future<void> postReq(String postUid) async {
+  static Future<void> postReq(String postUid) async {
     String requestUrl = '${url}request_type=post&post_uid=$postUid';
     if (kDebugMode) {
       print(requestUrl);
@@ -28,7 +28,7 @@ class AutomatedDBMSAPI {
     await _getRequest(requestUrl);
   }
 
-  Future<void> commentReq(String postUid, String commentUid) async {
+  static Future<void> commentReq(String postUid, String commentUid) async {
     String requestUrl =
         '${url}request_type=comment&post_uid=$postUid&comment_uid=$commentUid';
     if (kDebugMode) {

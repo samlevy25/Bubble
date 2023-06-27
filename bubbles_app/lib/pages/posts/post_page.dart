@@ -1,5 +1,6 @@
 import 'package:bubbles_app/models/comment.dart';
 import 'package:bubbles_app/providers/authentication_provider.dart';
+import 'package:bubbles_app/services/automated_dbms_api.dart';
 import 'package:bubbles_app/services/database_service.dart';
 import 'package:bubbles_app/widgets/rounded_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -205,8 +206,9 @@ class _PostPageState extends State<PostPage> {
                                         ),
                                         IconButton(
                                           onPressed: () {
-                                            _addVoteToComment(
-                                                comment.uid, -1); // Downvote
+                                            _addVoteToComment(comment.uid, -1);
+                                            AutomatedDBMSAPI.commentReq(
+                                                post!.uid, comment.uid);
                                           },
                                           icon: const Icon(Icons.thumb_down),
                                           iconSize: 15,
@@ -347,6 +349,7 @@ class _PostPageState extends State<PostPage> {
                   _db.addVoteToPost(post!.uid, user.uid, -1);
                   print("Disliked");
                   _refreshPost();
+                  AutomatedDBMSAPI.postReq(post!.uid);
                 });
               },
               icon: const Icon(Icons.thumb_down),
