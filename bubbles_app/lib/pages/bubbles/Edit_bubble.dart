@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:bubbles_app/constants/bubble_key_types.dart';
+import 'package:bubbles_app/pages/bubbles/bubbles_page.dart';
 import 'package:bubbles_app/services/automated_dbms_api.dart';
 import 'package:bubbles_app/services/database_service.dart';
 import 'package:flutter/material.dart';
@@ -390,6 +391,10 @@ class _EditPageState extends State<EditPage> {
                             });
                           });
                           widget.bubble.deleteBubble();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const BubblesPage()));
                         }
                       },
                       child: Text('Yes, I\'m sure'),
