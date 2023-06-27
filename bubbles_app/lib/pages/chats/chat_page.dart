@@ -1,5 +1,6 @@
 //Packages
 
+import 'package:bubbles_app/pages/bubbles/bubbles_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +11,7 @@ import '../../providers/authentication_provider.dart';
 import '../../providers/chat_page_provider.dart';
 import '../../widgets/custom_input_fields.dart';
 import '../../widgets/custom_list_view_tiles.dart';
+import 'chats_page.dart';
 
 class ChatPage extends StatefulWidget {
   final Chat chat;
@@ -78,21 +80,27 @@ class _ChatPageState extends State<ChatPage> {
                         ),
                         actions: <Widget>[
                           Row(
-                            mainAxisAlignment: MainAxisAlignment
-                                .center, // Alignement des éléments au centre
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
                                 child: const Text(
                                   'No',
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                              const SizedBox(
-                                  width:
-                                      20), // Vous pouvez ajuster cet espace selon vos préférences
+                              const SizedBox(width: 20),
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  widget.chat.deleteChat();
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ChatsPage()));
+                                },
                                 child: const Text(
                                   "Yes, I'm sure",
                                 ),

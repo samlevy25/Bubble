@@ -371,6 +371,16 @@ extension BubbleDatabaseService on DatabaseService {
     }
   }
 
+  Future<void> deleteChat(String chatID) async {
+    try {
+      await _db.collection(chatsCollection).doc(chatID).delete();
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
   // Create a new bubble
   Future<void> createBubble({
     required String bubbleUid,

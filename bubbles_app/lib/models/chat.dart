@@ -1,3 +1,6 @@
+import 'package:get_it/get_it.dart';
+
+import '../services/database_service.dart';
 import 'app_user.dart';
 import 'message.dart';
 
@@ -10,6 +13,7 @@ class Chat {
   List<Message> messages;
 
   late final List<AppUser> _recepient;
+  final DatabaseService _db = GetIt.instance.get<DatabaseService>();
 
   Chat({
     required this.uid,
@@ -35,5 +39,9 @@ class Chat {
 
   String imageURL() {
     return _recepient.first.imageURL;
+  }
+
+  void deleteChat() {
+    _db.deleteChat(uid);
   }
 }
