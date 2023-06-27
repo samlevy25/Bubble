@@ -29,12 +29,12 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0, // Set the elevation to 0 to remove the line
-        leading: IconButton(
-          icon: const Icon(Icons.notifications),
-          color: Colors.lightBlue,
-          onPressed: () {
-            // Handle notification icon press
-          },
+        leading: Center(
+          child: Image.asset(
+            'assets/images/logo.png', // Replace 'assets/logo.png' with your image path
+            width: 40,
+            height: 40,
+          ),
         ),
         actions: [
           IconButton(
@@ -45,13 +45,15 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ],
-        title: Center(
-          child: Image.asset(
-            'assets/images/logo.png', // Replace 'assets/logo.png' with your image path
-            width: 40,
-            height: 40,
-          ),
-        ),
+        title: const Center(
+            child: Text(
+          'Bubble',
+          style: TextStyle(
+              color: Colors.lightBlue, // Changer la couleur du texte en rouge
+
+              fontSize: 40 // Mettre le texte en cursive
+              ),
+        )),
       ),
       body: _buildPage(currentPage),
       bottomNavigationBar: BottomNavigationBar(

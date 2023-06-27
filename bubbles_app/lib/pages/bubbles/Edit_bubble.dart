@@ -391,10 +391,9 @@ class _EditPageState extends State<EditPage> {
                             });
                           });
                           widget.bubble.deleteBubble();
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const BubblesPage()));
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
                         }
                       },
                       child: Text('Yes, I\'m sure'),
