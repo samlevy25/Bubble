@@ -289,18 +289,6 @@ class DatabaseService {
 
 // Extension methods for Bubble-related database operations
 extension BubbleDatabaseService on DatabaseService {
-  Future<void> updateLastTimeBubbleUpdated(String uid) async {
-    try {
-      _db.collection('Bubbles').doc(uid).set({
-        'lastTimeUpdated': DateTime.now().toUtc(),
-      });
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-  }
-
   // Get bubbles for marks
   Future<List<Map<String, dynamic>>> getBubblesFormarks() async {
     final querySnapshot = await _db.collection(bubblesCollection).get();
@@ -324,7 +312,6 @@ extension BubbleDatabaseService on DatabaseService {
 
   // Get the last message for a bubble
   Future<QuerySnapshot> getLastMessageForBubble(String bubbleID) {
-    updateLastTimeBubbleUpdated(bubbleID);
     return _db
         .collection(bubblesCollection)
         .doc(bubbleID)
@@ -336,7 +323,6 @@ extension BubbleDatabaseService on DatabaseService {
 
   // Stream messages for a specific bubble
   Stream<QuerySnapshot> streamMessagesForBubble(String bubbleID) {
-    updateLastTimeBubbleUpdated(bubbleID);
     return _db
         .collection(bubblesCollection)
         .doc(bubbleID)
@@ -349,7 +335,6 @@ extension BubbleDatabaseService on DatabaseService {
   Future<void> updateBubbleData(
       String bubbleID, Map<String, dynamic> data) async {
     try {
-      updateLastTimeBubbleUpdated(bubbleID);
       await _db.collection(bubblesCollection).doc(bubbleID).update(data);
     } catch (e) {
       if (kDebugMode) {
@@ -361,7 +346,6 @@ extension BubbleDatabaseService on DatabaseService {
   // Add a message to a bubble
   Future<void> addMessageToBubble(String bubbleID, Message message) async {
     try {
-      updateLastTimeBubbleUpdated(bubbleID);
       await _db
           .collection(bubblesCollection)
           .doc(bubbleID)
@@ -414,7 +398,7 @@ extension BubbleDatabaseService on DatabaseService {
           "keyType": keyType,
           "key": key,
           "size": bubbleSize,
-          "lastTimeUpdated": DateTime.now().toUtc(),
+          "createdTime": DateTime.now().toUtc(),
         },
       );
     } catch (e) {
@@ -435,7 +419,6 @@ extension BubbleDatabaseService on DatabaseService {
     String newNameBubble,
   ) async {
     try {
-      updateLastTimeBubbleUpdated(uid);
       await _db
           .collection(bubblesCollection)
           .doc(uid)
@@ -453,7 +436,6 @@ extension BubbleDatabaseService on DatabaseService {
     String newDescriptionBubble,
   ) async {
     try {
-      updateLastTimeBubbleUpdated(uid);
       await _db
           .collection(bubblesCollection)
           .doc(uid)
@@ -662,38 +644,36 @@ extension ExplorerDatabaseService on DatabaseService {
           commentVoters.add(userId);
 
           final String senderId = commentData?['sender_id'];
-          if (senderId != null && senderId is String) {
-            final userRef = _db.collection('Users').doc(senderId);
+          final userRef = _db.collection('Users').doc(senderId);
 
-            if (voteValue > 0) {
-              await commentRef.update({
-                'voters': commentVoters,
-                'votes_up': votesUp + 1,
-              });
-              print("Vote added to comment: votes_up increased by 1");
-              userRef.set(
-                {
-                  'up_votes': FieldValue.increment(1),
-                  'number_of_votes': FieldValue.increment(1),
-                },
-                SetOptions(merge: true),
-              );
-            } else if (voteValue < 0) {
-              await commentRef.update({
-                'voters': commentVoters,
-                'votes_down': votesDown + 1,
-              });
-              print("Vote added to comment: votes_down increased by 1");
-              userRef.set(
-                {
-                  'down_votes': FieldValue.increment(1),
-                  'number_of_votes': FieldValue.increment(1),
-                },
-                SetOptions(merge: true),
-              );
-            } else {
-              print("Invalid or missing sender UID");
-            }
+          if (voteValue > 0) {
+            await commentRef.update({
+              'voters': commentVoters,
+              'votes_up': votesUp + 1,
+            });
+            print("Vote added to comment: votes_up increased by 1");
+            userRef.set(
+              {
+                'up_votes': FieldValue.increment(1),
+                'number_of_votes': FieldValue.increment(1),
+              },
+              SetOptions(merge: true),
+            );
+          } else if (voteValue < 0) {
+            await commentRef.update({
+              'voters': commentVoters,
+              'votes_down': votesDown + 1,
+            });
+            print("Vote added to comment: votes_down increased by 1");
+            userRef.set(
+              {
+                'down_votes': FieldValue.increment(1),
+                'number_of_votes': FieldValue.increment(1),
+              },
+              SetOptions(merge: true),
+            );
+          } else {
+            print("Invalid or missing sender UID");
           }
         } else {
           print("User has already voted on this comment");
