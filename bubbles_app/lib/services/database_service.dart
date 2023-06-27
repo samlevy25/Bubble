@@ -289,6 +289,18 @@ class DatabaseService {
 
 // Extension methods for Bubble-related database operations
 extension BubbleDatabaseService on DatabaseService {
+  Future<void> updateLastTimeBubbleUpdated(String uid) async {
+    try {
+      _db.collection('Bubbles').doc(uid).set({
+        'lastTimeUpdated': DateTime.now().toUtc(),
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
   // Get bubbles for marks
   Future<List<Map<String, dynamic>>> getBubblesFormarks() async {
     final querySnapshot = await _db.collection(bubblesCollection).get();
@@ -312,6 +324,7 @@ extension BubbleDatabaseService on DatabaseService {
 
   // Get the last message for a bubble
   Future<QuerySnapshot> getLastMessageForBubble(String bubbleID) {
+    updateLastTimeBubbleUpdated(bubbleID);
     return _db
         .collection(bubblesCollection)
         .doc(bubbleID)
@@ -323,6 +336,7 @@ extension BubbleDatabaseService on DatabaseService {
 
   // Stream messages for a specific bubble
   Stream<QuerySnapshot> streamMessagesForBubble(String bubbleID) {
+    updateLastTimeBubbleUpdated(bubbleID);
     return _db
         .collection(bubblesCollection)
         .doc(bubbleID)
@@ -335,6 +349,7 @@ extension BubbleDatabaseService on DatabaseService {
   Future<void> updateBubbleData(
       String bubbleID, Map<String, dynamic> data) async {
     try {
+      updateLastTimeBubbleUpdated(bubbleID);
       await _db.collection(bubblesCollection).doc(bubbleID).update(data);
     } catch (e) {
       if (kDebugMode) {
@@ -346,6 +361,7 @@ extension BubbleDatabaseService on DatabaseService {
   // Add a message to a bubble
   Future<void> addMessageToBubble(String bubbleID, Message message) async {
     try {
+      updateLastTimeBubbleUpdated(bubbleID);
       await _db
           .collection(bubblesCollection)
           .doc(bubbleID)
@@ -400,6 +416,7 @@ extension BubbleDatabaseService on DatabaseService {
           "size": bubbleSize,
         },
       );
+      updateLastTimeBubbleUpdated(bubbleUid);
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -418,6 +435,7 @@ extension BubbleDatabaseService on DatabaseService {
     String newNameBubble,
   ) async {
     try {
+      updateLastTimeBubbleUpdated(uid);
       await _db
           .collection(bubblesCollection)
           .doc(uid)
@@ -435,6 +453,7 @@ extension BubbleDatabaseService on DatabaseService {
     String newDescriptionBubble,
   ) async {
     try {
+      updateLastTimeBubbleUpdated(uid);
       await _db
           .collection(bubblesCollection)
           .doc(uid)
