@@ -2,6 +2,7 @@
 
 import 'package:bubbles_app/pages/bubbles/bubbles_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 //Widgets
@@ -9,6 +10,7 @@ import '../../models/chat.dart';
 import '../../models/message.dart';
 import '../../providers/authentication_provider.dart';
 import '../../providers/chat_page_provider.dart';
+import '../../services/navigation_service.dart';
 import '../../widgets/custom_input_fields.dart';
 import '../../widgets/custom_list_view_tiles.dart';
 import 'chats_page.dart';
@@ -34,6 +36,8 @@ class _ChatPageState extends State<ChatPage> {
 
   late GlobalKey<FormState> _messageFormState;
   late ScrollController _messagesListViewController;
+
+  NavigationService nav = GetIt.instance.get<NavigationService>();
 
   @override
   void initState() {
@@ -95,11 +99,6 @@ class _ChatPageState extends State<ChatPage> {
                               TextButton(
                                 onPressed: () {
                                   widget.chat.deleteChat();
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ChatsPage()));
                                 },
                                 child: const Text(
                                   "Yes, I'm sure",
