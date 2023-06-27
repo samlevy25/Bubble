@@ -1,10 +1,13 @@
 import 'package:bubbles_app/models/app_user.dart';
+import 'package:bubbles_app/services/database_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class OtherUserProfile extends StatelessWidget {
   final AppUser user;
+  final DatabaseService _db = GetIt.instance<DatabaseService>();
 
-  const OtherUserProfile({super.key, required this.user});
+  OtherUserProfile({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +36,8 @@ class OtherUserProfile extends StatelessWidget {
           const SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
-              // Report the user
-              // Implement the logic to report the user here
+              _db.reportUser(user.uid);
               Navigator.of(context).pop();
-              // Implement the logic to report the user
             },
             child: const Text('Report'),
           ),
