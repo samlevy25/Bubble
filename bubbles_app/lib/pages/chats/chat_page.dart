@@ -61,7 +61,51 @@ class _ChatPageState extends State<ChatPage> {
       builder: (BuildContext context) {
         _pageProvider = context.watch<ChatPageProvider>();
         return Scaffold(
-            appBar: AppBar(title: const Text('Private Chat')),
+            appBar: AppBar(
+              title: const Text('Private Chat'),
+              actions: <Widget>[
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  tooltip: 'Supprimer la conversation',
+                  onPressed: () {
+                    showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        content: const Text(
+                          'Are you sure you want to delete the chat?',
+                          style: TextStyle(color: Colors.red),
+                          textAlign: TextAlign.center,
+                        ),
+                        actions: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment
+                                .center, // Alignement des éléments au centre
+                            children: <Widget>[
+                              TextButton(
+                                onPressed: () {},
+                                child: const Text(
+                                  'No',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              const SizedBox(
+                                  width:
+                                      20), // Vous pouvez ajuster cet espace selon vos préférences
+                              TextButton(
+                                onPressed: () {},
+                                child: const Text(
+                                  "Yes, I'm sure",
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
             body: Stack(
               children: [
                 SingleChildScrollView(
