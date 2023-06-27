@@ -523,7 +523,7 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              "Your informations",
+              "Your location",
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.bold,
@@ -537,8 +537,6 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             height: _deviceHeight * 0.02,
           ),
           Center(child: currentLocation()),
-          SizedBox(height: 10.0),
-          Center(child: currentWIFI()),
         ],
       ),
     );
@@ -553,9 +551,10 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
           return Text('Error: ${snapshot.error}');
         } else {
           return Text(
-            'Location: ${snapshot.data}',
+            '${snapshot.data}',
             style: TextStyle(
               color: Colors.black,
+              fontWeight: FontWeight.bold,
               fontSize: 17.0,
             ),
           );

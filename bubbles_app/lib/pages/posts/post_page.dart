@@ -107,7 +107,7 @@ class _PostPageState extends State<PostPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Post"),
+        title: const Text("Post"),
         centerTitle: true,
       ),
       body: _isLoading

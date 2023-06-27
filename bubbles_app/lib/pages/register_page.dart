@@ -171,25 +171,27 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: _deviceHeight * 0.03,
-            vertical: _deviceHeight * 0.06,
+            vertical: _deviceHeight * 0.04,
           ),
           child: SingleChildScrollView(
             child: Form(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  _profileImageField(),
-                  SizedBox(
-                    height: _deviceHeight * 0.05,
-                  ),
-                  _registerForm(),
-                  SizedBox(
-                    height: _deviceHeight * 0.05,
-                  ),
-                  _registerButton(),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    _profileImageField(),
+                    SizedBox(
+                      height: _deviceHeight * 0.04,
+                    ),
+                    _registerForm(),
+                    SizedBox(
+                      height: _deviceHeight * 0.08,
+                    ),
+                    _registerButton(),
+                  ],
+                ),
               ),
             ),
           ),
@@ -245,7 +247,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _registerForm() {
     return SizedBox(
-      height: _deviceHeight * 0.45,
+      height: _deviceHeight * 0.47,
       child: Form(
         key: _registerFormKey,
         child: Column(

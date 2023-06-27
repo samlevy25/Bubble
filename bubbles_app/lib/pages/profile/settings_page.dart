@@ -159,8 +159,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
     RegExp regExp = RegExp(r".{6,}");
 
-    // RegExp(r".{6,}").hasMatch(_newPassword)
-
     if (!regExp.hasMatch(value)) {
       return 'Password must be at least 6 characters long.';
     }
@@ -191,9 +189,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return null;
   }
 
-  // radius
   double _currentSliderValue = 0;
-  // lang
 
   String? lang;
 
