@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "443303433279",
-    "project_id": "bubbles-app-4eb56",
-    "storage_bucket": "bubbles-app-4eb56.appspot.com"
+    "project_number": "297483957596",
+    "project_id": "bubbles-b7592",
+    "storage_bucket": "bubbles-b7592.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:443303433279:android:7bd9a817e7e26aecf7148a",
+        "mobilesdk_app_id": "1:297483957596:android:8bad617464157ed0403d99",
         "android_client_info": {
-          "package_name": "com.se16.bubbles"
+          "package_name": "com.example.bubbles_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "443303433279-5vtlgaod48lubhhrm9lohija2ijgk9rh.apps.googleusercontent.com",
+          "client_id": "297483957596-60l8t22ob8q7d20r84b9ha5s9squngja.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAdfGraaHIsMnvXWnhYIIwyccVM7gTpQpc"
+          "current_key": "AIzaSyC8yo3jKP5v7mhUtKpqrkGARBgtrQdXOxw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "443303433279-5vtlgaod48lubhhrm9lohija2ijgk9rh.apps.googleusercontent.com",
+              "client_id": "297483957596-60l8t22ob8q7d20r84b9ha5s9squngja.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
