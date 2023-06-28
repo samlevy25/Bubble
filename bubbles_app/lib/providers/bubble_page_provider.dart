@@ -157,9 +157,9 @@ class BubblePageProvider extends ChangeNotifier {
   }
 
   Future<String> translateAndFilter(AppUser msgSender, String msg) async {
-    // if (msgSender.uid == _auth.appUser.uid) {
-    //   return msg;
-    // }
+    if (msgSender.uid == _auth.appUser.uid) {
+      return msg;
+    }
     final filter = ProfanityFilter();
     final String preferedLanguage = _auth.appUser.preferredLanguage;
     print("preferedLanguage: $preferedLanguage");
