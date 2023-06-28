@@ -238,14 +238,6 @@ class _SettingsPageState extends State<SettingsPage> {
             )),
             _changeLanguage(context),
             _logout(),
-            const ListTile(
-                title: Text(
-              "About",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            )),
-            _aboutLink(),
           ],
         ),
       ),

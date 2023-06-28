@@ -45,15 +45,6 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ],
-        title: const Center(
-            child: Text(
-          'Bubble',
-          style: TextStyle(
-              color: Colors.lightBlue, // Changer la couleur du texte en rouge
-
-              fontSize: 40 // Mettre le texte en cursive
-              ),
-        )),
       ),
       body: _buildPage(currentPage),
       bottomNavigationBar: BottomNavigationBar(

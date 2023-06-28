@@ -89,22 +89,6 @@ class _CreateBubblePageState extends State<CreateBubblePage> {
             Navigator.pop(context);
           },
         ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.info_outline,
-              color: Colors.lightBlue,
-              size: 30.0,
-            ),
-            onPressed: () async {
-              final Uri _url =
-                  Uri.parse('https://bubbles-website-716a4.web.app/');
-              if (!await launchUrl(_url)) {
-                throw Exception('Could not launch $_url');
-              }
-            },
-          ),
-        ],
       ),
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
