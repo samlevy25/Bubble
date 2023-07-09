@@ -17,9 +17,9 @@ class Post {
   final String geoHash;
   final String LocationName;
   final List<Comment> comments;
-  final List<String> voters;
-  final int votesUp;
-  final int votesDown;
+  List<String> voters;
+  int votesUp;
+  int votesDown;
 
   Post({
     required this.uid,

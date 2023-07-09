@@ -18,7 +18,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import '../../widgets/pop_up_menu.dart';
 
-enum SortBy { newest, oldest }
+enum SortBy { newest, oldest, rate }
 
 class PostPage extends StatefulWidget {
   final String postUid;
@@ -94,6 +94,10 @@ class _PostPageState extends State<PostPage> {
         case SortBy.oldest:
           post?.comments.sort((a, b) => a.sentTime.compareTo(b.sentTime));
           break;
+        case SortBy.rate:
+          post?.comments.sort((a, b) =>
+              (b.votesUp - b.votesDown).compareTo(a.votesUp - a.votesDown));
+          break;
       }
     });
   }
@@ -135,9 +139,12 @@ class _PostPageState extends State<PostPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    const SizedBox(width: 10),
                     _buildSortButton(SortBy.newest),
                     const SizedBox(width: 10),
                     _buildSortButton(SortBy.oldest),
+                    const SizedBox(width: 10),
+                    _buildSortButton(SortBy.rate),
                     Expanded(
                       child: TextButton(
                         onPressed: () {
@@ -194,7 +201,11 @@ class _PostPageState extends State<PostPage> {
                                           color:
                                               Color.fromARGB(255, 255, 162, 0),
                                         ),
-                                        Text(comment.votesUp.toString()),
+                                        Text(comment.votesDown +
+                                                    comment.votesUp ==
+                                                0
+                                            ? "0%"
+                                            : "${(comment.votesUp / (comment.votesDown + comment.votesUp)) * 100}%"),
                                         IconButton(
                                           onPressed: () {
                                             _addVoteToComment(
@@ -264,6 +275,15 @@ class _PostPageState extends State<PostPage> {
 
   Widget _buildSortButton(SortBy sortOption) {
     final isSelected = _sortBy == sortOption;
+    String text = "";
+
+    if (sortOption == SortBy.newest) {
+      text = 'Newest';
+    } else if (sortOption == SortBy.oldest) {
+      text = 'Oldest';
+    } else {
+      text = 'Rate';
+    }
 
     return ElevatedButton(
       onPressed: () => _sortComments(sortOption),
@@ -284,7 +304,7 @@ class _PostPageState extends State<PostPage> {
         ),
       ),
       child: Text(
-        sortOption == SortBy.newest ? 'Newest' : 'Oldest',
+        text,
         style: TextStyle(
           color: isSelected ? Colors.white : Colors.black,
         ),
