@@ -22,6 +22,10 @@
 </p>
 <p>Every user's profile is an integral part of Bubbles. It serves as a personal space, allowing users to share information, interests, and activities. Emphasis is placed on user-friendliness and privacy.</p>
 
+<h3>Bubble</h3>
+<p>"Bubbles" is a unique feature of our social networking application designed to foster community-based local interactions. These "Bubbles" are geographically based groups created by users and defined by specific locations and radii. The goal of "Bubbles" is to connect people within a certain geographical proximity, promoting a sense of community and shared local experiences.</p>
+
+
 <h3>Private Chats</h3>
 <p>The essence of any social network lies in facilitating communication. Our app includes a private chat feature, enabling one-on-one conversations.</p>
 
