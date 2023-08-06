@@ -32,6 +32,7 @@
 <p>On the technical side, ensuring data integrity and monitoring user activity is critical for the app's functionality. We have a dedicated server that oversees the database, ensuring smooth operation, data consistency, and security.</p>
 
 <h2>Access Key Technologies</h2>
+<img align="right" alt="GIF" src="https://raw.githubusercontent.com/rahul-jha98/rahul-jha98/main/techstack.gif" width="360px"/>
 <p>To ensure bubbles maintain exclusivity or privacy, we employ a variety of technologies to create access keys. These keys determine a user's ability to join a bubble, with each key based on different technologies with its unique benefits, making Bubbles versatile for numerous use scenarios.</p>
 
 <h3>GPS</h3>
