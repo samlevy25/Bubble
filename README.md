@@ -39,12 +39,11 @@
 <p align="center">
   <img src="bubbles_app/Image app/explorer.jpg" alt="register"  width="300px">
 </p>
-
-<!-- Ligne vide pour ajouter de l'espace -->
- 
+<br> <!-- Balise de saut de ligne pour ajouter de l'espace vertical -->
 <p align="center">
   <img src="bubbles_app/Image app/post's comment.jpg" alt="register"  width="300px">
 </p>
+
 
 
 <p>To foster interaction, the ability to create posts and comments is vital. Users can share thoughts, experiences, and ideas publicly. Real-time feedback is enabled through likes and dislikes.</p>
