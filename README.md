@@ -25,7 +25,7 @@
 <h3>Bubble</h3>
 <p align="center">
   <img src="bubbles_app/Image app/list bubble.jpg" alt="register"  width="300px">
-    <img src="bubbles_app/Image app/bubble chat.jpg" alt="register"  width="3000px">
+    <img src="bubbles_app/Image app/bubble chat.jpg" alt="register"  width="300px">
 </p>
 
 <p>"Bubbles" is a unique feature of our social networking application designed to foster community-based local interactions. These "Bubbles" are geographically based groups created by users and defined by specific locations and radii. The goal of "Bubbles" is to connect people within a certain geographical proximity, promoting a sense of community and shared local experiences.</p>
