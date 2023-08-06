@@ -55,11 +55,11 @@
 <h2>Access Key Technologies</h2>
 
 <p>To ensure bubbles maintain exclusivity or privacy, we employ a variety of technologies to create access keys. These keys determine a user's ability to join a bubble, with each key based on different technologies with its unique benefits, making Bubbles versatile for numerous use scenarios.</p>
-
+<img align="right" alt="GIF" src="https://raw.githubusercontent.com/rahul-jha98/rahul-jha98/main/techstack.gif" width="360px"/>
 <h3>GPS</h3>
 <p>By default, access to bubbles is determined by GPS. A bubble is created at a specific location, and its radius sets the geographical area within which users can join.</p>
 
-  <img src="bubbles_app/Image app/register.jpg" alt="register"  width="260px" aligh=right>
+ 
 
 <h3>WiFi</h3>
 <p>We also offer WiFi-based access. A bubble can be created where only those connected to a specific WiFi network can join, ideal for more private bubbles.</p>
