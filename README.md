@@ -38,9 +38,8 @@
 <h3>Post & Comment Ratings</h3>
 <p align="center">
   <img src="bubbles_app/Image app/explorer.jpg" alt="register"  width="300px">
-</p>
-<br> <!-- Balise de saut de ligne pour ajouter de l'espace vertical -->
-<p align="center">
+
+
   <img src="bubbles_app/Image app/post's comment.jpg" alt="register"  width="300px">
 </p>
 
