@@ -14,6 +14,7 @@
 <h2>Key Features</h2>
 
 <h3>User Profile Creation</h3>
+<img align=right src="bubbles_app/Image app/sign in .jpg" alt="Bubbles App Overview" width="260px">
 <p>Every user's profile is an integral part of Bubbles. It serves as a personal space, allowing users to share information, interests, and activities. Emphasis is placed on user-friendliness and privacy.</p>
 
 <h3>Private Chats</h3>
