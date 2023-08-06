@@ -32,9 +32,7 @@
 
 
 <h3>Private Chats</h3>
-<p align="center">
-  <img src="bubbles_app/Image app/register.jpg" alt="register"  width="310px">
-</p>
+
 <p>The essence of any social network lies in facilitating communication. Our app includes a private chat feature, enabling one-on-one conversations.</p>
 
 <h3>Post & Comment Ratings</h3>
