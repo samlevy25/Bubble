@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<h1>Welcome to Bubbles</h1>
+<h1>Welcome to Bubble</h1>
 <p align="center">
   <img src="bubbles_app/Image app/sign in .jpg" alt="Bubbles App Overview"  width="260px">
 </p>
@@ -15,7 +15,9 @@
 <p>Bubbles is a location-based social networking application. Unlike traditional platforms such as Facebook, Quora, Reddit, WhatsApp, and Telegram, Bubbles focuses on connecting users with people in their immediate vicinity. By filtering posts and content to display updates only from nearby individuals, Bubbles offers a tailored social networking experience.</p>
 
 <h2>Key Features</h2>
-<img align=right src="bubbles_app/Image app/sign in .jpg" alt="Bubbles App Overview" width="260px">
+<<p align="center">
+  <img src="bubbles_app/Image app/sign in .jpg" alt="Bubbles App Overview"  width="260px">
+</p>
 <h3>User Profile Creation</h3>
 
 <p>Every user's profile is an integral part of Bubbles. It serves as a personal space, allowing users to share information, interests, and activities. Emphasis is placed on user-friendliness and privacy.</p>
