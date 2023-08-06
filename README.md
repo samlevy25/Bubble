@@ -8,7 +8,7 @@
 <body>
 
 <h1>Welcome to Bubbles</h1>
-<img align=center src="YOUR_IMAGE_URL_1" alt="Bubbles App Overview">
+<img align=center src="bubbles_app/Image app/sign in .jpg" alt="Bubbles App Overview">
 <p>Bubbles is a location-based social networking application. Unlike traditional platforms such as Facebook, Quora, Reddit, WhatsApp, and Telegram, Bubbles focuses on connecting users with people in their immediate vicinity. By filtering posts and content to display updates only from nearby individuals, Bubbles offers a tailored social networking experience.</p>
 
 <h2>Key Features</h2>
