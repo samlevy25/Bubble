@@ -58,9 +58,9 @@
 
 <h3>GPS</h3>
 <p>By default, access to bubbles is determined by GPS. A bubble is created at a specific location, and its radius sets the geographical area within which users can join.</p>
-<p align="right">
-  <img src="bubbles_app/Image app/register.jpg" alt="register"  width="260px">
-</p>
+
+  <img src="bubbles_app/Image app/register.jpg" alt="register"  width="260px" aligh=right>
+
 <h3>WiFi</h3>
 <p>We also offer WiFi-based access. A bubble can be created where only those connected to a specific WiFi network can join, ideal for more private bubbles.</p>
 
