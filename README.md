@@ -38,7 +38,7 @@
 <h3>Post & Comment Ratings</h3>
 <p align="center">
   <img src="bubbles_app/Image app/register.jpg" alt="register"  width="260px">
-    <img src="bubbles_app/Image app/register.jpg" alt="register"  width="260px">
+    <img src="bubbles_app/Image app/post's comment.jpg" alt="register"  width="260px">
 </p>
 
 <p>To foster interaction, the ability to create posts and comments is vital. Users can share thoughts, experiences, and ideas publicly. Real-time feedback is enabled through likes and dislikes.</p>
