@@ -18,7 +18,7 @@
 
 <h3>User Profile Creation</h3>
 <p align="center">
-  <img src="bubbles_app/Image app/sign in .jpg" alt="Bubbles App Overview"  width="260px">
+  <img src="bubbles_app/Image app/register.jpg" alt="register"  width="260px">
 </p>
 <p>Every user's profile is an integral part of Bubbles. It serves as a personal space, allowing users to share information, interests, and activities. Emphasis is placed on user-friendliness and privacy.</p>
 
@@ -26,6 +26,11 @@
 <p>The essence of any social network lies in facilitating communication. Our app includes a private chat feature, enabling one-on-one conversations.</p>
 
 <h3>Post & Comment Ratings</h3>
+<p align="center">
+  <img src="bubbles_app/Image app/register.jpg" alt="register"  width="260px">
+    <img src="bubbles_app/Image app/register.jpg" alt="register"  width="260px">
+</p>
+
 <p>To foster interaction, the ability to create posts and comments is vital. Users can share thoughts, experiences, and ideas publicly. Real-time feedback is enabled through likes and dislikes.</p>
 
 <h3>Reporting System</h3>
