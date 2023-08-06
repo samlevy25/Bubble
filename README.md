@@ -23,10 +23,16 @@
 <p>Every user's profile is an integral part of Bubbles. It serves as a personal space, allowing users to share information, interests, and activities. Emphasis is placed on user-friendliness and privacy.</p>
 
 <h3>Bubble</h3>
+<p align="center">
+  <img src="bubbles_app/Image app/register.jpg" alt="register"  width="260px">
+</p>
 <p>"Bubbles" is a unique feature of our social networking application designed to foster community-based local interactions. These "Bubbles" are geographically based groups created by users and defined by specific locations and radii. The goal of "Bubbles" is to connect people within a certain geographical proximity, promoting a sense of community and shared local experiences.</p>
 
 
 <h3>Private Chats</h3>
+<p align="center">
+  <img src="bubbles_app/Image app/register.jpg" alt="register"  width="260px">
+</p>
 <p>The essence of any social network lies in facilitating communication. Our app includes a private chat feature, enabling one-on-one conversations.</p>
 
 <h3>Post & Comment Ratings</h3>
@@ -49,7 +55,9 @@
 <h2>Access Key Technologies</h2>
 
 <p>To ensure bubbles maintain exclusivity or privacy, we employ a variety of technologies to create access keys. These keys determine a user's ability to join a bubble, with each key based on different technologies with its unique benefits, making Bubbles versatile for numerous use scenarios.</p>
-<img align="right" alt="GIF" src="https://raw.githubusercontent.com/rahul-jha98/rahul-jha98/main/techstack.gif" width="100px"/>
+<p align="right">
+  <img src="bubbles_app/Image app/register.jpg" alt="register"  width="260px">
+</p>
 <h3>GPS</h3>
 <p>By default, access to bubbles is determined by GPS. A bubble is created at a specific location, and its radius sets the geographical area within which users can join.</p>
 
